@@ -1,0 +1,56 @@
+ChangeLog for package klausuR
+
+## 0.10-0
+  - added klausur.mufo() and new S4 class klausuR.mult: initial support for parallel test forms
+  - fixed missing import of tools package
+
+## 0.9-7
+  - added direct PDF creation to klausur.report(), using texi2dvi() from package tools
+  - consequently added the tools package as a dependency
+
+## 0.9-6
+  - added schemes "DIHK", "USA" and "UK" to klausuR.gen.marks()
+  - added informative slot "marks.sum" to objects of class klausuR
+  - updated the show method for klausuR objects accordingly
+  - added "marks.info" option to klausur.report(), to include all or parts of "marks.sum" if wanted
+
+## 0.9-5
+  - fixed another bug in klausur.compare(): objects with NAs meant trouble.
+  - added "select" option to klausur.compare() to be able to focus on certain variables
+
+## 0.9-4
+  - added support for different file name scheme to klausur.report() (matr. no. or name_firstname)
+
+## 0.9-3
+  - added "alt.comma" parameter to klausur.report()
+  - minor corrections in the documentation (some missing params in usage)
+
+## 0.9-2
+  - restructured the LaTeX output
+  - fixed some bugs in klausur.compare()
+  - added parameters to skip cronbach's alpha and item analysis in klausur()
+  - cronbach's alpha and item analysis now run in a safe tryCatch() environment
+  - modified the show() method accordingly
+
+## 0.9-1
+  - added "alpha if removed" calculation for each item
+  - added longtable support for klausur.report()
+  - fixed some bugs in klausur(), klausur.report() and plot() regarding character vectors
+
+## 0.9-0
+  - added support for partially correct answers (if multiple correct answers possible)
+    via the new "score" parameter
+  - more cleaning up: moved some subroutines to internal functions
+
+## 0.8-1
+  - added marks A to F as an option in klausur.gen.marks()
+  - adjusted the plot method to treat marks as characters
+  - beautyfied the output of individual results in klausur()
+  - cleaned up a bit (removed unused relicts from klausur.R)
+  - translated hopefully all comments in the code into english
+
+## 0.8-0
+  - added feature to suggest marks by normal distribution
+
+## 0.7-0
+  - initial public release (via reaktanz.de)
