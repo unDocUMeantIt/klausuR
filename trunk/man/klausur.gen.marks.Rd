@@ -25,7 +25,7 @@ with the naming scheme for items (\code{Item###}, see also \code{\link[klausuR:k
 \code{klausur.gen.marks} will calculate the maximum score automatically. Or you assign the maximum directly as an integer
 value.
 
-Another feature can be toggled with the parameter "suggest". If you feed it with the mean and standard deviation values of your test's
+Another feature can be toggled with the parameter \code{suggest}. If you feed it with the mean and standard deviation values of your test's
 results, marks are automatically assigned to the achieved score under the assumption of normal distribution. Please understand that
 the naming "suggest" is not an accident! This is only a suggestion, please review it, tweak it, revise it, until it fits your needs.
 However, this feature can directly be called by \code{\link[klausuR:klausur]{klausur}}.}
@@ -40,7 +40,7 @@ e.g. your observation data, or an integer representing the maximum score of the 
 be asked for the maximum score.}
 \item{wght}{A vector with weights for each item. If NULL, the number of items is used as maximum score, that is,
 each item gives a point.}
-\item{suggest}{A list with the elements "mean" and "sd". If both are not NULL, this function will suggest marks for achieved points
+\item{suggest}{A list with the elements \code{mean} and \code{sd}. If both are not NULL, this function will suggest marks for achieved points
 assuming normal distribution. That is, "mean" and "sd" should be set to the corresponding values of the test's results.}
 }
 \examples{\dontrun{

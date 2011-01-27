@@ -139,14 +139,14 @@ klausur.mufo <- function(answ, corr, corr.key, marks, mark.labels=NULL, items=NU
       klausur.mufo.global@mean	<- summary(klausur.mufo.global@results$Points)
       klausur.mufo.global@sd	<- sd(klausur.mufo.global@results$Points)
 	  ## psychometic quality of the items
-	  if(cronbach==TRUE){
+	  if(isTRUE(cronbach)){
 		# calling an internal function which is
 		# using alpha() from package "psychometric"
 		cron.alpha.list <- calc.cronbach.alpha(subset(klausur.mufo.global@trfls, select=-MatrNo))
 	  } else {
 	    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
 	  }
-	  if(item.analysis==TRUE){
+	  if(isTRUE(item.analysis)){
 		# calling another internal function which is also
 		# using alpha() from package "psychometric"
 		item.analyse <- calc.item.analysis(subset(klausur.mufo.global@trfls, select=-MatrNo), cron.alpha.list)

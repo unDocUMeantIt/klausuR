@@ -25,16 +25,16 @@ In the case of \code{"partial"}, an additional condition is that none of the dis
 If the correct answer is "134" and a subject checked "15", \code{"solved"} will give no point (because "15" is not equal to "134"), as will \code{"partial"}
 (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
 
-The \strong{assigned marks} are expected to be in a certain format as well, as long as you dont want klausur to suggest them itself (see below).
+The \strong{assigned marks} are expected to be in a certain format as well, as long as you don't want \code{klausur} to suggest them itself (see below).
 Just create an empty vector to start with (say \code{your.marks <- c()}) and fill it according to the scheme \code{your.marks[<points from>:<points to>] <- <mark>}.
-Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indexes to the vector with
+Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indices to the vector with
 \code{your.marks[27:30] <- "1.7"} (see example section below). It is crucial to assign marks to the whole range of points that can be achieved in the test.
 On the other hand, it's irrelevant wheter you assign decimal marks as in the example, only integer values, a 15 marks scheme or whatever. The convenience
 function \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} can assist you in creating such a valid vector.
 
 Another way to deal with marks is to let klausuR make a suggestion. That is, if \code{marks="suggest"}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
 kicks in and takes either the \code{mark.labels} you have defined here or will ask you step by step. See the documentation of that function for details. To see the
-suggested result in detail, have a look at the slot "marks" of the returned object.
+suggested result in detail, have a look at the slot \code{marks} of the returned object.
 
 To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.
 
@@ -62,7 +62,7 @@ Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{s
 \keyword{misc}
 \arguments{\item{answ}{A \code{\link{data.frame}} which has to include at least these variables:
 \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
-and variables for the ansered items (according to the scheme \code{Item###},
+and variables for the answered items (according to the scheme \code{Item###},
 where ### is a number with leading zeros, if needed).}
 \item{corr}{A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).}
 \item{marks}{A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let

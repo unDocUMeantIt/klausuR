@@ -45,10 +45,10 @@ klausur.gen.corr <- function(answ=NULL, items.char=FALSE, test.forms=1){
   # this function is called to ask for the answer to each item
   read.answers <- function(itemname, correct.answ){
     answ.item <- ""
-    while(answ.item == ""){
+    while(identical(answ.item, "")){
       print(correct.answ)
       answ.item <- readline(paste("Please input the correct answer for ",as.character(itemname),":", sep=""))
-      if(answ.item != ""){
+      if(!identical(answ.item, "")){
 	  if(items.char)
 	    correct.answ[itemname] <- as.character(answ.item)
 	  else
@@ -68,9 +68,9 @@ klausur.gen.corr <- function(answ=NULL, items.char=FALSE, test.forms=1){
   # this function is called to ask for the corrsponding item numbers or names of parallel test forms
   read.test.form <- function(itemname, form, correct.answ){
     answ.item <- ""
-    while(answ.item == ""){
+    while(identical(answ.item, "")){
       answ.item <- readline(paste("Form,",form,", ",as.character(itemname)," -- Please input the corresponding item in Form 1 (name or number):", sep=""))
-      if(answ.item != ""){
+      if(!identical(answ.item, "")){
 	  if(items.char)
 	    correct.answ[correct.answ[correct.answ$Form == form],itemname] <- as.character(answ.item)
 	  else

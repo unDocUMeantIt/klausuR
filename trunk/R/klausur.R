@@ -127,14 +127,14 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		  # create the TRUE/FALSE-matrix for solved items
 		  # this will become a point matrix instead if partial results are ok
-		  if(score == "partial" || score == "liberal"){
+		  if(identical(score, "partial") || identical(score, "liberal")){
 		    # weights will be considered here as well
 		    # if partial answers should be considered
-		    if(score == "partial"){
+		    if(identical(score, "partial")){
 		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")))
 		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")))
 		    }
-		    if(score == "liberal"){
+		    if(identical(score, "liberal")){
 		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")))
 		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")))
 		    }
@@ -158,7 +158,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  stdabw <- sd(punkte)
 
 		  # should marks be suggested or are they given?
-		  if(length(marks) == 1 && marks == "suggest"){
+		  if(length(marks) == 1 && identical(marks, "suggest")){
 		    warning("Marks are a suggestion, not your definition!")
 		    marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw))
 		  }
@@ -180,14 +180,14 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  ergebnis.anonym <- anon.results(ergebnis.daten)
 
 		  ## psychometic quality of the items
-		  if(cronbach==TRUE){
+		  if(isTRUE(cronbach)){
 			# calling an internal function which is
 			# using alpha() from package "psychometric"
 			cron.alpha.list <- calc.cronbach.alpha(wahr.falsch)
 		  } else {
 		    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
 		  }
-		  if(item.analysis==TRUE){
+		  if(isTRUE(item.analysis)){
 			# calling another internal function which is also
 			# using alpha() from package "psychometric"
 			item.analyse <- calc.item.analysis(wahr.falsch, cron.alpha.list)

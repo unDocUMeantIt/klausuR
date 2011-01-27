@@ -2,6 +2,7 @@ ChangeLog for package klausuR
 
 ## 0.10-1
   - added variable "Form" to klausur.gen()
+  - replaced several "if(a == b)" constructs with "identical(a, b)" or "isTRUE(...)"
 
 ## 0.10-0
   - added klausur.mufo() and new S4 class klausuR.mult: initial support for parallel test forms

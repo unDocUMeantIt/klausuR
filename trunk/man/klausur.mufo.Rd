@@ -12,10 +12,10 @@ all tests will be re-ordered to fit the order of the first given test form (this
 
 The parameters are mostly the same as those for \code{\link[klausuR:klausur]{klausur}}. One new parameter \code{corr.key}
 is needed to communicate the order of items in each test form, and the data.frame \code{answ} needs one additional variable
-called "Form".
+called \code{Form}.
 
 An example: You have prepared a test in two different parallel forms "A" an "B", So in addition to the variables in \code{answ}
-you need to create a variable called "Form", to document which test subject was given which test form. Since form "B" holds the same
+you need to create a variable called \code{Form}, to document which test subject was given which test form. Since form "B" holds the same
 items as form "A", only in a different order, we only need to define these positions and we're done. Therefore \code{corr.key} must
 be a matrix or data.frame, again with a column called "Form", one for each item, and one row of data for each test form. That is, you'd need
 one row for test form "A" and one for test form "B", giving an index for each item where it is placed in the form. For "A" this is
@@ -35,7 +35,7 @@ and variables for the ansered items (according to the scheme \code{Item###},
 where ### is a number with leading zeros, if needed).}
 \item{corr}{A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).}
 \item{corr.key}{A data.frame or matrix indicating the positions of all items (columns) in all forms (rows). Must have
-a column called "Form" (like \code{answ}), and the item columns must follow the explained name scheme \code{Item###}.}
+a column called \code{Form} (like \code{answ}), and the item columns must follow the explained name scheme \code{Item###}.}
 \item{marks}{A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
 \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.}
 \item{mark.labels}{If \code{marks="suggest"}, use these as the marks you want to give.}

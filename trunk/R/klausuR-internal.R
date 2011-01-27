@@ -43,12 +43,12 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace
 		    if(length(wght) != length(corr))
 		      stop(simpleError("The number of weights differs from the number if items!"))
 		  }
-		  if(score != "solved"){
-		    if(score != "partial" && score != "liberal")
+		  if(!identical(score, "solved")){
+		    if(!identical(score, "partial") && !identical(score, "liberal"))
 		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\" or \"liberal\"!"))
-		    else if(score == "partial")
+		    else if(identical(score, "partial"))
 		      warning("Partially answered items were allowed (but only if no wrong alternative was checked).")
-		    else if(score == "liberal")
+		    else if(identical(score, "liberal"))
 		      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).")
 		  } else{}
 
@@ -153,7 +153,7 @@ answ.alternatives <- function(answ, latex=FALSE){
   # divide all answers into its parts
   answ.parts <- strsplit(as.character(answ), "")
   names(answ.parts) <- names(answ)
-  if(latex == TRUE){
+  if(isTRUE(latex)){
     if(length(answ.parts) > 1)
       answ.parts <- lapply(answ.parts, function(x) paste(x, collapse=", "))
     else
@@ -211,7 +211,7 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
       # this corresponds to the "absolute" value
       result <- unlist(lapply(result.list, sum))
       # if we want the percentage instead:
-      if(mode == "percent")
+      if(identical(mode, "percent"))
 	result <- round((result * wght)/corr.length, digits=2)
       else{}
     }
@@ -220,7 +220,7 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
       result <- as.numeric(item.answ == corr[item])
       # percentage is irrelevant for dichotomous items,
       # but there might be a weight vector
-      if(mode == "percent")
+      if(identical(mode, "percent"))
 	result <- result * wght
       else{}
     }

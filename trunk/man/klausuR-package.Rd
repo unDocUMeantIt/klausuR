@@ -7,12 +7,12 @@
 Package: \tab klausuR\cr
 Type: \tab Package\cr
 Version: \tab 0.10-1\cr
-Date: \tab 2010-11-05\cr
+Date: \tab 2010-12-02\cr
 Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 Encoding: \tab UTF-8\cr
 License: \tab GPL (>= 3)\cr
 LazyLoad: \tab yes\cr
-URL: \tab http://www.r-project.org, http://www.reaktanz.de \cr
+URL: \tab https://r-forge.r-project.org/projects/klausur, http://www.reaktanz.de \cr
 }
 
 A set of functions designed to quickly generate results of

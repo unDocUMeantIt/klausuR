@@ -27,8 +27,8 @@ reports on each test form, call \code{klausur.report} with the single slots from
 \arguments{\item{klsr}{An object of class klausuR or klausuR.mult.}
 \item{matn}{Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 or "glob" (produces a global results document).}
-\item{save}{logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").}
-\item{pdf}{logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
+\item{save}{Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").}
+\item{pdf}{Logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
 If \code{save} is FALSE, a temporary directory is used, that is only the PDF files will be saved.}
 \item{path}{Path for \code{save} and \code{hist} files.}
 \item{file.name}{File name scheme for the reports, either "matn" (matriculation number) or "name" (name and firstname).}

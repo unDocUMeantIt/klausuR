@@ -91,28 +91,28 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 	stop(simpleError("The given object is not of class \"klausuR\"!"))
     }
 
-  if(!is.numeric(matn) && matn != "all" && matn != "anon" && matn != "glob")
+  if(!is.numeric(matn) && !identical(matn, "all") && !identical(matn, "anon") && !identical(matn, "glob"))
     stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
 
-  if((save == TRUE || pdf == TRUE || hist$points == TRUE || hist$marks == TRUE) && is.null(path))
+  if((isTRUE(save) || isTRUE(pdf) || isTRUE(hist$points) || isTRUE(hist$marks)) && is.null(path))
     stop(simpleError("Files have to be saved, but path is empty!"))
 
   ## path handling
   # check if path exists
-  if(file.info(path)$isdir == FALSE)
+  if(!isTRUE(file.info(path)$isdir))
     stop(simpleError(paste(path,"is not a valid path!")))
   # PDF creation will be done in an temporal directory if "save" is FALSE
   # we'll make "path" "path.orig" and override it with that tempdir internally
-  if(save == FALSE && pdf == TRUE){
+  if(!isTRUE(save) && isTRUE(pdf)){
     path.orig <- path
     path <- tempfile("klausuR")
       if(!dir.create(path, recursive=TRUE)) stop(simpleError("Couldn't create temporary directory! Try with save=TRUE"))
     # if the function is done, remove the tempdir
-    on.exit(if(path != path.orig) unlink(path, recursive=TRUE))
+    on.exit(if(!identical(path, path.orig)) unlink(path, recursive=TRUE))
   } else {}
 
   # define the text of the LaTeX document...
-  if(lang == "de"){
+  if(identical(lang, "de")){
   text <- list(Auswertung="Einzelauswertung",
 	    DozentIn="Dozent",
 	    MatrikelNr="Matrikel-Nr.",
@@ -216,14 +216,14 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       current.wd <- getwd()
       # change to destined directory
       setwd(path)
-      if(file=="all"){
+      if(identical(file, "all")){
 	for(i in dir(pattern="*.tex")) texi2dvi(i, pdf=TRUE, clean=TRUE)
       }
       else{
 	texi2dvi(file, pdf=TRUE, clean=TRUE)
       }
       # in case save was FALSE, move the PDFs to the actual destination
-      if(save == FALSE && file.info(path.orig)$isdir == TRUE){
+      if(!isTRUE(save) && isTRUE(file.info(path.orig)$isdir)){
 	file.copy(dir(pattern="*.pdf"), path.orig, overwrite=TRUE)
       } else {}
       # get back to where we came from
@@ -256,12 +256,12 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       prozent <- einzelergebnis$Percent
       note <- einzelergebnis$Mark
       # check for file name scheme
-      if(file.name == "name")
+      if(identical(file.name, "name"))
 	name.scheme <- paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep="")
       else
 	name.scheme <- paste(matn,".tex", sep="")
       # create filename from name scheme
-      if(save == TRUE || pdf == TRUE)
+      if(isTRUE(save) || isTRUE(pdf))
 	dateiname <- file.path(path, name.scheme)
       else
 	dateiname <- ""
@@ -334,20 +334,20 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       write(latex.foot, file=dateiname, append=TRUE)
 
       # check if PDF creation is demanded
-      if(pdf == TRUE && is.character(name.scheme)){
+      if(isTRUE(pdf) && is.character(name.scheme)){
 	create.pdf(file=name.scheme, path=path)
       } else {}
   } ## end function tabellenbau()
 
   global.report <- function(form){
       # set the file name
-      if((save == TRUE || pdf == TRUE) && is.character(anon.glob.file))
+      if((isTRUE(save) || isTRUE(pdf)) && is.character(anon.glob.file))
 	dateiname <- file.path(path, anon.glob.file)
       else
 	dateiname <- ""
 
       # prepare the table
-      if(form == "anon"){
+      if(identical(form, "anon")){
 	anon.glob.table <- klsr@anon
 	colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
 	anon.glob.digits <- c(0,0,0,1,1)
@@ -418,18 +418,18 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       write(latex.foot, file=dateiname, append=TRUE)
 
       # check if PDF creation is demanded
-      if(pdf == TRUE && is.character(anon.glob.file)){
+      if(isTRUE(pdf) && is.character(anon.glob.file)){
 	create.pdf(file=anon.glob.file, path=path)
       } else {}
   } ## end function global.report()
 
-  if(matn=="all"){
+  if(identical(matn, "all")){
     for(i in results$MatrNo) tabellenbau(matn=i)
   }
-  else if(matn=="anon"){
+  else if(identical(matn, "anon")){
     global.report(form="anon")
   }
-  else if(matn=="glob"){
+  else if(identical(matn, "glob")){
     global.report(form="global")
   }
   else
