@@ -1,6 +1,7 @@
 ChangeLog for package klausuR
 
 ## 0.10-1
+  - complete rewrite of klausur.compare(): less and more efficient code
   - added variable "Form" to klausur.gen()
   - replaced several "if(a == b)" constructs with "identical(a, b)" or "isTRUE(...)"
 
