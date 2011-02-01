@@ -159,19 +159,19 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		  # should marks be suggested or are they given?
 		  if(length(marks) == 1 && identical(marks, "suggest")){
-		    warning("Marks are a suggestion, not your definition!")
+		    warning("Marks are a suggestion, not your definition!", call.=FALSE)
 		    marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw))
 		  }
 
 		  # check wheter maximum score matches the assigned marks
 		  if(length(marks) != maxp){
-		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)))
+		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)), call.=FALSE)
 		  }
 
 		  # assign the marks
 		  note <- marks[punkte]
 		    if(sum(is.na(note)) > 0)
-		      stop(simpleError("Undefined score found. Can't assign marks, check their values!\n\n"))
+		      stop(simpleError("Undefined score found. Can't assign marks, check their values!\n\n"), call.=FALSE)
 
 		  # create data object with name, mat-nr and global results
 		  # calls the internal function global.results()
@@ -220,7 +220,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  # return all data or just for one matriculation number?
 		  if(!is.null(matn)){
 			if(!sum(answ$MatrNo == matn) == 1){
-			  stop(simpleError("The given matriculation number is not defined!"))
+			  stop(simpleError("The given matriculation number is not defined!"), call.=FALSE)
 			  }
 			  pers.ergebnisse <- ergebnis.daten[ergebnis.daten$MatrNo == matn,]
 			  items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn, -1]

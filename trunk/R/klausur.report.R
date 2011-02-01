@@ -208,6 +208,19 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
     return(output)
   }
 
+  # this function will replace German umlauts for filenames
+  # it's used in tabellenbau() below
+  file.umlaute <- function(input){
+    output <- gsub("ß","ss",as.character(input))
+    output <- gsub("ö","oe",as.character(output))
+    output <- gsub("ü","ue",as.character(output))
+    output <- gsub("ä","ae",as.character(output))
+    output <- gsub("Ö","Oe",as.character(output))
+    output <- gsub("Ü","Ue",as.character(output))
+    output <- gsub("Ä","Ae",as.character(output))
+    return(output)
+  }
+
   # this function will convert LaTeX to PDF
   # it is called in global.report() and tabellenbau()
   create.pdf <- function(file, path){
@@ -257,7 +270,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       note <- einzelergebnis$Mark
       # check for file name scheme
       if(identical(file.name, "name"))
-	name.scheme <- paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep="")
+	name.scheme <- file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep=""))
       else
 	name.scheme <- paste(matn,".tex", sep="")
       # create filename from name scheme

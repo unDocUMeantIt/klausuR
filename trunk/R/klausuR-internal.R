@@ -9,22 +9,22 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace
 		  # are there missing values in answ?
 		  if(sum(is.na(answ) > 0)){
 		    if(!is.null(na.replace)){
-		      warning(paste("NAs were present in ",deparse(substitute(answ))," and replaced by \"",na.replace,"\"!\n", sep=""))
+		      warning(paste("NAs were present in ",deparse(substitute(answ))," and replaced by \"",na.replace,"\"!\n", sep=""), call.=FALSE)
 		      answ[is.na(answ)] <- na.replace
 		    }
 		    else
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(answ)),"!\n", sep="")))
+		      stop(simpleError(paste("NAs present in ",deparse(substitute(answ)),"!\n", sep="")), call.=FALSE)
 		  } else{}
 		  if(sum(is.na(corr) > 0)){
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")))
+		      stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")), call.=FALSE)
 		  } else{}
 		  if(sum(is.na(marks) > 0)){
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(marks)),"!\n", sep="")))
+		      stop(simpleError(paste("NAs present in ",deparse(substitute(marks)),"!\n", sep="")), call.=FALSE)
 		  } else{}
 
 		  # are all needed variables present in the answers data?
 		  if(is.null(answ$Name) || is.null(answ$FirstName) || is.null(answ$MatrNo)){
-		    stop(simpleError("The observation data is not complete (Name, FirstName, MatrNo)!"))
+		    stop(simpleError("The observation data is not complete (Name, FirstName, MatrNo)!"), call.=FALSE)
 		  } else{}
 
 		  # in case no items were specified, take variables of names "Item##" as items
@@ -35,21 +35,21 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace
 		  if(!setequal(names(answ[, items]),names(corr))){
 		    fehl.items.corr <- names(corr[!is.element(names(corr),names(answ[,items]))])
 		    fehl.items.answ <- names(answ[!is.element(names(answ[, items]),names(corr))])
-		    stop(simpleError(paste("Please check:", fehl.items.corr, fehl.items.answ, "\n\n The number of items differs between observed and correct answers!")))
+		    stop(simpleError(paste("Please check:", fehl.items.corr, fehl.items.answ, "\n\n The number of items differs between observed and correct answers!")), call.=FALSE)
 		  }
 		  if(is.null(wght)){
 		    warning("No weight vector (wght) given.\n  Number of items is used as maximum score.")
 		  } else{
 		    if(length(wght) != length(corr))
-		      stop(simpleError("The number of weights differs from the number if items!"))
+		      stop(simpleError("The number of weights differs from the number if items!"), call.=FALSE)
 		  }
 		  if(!identical(score, "solved")){
 		    if(!identical(score, "partial") && !identical(score, "liberal"))
-		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\" or \"liberal\"!"))
+		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\" or \"liberal\"!"), call.=FALSE)
 		    else if(identical(score, "partial"))
-		      warning("Partially answered items were allowed (but only if no wrong alternative was checked).")
+		      warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
 		    else if(identical(score, "liberal"))
-		      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).")
+		      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
 		  } else{}
 
     # return objects that have probably changed
@@ -92,7 +92,7 @@ calc.cronbach.alpha <- function(dichot.matrix){
 	  return(list(alpha=cr.alpha, ci=cr.alpha.ci, deleted=cr.deleted))
 	}
 	cron.alpha.list <- tryCatch(try.cron.alpha(), error=function(e){
-	warning("Cronbach's alpha calculation failed!\n", e)
+	warning("Cronbach's alpha calculation failed!\n", e, call.=FALSE)
 	return(list(alpha=NA, ci=NA, deleted=NA))})
   } ## end function calc.cronbach.alpha()
 
@@ -105,7 +105,7 @@ calc.item.analysis <- function(dichot.matrix, cron.alpha.list){
 	  return(item.anal)
 	}
 	item.analyse <- tryCatch(try.item.analysis(), error=function(e){
-	warning("Item analysis failed!\n", e)
+	warning("Item analysis failed!\n", e, call.=FALSE)
 	return(data.frame(NA))})
   } ## end function calc.item.analysis()
 
