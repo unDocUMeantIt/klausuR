@@ -168,10 +168,16 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)), call.=FALSE)
 		  }
 
-		  # assign the marks
-		  note <- marks[punkte]
-		    if(sum(is.na(note)) > 0)
-		      stop(simpleError("Undefined score found. Can't assign marks, check their values!\n\n"), call.=FALSE)
+		  # assign the marks. zero points will result in lowest mark, NA will stay NA
+		  note <- sapply(punkte, function(x){
+			    if(is.na(x))
+			      return(NA) else{}
+			    if(x > 0)
+			      note <- marks[x]
+			    else
+			      note <- marks[1]
+			    return(note)
+			  })
 
 		  # create data object with name, mat-nr and global results
 		  # calls the internal function global.results()

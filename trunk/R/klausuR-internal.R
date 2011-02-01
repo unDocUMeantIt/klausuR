@@ -6,14 +6,28 @@
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the given data
 data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace){
-		  # are there missing values in answ?
-		  if(sum(is.na(answ) > 0)){
+
+		  # in case no items were specified, take variables of names "Item##" as items
+		  if(is.null(items)){
+		    items <- grep("Item([[:digit:]]{1,3})", names(answ))
+		  } else{}
+
+		  # are all needed variables present in the answers data?
+		  if(is.null(answ$Name) || is.null(answ$FirstName) || is.null(answ$MatrNo)){
+		    stop(simpleError("The observation data is not complete (Name, FirstName, MatrNo)!"), call.=FALSE)
+		  } else{}
+
+		  # we'll check for NAs only in variables we will use, so define them here
+		  relevant.items <- c(grep("^Name$", names(answ)), grep("^FirstName$", names(answ)), grep("^MatrNo$", names(answ)), items)
+
+		  # are there missing values in answ, at least in the relevant parts?
+		  if(sum(is.na(answ[, relevant.items]) > 0)){
 		    if(!is.null(na.replace)){
 		      warning(paste("NAs were present in ",deparse(substitute(answ))," and replaced by \"",na.replace,"\"!\n", sep=""), call.=FALSE)
 		      answ[is.na(answ)] <- na.replace
 		    }
 		    else
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(answ)),"!\n", sep="")), call.=FALSE)
+		      warning(paste("NAs were present in ",deparse(substitute(answ)),"\"!\n", sep=""), call.=FALSE)
 		  } else{}
 		  if(sum(is.na(corr) > 0)){
 		      stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")), call.=FALSE)
@@ -22,15 +36,6 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace
 		      stop(simpleError(paste("NAs present in ",deparse(substitute(marks)),"!\n", sep="")), call.=FALSE)
 		  } else{}
 
-		  # are all needed variables present in the answers data?
-		  if(is.null(answ$Name) || is.null(answ$FirstName) || is.null(answ$MatrNo)){
-		    stop(simpleError("The observation data is not complete (Name, FirstName, MatrNo)!"), call.=FALSE)
-		  } else{}
-
-		  # in case no items were specified, take variables of names "Item##" as items
-		  if(is.null(items)){
-		    items <- grep("Item([[:digit:]]{1,3})", names(answ))
-		  } else{}
 		  # now let's check wheter all defined correct answers match the variables in answers data
 		  if(!setequal(names(answ[, items]),names(corr))){
 		    fehl.items.corr <- names(corr[!is.element(names(corr),names(answ[,items]))])
