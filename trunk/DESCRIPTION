@@ -2,7 +2,7 @@ Package: klausuR
 Type: Package
 Title: Multiple Choice Test Evaluation
 Version: 0.10-1
-Date: 2010-12-02
+Date: 2011-02-01
 Author: m.eik michalke
 Maintainer: m.eik michalke <meik.michalke@uni-duesseldorf.de>
 Depends: R (>= 2.9.0),xtable,psychometric,methods,graphics,tools
@@ -14,4 +14,4 @@ Description: A set of functions designed to quickly generate results of
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyLoad: yes
-URL: https://r-forge.r-project.org/projects/klausur, http://www.reaktanz.de
+URL: https://r-forge.r-project.org/projects/klausur

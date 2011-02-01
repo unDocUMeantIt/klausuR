@@ -94,11 +94,11 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
   }
   else {
   # check if a preset of marks can be used
-  if(length(mark.labels) == 1 && identical(mark.labels, 16))
+  if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 16))
     mark.labels <- c("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15")
-  else if(length(mark.labels) == 1 && identical(mark.labels, 11))
+  else if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 11))
     mark.labels <- c("5.0","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1.3","1.0")
-  else if(length(mark.labels) == 1 && (identical(mark.labels, 6) || identical(mark.labels, "DIHK")))
+  else if(length(mark.labels) == 1 && (identical(as.numeric(mark.labels), 6) || identical(mark.labels, "DIHK")))
     mark.labels <- c(6:1)
   else if(length(mark.labels) == 1 && identical(mark.labels, "USA"))
     mark.labels <- c("F","D","C","B","A")

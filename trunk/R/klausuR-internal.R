@@ -198,15 +198,16 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
 			   # count only if no more answers were checked than correct answers available
 			      if(length(x) > corr.length)
 				return(0)
-			      else
+			      else {
 				abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
 				abs.false   <- sum(is.na(pmatch(x, corr.parts[item][[1]])))
-			   # if in strict mode, discard if more answers were checked then correct one,
-			   # that is, if at least one wrong answer was given, return no points at all
-			      if(strict && abs.false > 0)
-				return(0)
-			      else
-				return(abs.correct)
+				# if in strict mode, discard if more answers were checked then correct one,
+				# that is, if at least one wrong answer was given, return no points at all
+				if(strict && abs.false > 0)
+				  return(0)
+				else
+				  return(abs.correct)
+			      }
 			    })
       # this corresponds to the "absolute" value
       result <- unlist(lapply(result.list, sum))
@@ -244,7 +245,8 @@ marks.summary <- function(marks){
     # avoid strange starting points above zero
     if(mark.min <= 1){
       mark.min.pct <- ""
-    } else {
+    }
+    else {
       mark.min.pct <- ceiling(mark.min / maxp * 100)
     }
     mark.max.pct <- ceiling(mark.max / maxp * 100)
@@ -252,7 +254,8 @@ marks.summary <- function(marks){
     if(mark.min == mark.max){
       m.f.points <- mark.min
       m.f.pct <- mark.min.pct
-    } else {
+    }
+    else {
       m.f.points <- paste(mark.min, "-", mark.max, sep="")
       m.f.pct <- paste(mark.min.pct, " < ", mark.max.pct, sep="")
     }
