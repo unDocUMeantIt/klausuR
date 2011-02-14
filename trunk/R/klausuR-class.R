@@ -6,6 +6,8 @@
 #' @slot results A data.frame with global results
 #' @slot answ A data.frame with all given answers
 #' @slot corr A vector with the correct answers
+#' @slot wght A vector with the weights of items
+#' @slot points A data.frame with resulting points given for the answers
 #' @slot marks A vector with assignments of marks to achieved score
 #' @slot marks.sum A more convenient matrix with summary information on the defined marks
 #' @slot trfls A data.frame of TRUE/FALSE values, whether a subject was able to solve an item or not
@@ -25,6 +27,8 @@ setClass("klausuR",
     representation=representation(results="data.frame",
 	answ="data.frame",
 	corr="vector",
+	wght="vector",
+	points="data.frame",
 	marks="vector",
 	marks.sum="matrix",
 	trfls="data.frame",
@@ -36,6 +40,8 @@ setClass("klausuR",
     prototype(results=data.frame(),
 	answ=data.frame(),
 	corr=NULL,
+	wght=NULL,
+	points=data.frame(),
 	marks=NULL,
 	marks.sum=NULL,
 	trfls=data.frame(),

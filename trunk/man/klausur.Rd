@@ -1,8 +1,8 @@
 \name{klausur}
 \alias{klausur}
 \title{A function to evaluate multiple choice tests}
-\usage{klausur(answ, corr, marks, mark.labels=NULL, items = NULL,
-wght = NULL, score="solved", matn = NULL, na.replace = NULL,
+\usage{klausur(answ, corr, marks, mark.labels=NULL, items=NULL,
+wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
 cronbach=FALSE, item.analysis=FALSE)}
 \description{The function \code{klausur} expects a \code{\link{data.frame}} containing some identification data on all subjects and their answers to the test items,
 a vector with the correct answers, and a vector with marks assigned to the points achieved. It will compute global test results as well as
@@ -45,6 +45,8 @@ give quite unfair test results! In addition, please do \strong{always check a sa
 \item{results}{A data.frame with global results}
 \item{answ}{A data.frame with all given answers}
 \item{corr}{A vector with the correct answers}
+\item{wght}{A vector with the weights of items}
+\item{points}{A data.frame with resulting points given for the answers}
 \item{marks}{A vector with assignments of marks to achieved score}
 \item{marks.sum}{A more convenient matrix with summary information on the defined marks}
 \item{trfls}{A data.frame of TRUE/FALSE values, whether a subject was able to solve an item or not}

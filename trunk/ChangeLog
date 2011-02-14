@@ -6,6 +6,10 @@ ChangeLog for package klausuR
   - added new "na.rm" option to plot method, TRUE by default
   - added variable "Form" to klausur.gen()
   - replaced several "if(a == b)" constructs with "identical(a, b)" or "isTRUE(...)"
+  - fixed: klausur.report() accidently created PDFs in a loop over and over again
+  - fixed: klausur.report() failed if "#" appeared in names
+  - fixed: klausur.report() didn't show partial results correctly, added check for needed digits
+  - added slots "wght" and "points" to class klausuR
 
 ## 0.10-0
   - added klausur.mufo() and new S4 class klausuR.mult: initial support for parallel test forms

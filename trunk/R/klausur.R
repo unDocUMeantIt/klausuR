@@ -61,6 +61,8 @@
 #'	\item{results}{A data.frame with global results}
 #'	\item{answ}{A data.frame with all given answers}
 #'	\item{corr}{A vector with the correct answers}
+#'	\item{wght}{A vector with the weights of items}
+#'	\item{points}{A data.frame with resulting points given for the answers}
 #'	\item{marks}{A vector with assignments of marks to achieved score}
 #'	\item{marks.sum}{A more convenient matrix with summary information on the defined marks}
 #'	\item{trfls}{A data.frame of TRUE/FALSE values, whether a subject was able to solve an item or not}
@@ -119,10 +121,13 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  # probably weight items, to calculate the maximum score
 		  if(!is.null(wght)){
 		    maxp <- sum(wght)
+		    wght.results <- wght
 		  }
 		  # in case no weights were given, count each item as one point
 		  else {
 		    maxp <- length(items)
+		    # for the results, create a vector of 1's by number of items
+		    wght.results <- rep(1, length(items))
 		  }
 
 		  # create the TRUE/FALSE-matrix for solved items
@@ -204,6 +209,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  ## compose the resulting object
 		  # here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually
 		  wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo, wahr.falsch)
+		  # the same way make a copy of the matrix with resulting points, especially interesting if items were weighted
+		  ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
 		  # and we make a copy with given answers as well
 		  antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
 		  # use the internal marks.summary() function to create convenient information on the mark definitions
@@ -213,6 +220,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 					  results=ergebnis.daten,
 					  answ=antwort.daten,
 					  corr=corr,
+					  wght=wght.results,
+					  points=ergebnisse.daten,
 					  marks=marks,
 					  marks.sum=marks.info,
 					  trfls=wahrfalsch.daten,

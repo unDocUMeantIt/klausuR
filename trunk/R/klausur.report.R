@@ -183,13 +183,25 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
     ## let's grab some info out of the klausuR-object for code readability
     results <- klsr@results
+    res.points <- klsr@points
     truefalse <- klsr@trfls
     answers <- klsr@answ
     correct <- klsr@corr
+    wght <- klsr@wght
     # if informatin on marks is wanted, only grab the intended stuff
     if(sum(unlist(marks.info)) > 0){
       marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
       colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
+    }
+
+    # for a nice printout, check numer of needed digits for points.
+    # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
+    if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
+      print.digits <- 0
+    } else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
+      print.digits <- 1
+    } else {
+      print.digits <- 2
     }
 
   # this function will replace German umlauts with LaTeX equivalents
@@ -205,6 +217,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
     output <- gsub("Ä",'\\\\\"A',as.character(output))
     output <- gsub("&",'\\\\&',as.character(output))
     output <- gsub("_",'\\\\_',as.character(output))
+    output <- gsub("#",'\\\\#',as.character(output))
     return(output)
   }
 
@@ -229,26 +242,21 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       current.wd <- getwd()
       # change to destined directory
       setwd(path)
-      if(identical(file, "all")){
-	for(i in dir(pattern="*.tex")) texi2dvi(i, pdf=TRUE, clean=TRUE)
-      }
-      else{
-	texi2dvi(file, pdf=TRUE, clean=TRUE)
-      }
+      texi2dvi(file, pdf=TRUE, clean=TRUE)
       # in case save was FALSE, move the PDFs to the actual destination
       if(!isTRUE(save) && isTRUE(file.info(path.orig)$isdir)){
-	file.copy(dir(pattern="*.pdf"), path.orig, overwrite=TRUE)
+	file.copy(gsub(".tex", ".pdf", file), path.orig, overwrite=TRUE)
       } else {}
       # get back to where we came from
       setwd(current.wd)
   } ## end function create.pdf()
 
   tabellenbau <- function(matn){
-      # TRUE/FALSE-matrix of given answers
-      trfl.mtrx <- truefalse[truefalse$MatrNo==matn,]
+      points.mtrx <- res.points[res.points$MatrNo==matn,]
       einzelergebnis <- results[results$MatrNo==matn,]
-      geg.items <- grep("Item([[:digit:]]{1,3})",names(trfl.mtrx))
-      geg.trfl <- as.numeric(trfl.mtrx[,geg.items])
+      geg.items <- grep("Item([[:digit:]]{1,3})",names(points.mtrx))
+      geg.points <- as.numeric(points.mtrx[,geg.items])
+
       # the indices of all answers
       items <- grep("Item([[:digit:]]{1,3})",names(answers))
       if(alt.candy){
@@ -332,11 +340,11 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
       # combine parts to a document
       write(latex.head, file=dateiname)
-	# create table, the vector "richtig" from function ausw.daten is used
-	pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.trfl)
+	# create table
+	pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.points)
 	rownames(pre.erg.tabelle) <- c(text$Antwort,text$Korrekt,text$Punkte)
 	colnames(pre.erg.tabelle) <- names(answers)[items]
-      print(xtable(t(pre.erg.tabelle), digits=0,
+      print(xtable(t(pre.erg.tabelle), digits=c(0,0,0,print.digits),
 	caption=paste(text$Auswertung," ",vorname," ",name," (",text$MatrikelNr," ",matn,")",sep="")),
 	file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
       if(sum(unlist(marks.info)) > 0){
