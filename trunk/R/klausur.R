@@ -53,7 +53,7 @@
 #' @param wght A vector with weights for each item (named also according to \code{Item###}).
 #' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
-#' @param na.replace A single value to replace NAs with in \code{answ}.
+#' @param na.rm Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
@@ -106,12 +106,12 @@
 #' 
 #' klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
 
-klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.replace=NULL, cronbach=TRUE, item.analysis=TRUE){
+klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
 		  ## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
 		  ## firstly, check input data an quit if necessary
                   # data.check.klausur() is an internal function, defined in klausuR-internal.R
-		  sane.data <- data.check.klausur(answ, corr, marks, items, wght, score, na.replace)
+		  sane.data <- data.check.klausur(answ, corr, marks, items, wght, score, na.rm)
 		  answ <- sane.data$answ
 		  items <- sane.data$items
 
@@ -155,7 +155,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		  ## descriptive statistics
 		  mittel.quart <- summary(punkte)
-		  stdabw <- sd(punkte)
+		  stdabw <- sd(punkte, na.rm=TRUE)
 
 		  # should marks be suggested or are they given?
 		  if(length(marks) == 1 && identical(marks, "suggest")){
@@ -189,7 +189,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  if(isTRUE(cronbach)){
 			# calling an internal function which is
 			# using alpha() from package "psychometric"
-			cron.alpha.list <- calc.cronbach.alpha(wahr.falsch)
+			cron.alpha.list <- calc.cronbach.alpha(na.omit(wahr.falsch))
 		  } else {
 		    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
 		  }

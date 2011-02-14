@@ -19,6 +19,7 @@ Should you rather like plots on each test form, call \code{plot} with the single
 \item{marks}{Logical, whether the histogram should show the distribution of points (default) or marks}
 \item{sd.lines}{Logical, whether standard deviation lines should be plotted}
 \item{plot.normal}{Logical, whether normal distribution should be plotted (according to mean and Sd of the results)}
+\item{na.rm}{Logical, whether NA values should be ignored. Defaults to TRUE, because plotting would fail otherwise}
 \item{\dots}{Any other argument suitable for plot()}
 }
 \examples{data(antworten)

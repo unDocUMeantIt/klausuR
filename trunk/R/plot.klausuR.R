@@ -11,6 +11,7 @@
 #' @param marks Logical, whether the histogram should show the distribution of points (default) or marks
 #' @param sd.lines Logical, whether standard deviation lines should be plotted
 #' @param plot.normal Logical, whether normal distribution should be plotted (according to mean and Sd of the results)
+#' @param na.rm Logical, whether NA values should be ignored. Defaults to TRUE, because plotting would fail otherwise
 #' @param \dots Any other argument suitable for plot()
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}, \code{\link[klausuR:klausur.report]{klausur.report}}
@@ -48,11 +49,16 @@
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 
 #' @rdname plot-methods
-setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, ...){
+setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, na.rm=TRUE, ...){
 
   klsr <- x
-  erg.points <- klsr@results$Points
-  erg.marks <- klsr@results$Mark
+  if(isTRUE(na.rm)){
+	erg.points <- na.omit(klsr@results$Points)
+	erg.marks <- na.omit(klsr@results$Mark)
+  } else {
+	erg.points <- klsr@results$Points
+	erg.marks <- klsr@results$Mark
+  }
 
   if(!marks){
       erg.min <- min(erg.points)

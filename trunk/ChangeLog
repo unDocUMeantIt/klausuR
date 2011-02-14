@@ -2,6 +2,8 @@ ChangeLog for package klausuR
 
 ## 0.10-1
   - complete rewrite of klausur.compare(): less and more efficient code
+  - replaced "na.replace" option with a plain "na.rm", i.e., NA cases are dropped completely by default
+  - added new "na.rm" option to plot method, TRUE by default
   - added variable "Form" to klausur.gen()
   - replaced several "if(a == b)" constructs with "identical(a, b)" or "isTRUE(...)"
 

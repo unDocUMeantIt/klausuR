@@ -5,7 +5,7 @@
 ## data.check.klausur()
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the given data
-data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace){
+data.check.klausur <- function(answ, corr, marks, items, wght, score, na.rm){
 
 		  # in case no items were specified, take variables of names "Item##" as items
 		  if(is.null(items)){
@@ -22,9 +22,9 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.replace
 
 		  # are there missing values in answ, at least in the relevant parts?
 		  if(sum(is.na(answ[, relevant.items]) > 0)){
-		    if(!is.null(na.replace)){
-		      warning(paste("NAs were present in ",deparse(substitute(answ))," and replaced by \"",na.replace,"\"!\n", sep=""), call.=FALSE)
-		      answ[is.na(answ)] <- na.replace
+		    if(isTRUE(na.rm)){
+		      warning(paste("NAs were present in ",deparse(substitute(answ))," and removed!\n", sep=""), call.=FALSE)
+		      answ <- na.omit(answ)
 		    }
 		    else
 		      warning(paste("NAs were present in ",deparse(substitute(answ)),"\"!\n", sep=""), call.=FALSE)

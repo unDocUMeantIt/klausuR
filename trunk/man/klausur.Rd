@@ -72,7 +72,7 @@ where ### is a number with leading zeros, if needed).}
 \item{wght}{A vector with weights for each item (named also according to \code{Item###}).}
 \item{score}{Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.}
 \item{matn}{A matriculation number of a subject, to receive detailed results for that subject.}
-\item{na.replace}{A single value to replace NAs with in \code{answ}.}
+\item{na.rm}{Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.}
 \item{cronbach}{Logical. If TRUE, Cronbach's alpha will be calculated.}
 \item{item.analysis}{Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.}
