@@ -38,8 +38,8 @@
 #' give quite unfair test results! In addition, please do \strong{always check a sample of the results} to make sure no errors accurred.
 #' 
 #' @title A function to evaluate multiple choice tests
-#' @usage klausur(answ, corr, marks, mark.labels=NULL, items = NULL,
-#' wght = NULL, score="solved", matn = NULL, na.replace = NULL,
+#' @usage klausur(answ, corr, marks, mark.labels=NULL, items=NULL,
+#' wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
 #' cronbach=FALSE, item.analysis=FALSE)
 #' @param answ A \code{\link{data.frame}} which has to include at least these variables:
 #'	\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
