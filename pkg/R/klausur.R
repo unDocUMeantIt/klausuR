@@ -20,16 +20,16 @@
 #' If the correct answer is "134" and a subject checked "15", \code{"solved"} will give no point (because "15" is not equal to "134"), as will \code{"partial"}
 #' (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
 #' 
-#' The \strong{assigned marks} are expected to be in a certain format as well, as long as you dont want klausur to suggest them itself (see below).
+#' The \strong{assigned marks} are expected to be in a certain format as well, as long as you don't want \code{klausur} to suggest them itself (see below).
 #' Just create an empty vector to start with (say \code{your.marks <- c()}) and fill it according to the scheme \code{your.marks[<points from>:<points to>] <- <mark>}.
-#' Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indexes to the vector with
+#' Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indices to the vector with
 #' \code{your.marks[27:30] <- "1.7"} (see example section below). It is crucial to assign marks to the whole range of points that can be achieved in the test.
 #' On the other hand, it's irrelevant wheter you assign decimal marks as in the example, only integer values, a 15 marks scheme or whatever. The convenience
 #' function \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} can assist you in creating such a valid vector.
 #'
 #' Another way to deal with marks is to let klausuR make a suggestion. That is, if \code{marks="suggest"}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
 #' kicks in and takes either the \code{mark.labels} you have defined here or will ask you step by step. See the documentation of that function for details. To see the
-#' suggested result in detail, have a look at the slot "marks" of the returned object.
+#' suggested result in detail, have a look at the slot \code{marks} of the returned object.
 #'
 #' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.
 #'
@@ -38,12 +38,12 @@
 #' give quite unfair test results! In addition, please do \strong{always check a sample of the results} to make sure no errors accurred.
 #' 
 #' @title A function to evaluate multiple choice tests
-#' @usage klausur(answ, corr, marks, mark.labels=NULL, items = NULL,
-#' wght = NULL, score="solved", matn = NULL, na.replace = NULL,
+#' @usage klausur(answ, corr, marks, mark.labels=NULL, items=NULL,
+#' wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
 #' cronbach=FALSE, item.analysis=FALSE)
 #' @param answ A \code{\link{data.frame}} which has to include at least these variables:
 #'	\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
-#'	and variables for the ansered items (according to the scheme \code{Item###},
+#'	and variables for the answered items (according to the scheme \code{Item###},
 #'	where ### is a number with leading zeros, if needed).
 #' @param corr A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
@@ -53,7 +53,7 @@
 #' @param wght A vector with weights for each item (named also according to \code{Item###}).
 #' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
-#' @param na.replace A single value to replace NAs with in \code{answ}.
+#' @param na.rm Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
@@ -61,6 +61,8 @@
 #'	\item{results}{A data.frame with global results}
 #'	\item{answ}{A data.frame with all given answers}
 #'	\item{corr}{A vector with the correct answers}
+#'	\item{wght}{A vector with the weights of items}
+#'	\item{points}{A data.frame with resulting points given for the answers}
 #'	\item{marks}{A vector with assignments of marks to achieved score}
 #'	\item{marks.sum}{A more convenient matrix with summary information on the defined marks}
 #'	\item{trfls}{A data.frame of TRUE/FALSE values, whether a subject was able to solve an item or not}
@@ -69,7 +71,7 @@
 #'	\item{sd}{Standard deviation of the test results}
 #'	\item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
 #'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power and discriminant factor of all items.}
-#'	Not all slots are shown by default (refer to \code{\link[show,klausuR]{show}} and \code{\link[plot,klausuR]{plot}}).
+#'	Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{show}} and \code{\link[plot,klausuR]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur.report]{klausur.report}}, \code{\link[klausuR:klausur.compare]{klausur.compare}},
 #'  \code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
@@ -106,12 +108,12 @@
 #' 
 #' klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
 
-klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.replace=NULL, cronbach=TRUE, item.analysis=TRUE){
+klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
 		  ## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
 		  ## firstly, check input data an quit if necessary
                   # data.check.klausur() is an internal function, defined in klausuR-internal.R
-		  sane.data <- data.check.klausur(answ, corr, marks, items, wght, score, na.replace)
+		  sane.data <- data.check.klausur(answ, corr, marks, items, wght, score, na.rm)
 		  answ <- sane.data$answ
 		  items <- sane.data$items
 
@@ -119,22 +121,25 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  # probably weight items, to calculate the maximum score
 		  if(!is.null(wght)){
 		    maxp <- sum(wght)
+		    wght.results <- wght
 		  }
 		  # in case no weights were given, count each item as one point
 		  else {
 		    maxp <- length(items)
+		    # for the results, create a vector of 1's by number of items
+		    wght.results <- rep(1, length(items))
 		  }
 
 		  # create the TRUE/FALSE-matrix for solved items
 		  # this will become a point matrix instead if partial results are ok
-		  if(score == "partial" || score == "liberal"){
+		  if(identical(score, "partial") || identical(score, "liberal")){
 		    # weights will be considered here as well
 		    # if partial answers should be considered
-		    if(score == "partial"){
+		    if(identical(score, "partial")){
 		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")))
 		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")))
 		    }
-		    if(score == "liberal"){
+		    if(identical(score, "liberal")){
 		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")))
 		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")))
 		    }
@@ -155,23 +160,29 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		  ## descriptive statistics
 		  mittel.quart <- summary(punkte)
-		  stdabw <- sd(punkte)
+		  stdabw <- sd(punkte, na.rm=TRUE)
 
 		  # should marks be suggested or are they given?
-		  if(length(marks) == 1 && marks == "suggest"){
-		    warning("Marks are a suggestion, not your definition!")
+		  if(length(marks) == 1 && identical(marks, "suggest")){
+		    warning("Marks are a suggestion, not your definition!", call.=FALSE)
 		    marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw))
 		  }
 
 		  # check wheter maximum score matches the assigned marks
 		  if(length(marks) != maxp){
-		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)))
+		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)), call.=FALSE)
 		  }
 
-		  # assign the marks
-		  note <- marks[punkte]
-		    if(sum(is.na(note)) > 0)
-		      stop(simpleError("Undefined score found. Can't assign marks, check their values!\n\n"))
+		  # assign the marks. zero points will result in lowest mark, NA will stay NA
+		  note <- sapply(punkte, function(x){
+			    if(is.na(x))
+			      return(NA) else{}
+			    if(x > 0)
+			      note <- marks[x]
+			    else
+			      note <- marks[1]
+			    return(note)
+			  })
 
 		  # create data object with name, mat-nr and global results
 		  # calls the internal function global.results()
@@ -180,39 +191,28 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  ergebnis.anonym <- anon.results(ergebnis.daten)
 
 		  ## psychometic quality of the items
-		  if(cronbach==TRUE){
-		    # using alpha() from package "psychometric"
-		    try.cron.alpha <- function(){
-		      cr.alpha <- alpha(wahr.falsch)
-		      cr.alpha.ci <- alpha.CI(cr.alpha, k=dim(wahr.falsch)[2], N=dim(wahr.falsch)[1], level=0.95)
-		      cr.deleted <- as.matrix(sapply(1:dim(wahr.falsch)[2], function(x){alpha(wahr.falsch[-x])}))
-			rownames(cr.deleted) <- names(wahr.falsch)
-			colnames(cr.deleted) <- "alphaIfDeleted"
-		      return(list(alpha=cr.alpha,ci=cr.alpha.ci,deleted=cr.deleted))
-		    }
-		    cron.alpha.list <- tryCatch(try.cron.alpha(), error=function(e){
-			warning("Cronbach's alpha calculation failed!\n",e)
-			return(list(alpha=NA,ci=NA,deleted=NA))})
+		  if(isTRUE(cronbach)){
+			# calling an internal function which is
+			# using alpha() from package "psychometric"
+			cron.alpha.list <- calc.cronbach.alpha(na.omit(wahr.falsch))
 		  } else {
-		    cron.alpha.list <- list(alpha=NA,ci=NA,deleted=NA)
+		    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
 		  }
-		  if(item.analysis==TRUE){
-		    try.item.analysis <- function(){
-		      item.anal <- cbind(item.exam(wahr.falsch, discrim=TRUE), alphaIfDeleted=cron.alpha.list$deleted)
-		      return(item.anal)
-		    }
-		    item.analyse <- tryCatch(try.item.analysis(), error=function(e){
-			warning("Item analysis failed!\n",e)
-			return(data.frame(NA))})
+		  if(isTRUE(item.analysis)){
+			# calling another internal function which is also
+			# using alpha() from package "psychometric"
+			item.analyse <- calc.item.analysis(wahr.falsch, cron.alpha.list)
 		  } else {
-		    item.analyse <- data.frame(NA)
+		    item.analyse <- NULL
 		  }
 		  
 		  ## compose the resulting object
 		  # here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually
-		  wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo,wahr.falsch)
+		  wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo, wahr.falsch)
+		  # the same way make a copy of the matrix with resulting points, especially interesting if items were weighted
+		  ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
 		  # and we make a copy with given answers as well
-		  antwort.daten <- cbind(MatrNo=answ$MatrNo,answ[,items])
+		  antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
 		  # use the internal marks.summary() function to create convenient information on the mark definitions
 		  marks.info <- marks.summary(marks)
 		  # here we finally take all the partial results an knit them together into one object
@@ -220,6 +220,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 					  results=ergebnis.daten,
 					  answ=antwort.daten,
 					  corr=corr,
+					  wght=wght.results,
+					  points=ergebnisse.daten,
 					  marks=marks,
 					  marks.sum=marks.info,
 					  trfls=wahrfalsch.daten,
@@ -232,11 +234,11 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		  ## output options
 		  # return all data or just for one matriculation number?
 		  if(!is.null(matn)){
-			if(!sum(answ$MatrNo==matn)==1){
-			  stop(simpleError("The given matriculation number is not defined!"))
+			if(!sum(answ$MatrNo == matn) == 1){
+			  stop(simpleError("The given matriculation number is not defined!"), call.=FALSE)
 			  }
 			  pers.ergebnisse <- ergebnis.daten[ergebnis.daten$MatrNo == matn,]
-			  items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn,-1]
+			  items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn, -1]
 			  rownames(items.solved) <- "Solved"
 			  ausgabe <- list(Results=pers.ergebnisse, SolvedItems=t(items.solved))
 		  }

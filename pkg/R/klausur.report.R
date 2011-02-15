@@ -1,27 +1,30 @@
-#' \code{klausur.report} takes (at least) an object of class klausuR and a matriculation number to generate personal test results
+#' \code{klausur.report} takes (at least) an object of class klausuR (or klausuR.mult) and a matriculation number to generate personal test results
 #' in LaTeX and/or PDF format.
 #'
-#'The report contains, next to the individual results, a table with all given and correct  answers (using \code{\link[xtable]{xtable}}),
+#' The report contains, next to the individual results, a table with all given and correct  answers (using \code{\link[xtable]{xtable}}),
 #' as well as nice histograms showing the distribution of the test results (points and/or marks are supportet). If the matriculation numer
 #' is set to "all", reports for all subjects are produced. Setting it to "anon" will get you a printable version of the anonymized results.
 #' 
 #' By default output is sent to standard out. To save them to disk in LaTeX format a "save" parameter is provided. Alternatively, the reports
 #' can be converted to PDF format as well. \code{klausur.report} is calling \code{\link[texi2dvi]{texi2dvi}} from the \code{tools} package for that.
 #'
+#' If the object is of class klausuR.mult, only the global results for tests with several test forms are evaluated. In case you'd rather like
+#' reports on each test form, call \code{klausur.report} with the single slots from that object accordingly.
+#'
 #' @title Generate individual reports on multipe choice test results
-#' @method klausur.report klausuR
+#' @method klausur.report klausuR klausuR.mult
 #' @usage
-#' klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
-#'  hist=list(points=FALSE, marks=FALSE),
+#' klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
+#'  file.name="matn", hist=list(points=FALSE, marks=FALSE),
 #'  hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 #'  marks.info=list(points=FALSE, percent=FALSE),
 #'  descr=list(title=NULL, name=NULL, date=NULL),
 #'  lang="en", alt.candy=TRUE, anon.glob.file="anon.tex")
-#' @param klsr An object of class klausuR.
+#' @param klsr An object of class klausuR or klausuR.mult.
 #' @param matn Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 #'	or "glob" (produces a global results document).
-#' @param save logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").
-#' @param pdf logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
+#' @param save Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").
+#' @param pdf Logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
 #'	If \code{save} is FALSE, a temporary directory is used, that is only the PDF files will be saved.
 #' @param path Path for \code{save} and \code{hist} files.
 #' @param file.name File name scheme for the reports, either "matn" (matriculation number) or "name" (name and firstname).
@@ -78,35 +81,38 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			    descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
 			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex"){
 
-  # check whether klsr is an object og class "klausuR"
-  if(!inherits(klsr, "klausuR"))
-    stop(simpleError("The given object is not of class \"klausuR\"!"))
+  # before we start let's look at klsr
+  # if it's of class "klausuR.mult", extract global results and drop the rest
+  if(inherits(klsr, "klausuR.mult")){
+    klsr <- klsr@results.glob
+    } else{
+      # check whether klsr is an object of class "klausuR" instead
+      if(!inherits(klsr, "klausuR"))
+	stop(simpleError("The given object is not of class \"klausuR\"!"))
+    }
 
-  if(!is.numeric(matn) && matn != "all" && matn != "anon" && matn != "glob")
+  if(!is.numeric(matn) && !identical(matn, "all") && !identical(matn, "anon") && !identical(matn, "glob"))
     stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
 
-  if((save == TRUE || pdf == TRUE || hist$points == TRUE || hist$marks == TRUE) && is.null(path))
+  if((isTRUE(save) || isTRUE(pdf) || isTRUE(hist$points) || isTRUE(hist$marks)) && is.null(path))
     stop(simpleError("Files have to be saved, but path is empty!"))
 
   ## path handling
   # check if path exists
-  if(file.info(path)$isdir == FALSE)
+  if(!isTRUE(file.info(path)$isdir))
     stop(simpleError(paste(path,"is not a valid path!")))
   # PDF creation will be done in an temporal directory if "save" is FALSE
   # we'll make "path" "path.orig" and override it with that tempdir internally
-  if(save == FALSE && pdf == TRUE){
+  if(!isTRUE(save) && isTRUE(pdf)){
     path.orig <- path
     path <- tempfile("klausuR")
       if(!dir.create(path, recursive=TRUE)) stop(simpleError("Couldn't create temporary directory! Try with save=TRUE"))
     # if the function is done, remove the tempdir
-    on.exit(if(path != path.orig) unlink(path, recursive=TRUE))
+    on.exit(if(!identical(path, path.orig)) unlink(path, recursive=TRUE))
   } else {}
-  # to be sure path is treated as a directory, add a trailing slash if omitted
-  if(length(grep("/$", path)) == 0)
-    path <- paste(path,"/", sep="")
 
   # define the text of the LaTeX document...
-  if(lang == "de"){
+  if(identical(lang, "de")){
   text <- list(Auswertung="Einzelauswertung",
 	    DozentIn="Dozent",
 	    MatrikelNr="Matrikel-Nr.",
@@ -159,7 +165,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
   if(hist$points || hist$marks) {
     if(hist$points) {
-      pdf(file = paste(path,hist.points,sep=""),
+      pdf(file = file.path(path, hist.points),
 	  width = 10, height = 10,
 	  pointsize = 22, bg = "white")
 	plot(klsr, xlab=hist.text$P.xlab, ylab=hist.text$P.ylab, main=hist.text$P.main)
@@ -167,7 +173,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
     }
 
     if(hist$marks) {
-      pdf(file = paste(path,hist.marks,sep=""),
+      pdf(file = file.path(path, hist.marks),
 	  width = 10, height = 10,
 	  pointsize = 22, bg = "white")
 	plot(klsr, marks=TRUE, xlab=hist.text$N.xlab, ylab=hist.text$N.ylab, main=hist.text$N.main)
@@ -177,13 +183,25 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
     ## let's grab some info out of the klausuR-object for code readability
     results <- klsr@results
+    res.points <- klsr@points
     truefalse <- klsr@trfls
     answers <- klsr@answ
     correct <- klsr@corr
+    wght <- klsr@wght
     # if informatin on marks is wanted, only grab the intended stuff
     if(sum(unlist(marks.info)) > 0){
       marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
       colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
+    }
+
+    # for a nice printout, check numer of needed digits for points.
+    # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
+    if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
+      print.digits <- 0
+    } else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
+      print.digits <- 1
+    } else {
+      print.digits <- 2
     }
 
   # this function will replace German umlauts with LaTeX equivalents
@@ -199,6 +217,20 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
     output <- gsub("Ä",'\\\\\"A',as.character(output))
     output <- gsub("&",'\\\\&',as.character(output))
     output <- gsub("_",'\\\\_',as.character(output))
+    output <- gsub("#",'\\\\#',as.character(output))
+    return(output)
+  }
+
+  # this function will replace German umlauts for filenames
+  # it's used in tabellenbau() below
+  file.umlaute <- function(input){
+    output <- gsub("ß","ss",as.character(input))
+    output <- gsub("ö","oe",as.character(output))
+    output <- gsub("ü","ue",as.character(output))
+    output <- gsub("ä","ae",as.character(output))
+    output <- gsub("Ö","Oe",as.character(output))
+    output <- gsub("Ü","Ue",as.character(output))
+    output <- gsub("Ä","Ae",as.character(output))
     return(output)
   }
 
@@ -210,26 +242,21 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       current.wd <- getwd()
       # change to destined directory
       setwd(path)
-      if(file=="all"){
-	for(i in dir(pattern="*.tex")) texi2dvi(i, pdf=TRUE, clean=TRUE)
-      }
-      else{
-	texi2dvi(file, pdf=TRUE, clean=TRUE)
-      }
+      texi2dvi(file, pdf=TRUE, clean=TRUE)
       # in case save was FALSE, move the PDFs to the actual destination
-      if(save == FALSE && file.info(path.orig)$isdir == TRUE){
-	file.copy(dir(pattern="*.pdf"), path.orig, overwrite=TRUE)
+      if(!isTRUE(save) && isTRUE(file.info(path.orig)$isdir)){
+	file.copy(gsub(".tex", ".pdf", file), path.orig, overwrite=TRUE)
       } else {}
       # get back to where we came from
       setwd(current.wd)
   } ## end function create.pdf()
 
   tabellenbau <- function(matn){
-      # TRUE/FALSE-matrix of given answers
-      trfl.mtrx <- truefalse[truefalse$MatrNo==matn,]
+      points.mtrx <- res.points[res.points$MatrNo==matn,]
       einzelergebnis <- results[results$MatrNo==matn,]
-      geg.items <- grep("Item([[:digit:]]{1,3})",names(trfl.mtrx))
-      geg.trfl <- as.numeric(trfl.mtrx[,geg.items])
+      geg.items <- grep("Item([[:digit:]]{1,3})",names(points.mtrx))
+      geg.points <- as.numeric(points.mtrx[,geg.items])
+
       # the indices of all answers
       items <- grep("Item([[:digit:]]{1,3})",names(answers))
       if(alt.candy){
@@ -250,13 +277,13 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       prozent <- einzelergebnis$Percent
       note <- einzelergebnis$Mark
       # check for file name scheme
-      if(file.name == "name")
-	name.scheme <- paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep="")
+      if(identical(file.name, "name"))
+	name.scheme <- file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep=""))
       else
 	name.scheme <- paste(matn,".tex", sep="")
       # create filename from name scheme
-      if(save == TRUE || pdf == TRUE)
-	dateiname <- paste(path,name.scheme, sep="")
+      if(isTRUE(save) || isTRUE(pdf))
+	dateiname <- file.path(path, name.scheme)
       else
 	dateiname <- ""
 
@@ -313,11 +340,11 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
       # combine parts to a document
       write(latex.head, file=dateiname)
-	# create table, the vector "richtig" from function ausw.daten is used
-	pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.trfl)
+	# create table
+	pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.points)
 	rownames(pre.erg.tabelle) <- c(text$Antwort,text$Korrekt,text$Punkte)
 	colnames(pre.erg.tabelle) <- names(answers)[items]
-      print(xtable(t(pre.erg.tabelle), digits=0,
+      print(xtable(t(pre.erg.tabelle), digits=c(0,0,0,print.digits),
 	caption=paste(text$Auswertung," ",vorname," ",name," (",text$MatrikelNr," ",matn,")",sep="")),
 	file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
       if(sum(unlist(marks.info)) > 0){
@@ -328,20 +355,20 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       write(latex.foot, file=dateiname, append=TRUE)
 
       # check if PDF creation is demanded
-      if(pdf == TRUE && is.character(name.scheme)){
+      if(isTRUE(pdf) && is.character(name.scheme)){
 	create.pdf(file=name.scheme, path=path)
       } else {}
   } ## end function tabellenbau()
 
   global.report <- function(form){
       # set the file name
-      if((save == TRUE || pdf == TRUE) && is.character(anon.glob.file))
-	dateiname <- paste(path, anon.glob.file, sep="")
+      if((isTRUE(save) || isTRUE(pdf)) && is.character(anon.glob.file))
+	dateiname <- file.path(path, anon.glob.file)
       else
 	dateiname <- ""
 
       # prepare the table
-      if(form == "anon"){
+      if(identical(form, "anon")){
 	anon.glob.table <- klsr@anon
 	colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
 	anon.glob.digits <- c(0,0,0,1,1)
@@ -412,18 +439,18 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       write(latex.foot, file=dateiname, append=TRUE)
 
       # check if PDF creation is demanded
-      if(pdf == TRUE && is.character(anon.glob.file)){
+      if(isTRUE(pdf) && is.character(anon.glob.file)){
 	create.pdf(file=anon.glob.file, path=path)
       } else {}
   } ## end function global.report()
 
-  if(matn=="all"){
+  if(identical(matn, "all")){
     for(i in results$MatrNo) tabellenbau(matn=i)
   }
-  else if(matn=="anon"){
+  else if(identical(matn, "anon")){
     global.report(form="anon")
   }
-  else if(matn=="glob"){
+  else if(identical(matn, "glob")){
     global.report(form="global")
   }
   else

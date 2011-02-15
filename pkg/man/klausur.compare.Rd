@@ -2,7 +2,7 @@
 \alias{klausur.compare}
 \title{Comparison of data sets}
 \usage{klausur.compare(set1, set2, select=NA, new.set=NA)}
-\description{Compare two data sets for the use with klausuR}
+\description{Compare two data sets for use with klausuR}
 \details{The function \code{klausur.compare} will take two data sets and compare them for equality. This is useful to check for typos before
 you calculate the results with \code{\link[klausuR:klausur]{klausur}}. If you need to type in the given answers by hand, errors 
 easily occur, so it is advisable to input all data at least twice (perhaps by different persons) and check for differences
@@ -15,13 +15,12 @@ For convenience, if \code{new.set} is set to a character string, a new object is
 that is identical in both sets compared, but all dubious values will be replaced by NA.}
 \alias{klausur.compare}
 \value{A data.frame of the differences, if found. If not, just a message is returned.}
-\docType{function}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \keyword{utilities}
 \seealso{\code{\link[klausuR:klausur]{klausur}}}
-\arguments{\item{set1,set2}{the data sets to be compared}
-\item{select}{a vector with variables that should be compared, all others are omitted. At least "No", "FirstName" and "Name" are needed for the output!}
-\item{new.set}{a character string representing a valid name for an R object}
+\arguments{\item{set1,set2}{The data sets to be compared}
+\item{select}{A vector with variables that should be compared, all others are omitted. At least "No", "FirstName" and "Name" are needed for the output!}
+\item{new.set}{A character string representing a valid name for an R object}
 }
 \examples{\dontrun{
 # default comparison

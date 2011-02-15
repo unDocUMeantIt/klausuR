@@ -5,7 +5,8 @@
 #' @title S4 class klausuR.mult
 #' @slot forms A vector with the names of all test forms.
 #' @slot results.part A list with the partial results of each test form
-#' @name klausuR.mult
+#' @slot results.glob An object of class klausuR-class with overall results
+#' @name klausuR.mult,-class
 #' @import methods
 #' @keywords classes
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
@@ -13,21 +14,17 @@
 #' @rdname klausuR.mult-class
 
 setClass("klausuR.mult",
-representation=representation(
-    forms="vector",
-    results.part="list"
-#    results.glob="list",
-#    answ="data.frame",
-#    corr="vector",
-#    marks="vector",
-#    marks.sum="matrix",
-#    trfls="data.frame",
-#    anon="data.frame",
-#    mean="table",
-#    sd="numeric",
-#    cronbach="list",
-#    item.analysis="data.frame"
-))
+  representation=representation(
+      forms="vector",
+      results.part="list",
+      results.glob="klausuR"
+  ),
+  prototype(
+      forms=NULL,
+      results.part=list(),
+      results.glob=new("klausuR")
+  )
+)
 
 #setValidity("klausuR.mult", function(object){
 #  

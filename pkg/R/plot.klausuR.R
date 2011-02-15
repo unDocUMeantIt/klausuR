@@ -1,21 +1,23 @@
-#' A plot method for S4 objects of class klausuR
+#' Plot methods for S4 objects of class klausuR and klausuR.mult
 #'
-#' This plot method is beeing called by \code{\link[klausuR:klausur.report]{klausur.report}}.
+#' These plot methods are beeing called by \code{\link[klausuR:klausur.report]{klausur.report}}.
+#' If \code{x} is of class \code{klausuR.mult}, only the global results will be plotted.
+#' Should you rather like plots on each test form, call \code{plot} with the single slots from that object accordingly.
 #'
-#' @title plot method for klausuR
-#' @aliases plot,klausuR-method
-#' @method plot klausuR
+#' @title plot methods for klausuR and klausuR.mult
+#' @aliases plot,klausuR-method plot,klausuR.mult-method
 #' @usage plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, \dots)
-#' @param x An S4 object of class klausuR
+#' @param x An S4 object of class \code{klausuR} or \code{klausuR.mult}
 #' @param marks Logical, whether the histogram should show the distribution of points (default) or marks
 #' @param sd.lines Logical, whether standard deviation lines should be plotted
 #' @param plot.normal Logical, whether normal distribution should be plotted (according to mean and Sd of the results)
+#' @param na.rm Logical, whether NA values should be ignored. Defaults to TRUE, because plotting would fail otherwise
 #' @param \dots Any other argument suitable for plot()
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.report]{klausur.report}}
-#' @keywords methods dplot
+#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}, \code{\link[klausuR:klausur.report]{klausur.report}}
+#' @keywords methods plot
 #' @exportMethod plot
-#' @rdname plot
+#' @rdname plot-methods
 #' @examples
 #' data(antworten)
 #' 
@@ -44,12 +46,19 @@
 #' 
 #' klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
 #' plot(klsr.obj, marks=TRUE)
+setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 
-setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, ...){
+#' @rdname plot-methods
+setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, na.rm=TRUE, ...){
 
   klsr <- x
-  erg.points <- klsr@results$Points
-  erg.marks <- klsr@results$Mark
+  if(isTRUE(na.rm)){
+	erg.points <- na.omit(klsr@results$Points)
+	erg.marks <- na.omit(klsr@results$Mark)
+  } else {
+	erg.points <- klsr@results$Points
+	erg.marks <- klsr@results$Mark
+  }
 
   if(!marks){
       erg.min <- min(erg.points)
@@ -91,4 +100,10 @@ setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, 
 	plot(function(x) dnorm(x, mean=norm.mean, sd=norm.sd), from=norm.min, to=norm.max, axes=FALSE, xlab = "", ylab = "", lwd=5, lty=3)
       }
   }
+})
+
+#' @rdname plot-methods
+setMethod("plot", signature(x="klausuR.mult", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, ...){
+  klausur.global.object <- x@results.glob
+  plot(x=klausur.global.object, , marks=marks, sd.lines=sd.lines, plot.normal=plot.normal, ...)
 })

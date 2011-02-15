@@ -6,19 +6,20 @@
 \details{\tabular{ll}{
 Package: \tab klausuR\cr
 Type: \tab Package\cr
-Version: \tab 0.10-0\cr
-Date: \tab 2010-09-30\cr
-Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools,roxygen\cr
+Version: \tab 0.10-1\cr
+Date: \tab 2011-02-14\cr
+Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 Encoding: \tab UTF-8\cr
 License: \tab GPL (>= 3)\cr
 LazyLoad: \tab yes\cr
-URL: \tab http://www.r-project.org, http://www.reaktanz.de \cr
+URL: \tab https://r-forge.r-project.org/projects/klausur, http://www.reaktanz.de \cr
 }
 
-A set of functions designed to quickly generate results of a multiple choice test.
-Generates detailed global results, lists for anonymous feedback and personalised
-result feedback (in LaTeX and/or PDF format), as well as item statistics like
-Cronbach's alpha or disciminatory power.}
+A set of functions designed to quickly generate results of
+a multiple choice test. Generates detailed global results, lists
+for anonymous feedback and personalised result feedback (in LaTeX
+and/or PDF format), as well as item statistics like Cronbach's alpha or
+disciminatory power.}
 \alias{klausuR-package}
 \alias{klausuR}
 \docType{package}

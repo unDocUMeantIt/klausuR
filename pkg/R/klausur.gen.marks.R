@@ -21,7 +21,7 @@
 #' \code{klausur.gen.marks} will calculate the maximum score automatically. Or you assign the maximum directly as an integer
 #' value.
 #'
-#' Another feature can be toggled with the parameter "suggest". If you feed it with the mean and standard deviation values of your test's
+#' Another feature can be toggled with the parameter \code{suggest}. If you feed it with the mean and standard deviation values of your test's
 #' results, marks are automatically assigned to the achieved score under the assumption of normal distribution. Please understand that
 #' the naming "suggest" is not an accident! This is only a suggestion, please review it, tweak it, revise it, until it fits your needs.
 #' However, this feature can directly be called by \code{\link[klausuR:klausur]{klausur}}.
@@ -36,7 +36,7 @@
 #'        be asked for the maximum score.
 #' @param wght A vector with weights for each item. If NULL, the number of items is used as maximum score, that is,
 #'        each item gives a point.
-#' @param suggest A list with the elements "mean" and "sd". If both are not NULL, this function will suggest marks for achieved points
+#' @param suggest A list with the elements \code{mean} and \code{sd}. If both are not NULL, this function will suggest marks for achieved points
 #'	  assuming normal distribution. That is, "mean" and "sd" should be set to the corresponding values of the test's results.
 #' @return A character vector.
 #' @keywords utilities
@@ -84,9 +84,9 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
     markname <- "placeholder"
     mark.labels[1] <- as.character(readline(paste("Please start with the worst mark you'll assign:")))
     index <- 2
-    while(markname != ""){
+    while(!identical(markname, "")){
       markname <- as.character(readline(paste("Please name the next better mark (leave empty to finish!):")))
-      if(markname != ""){
+      if(!identical(markname, "")){
 	mark.labels[index] <- markname
 	index <- index + 1
       } else{}
@@ -94,17 +94,17 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
   }
   else {
   # check if a preset of marks can be used
-  if(length(mark.labels) == 1 && mark.labels == 16)
+  if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 16))
     mark.labels <- c("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15")
-  else if(length(mark.labels) == 1 && mark.labels == 11)
+  else if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 11))
     mark.labels <- c("5.0","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1.3","1.0")
-  else if(length(mark.labels) == 1 && (mark.labels == 6 || mark.labels == "DIHK"))
+  else if(length(mark.labels) == 1 && (identical(as.numeric(mark.labels), 6) || identical(mark.labels, "DIHK")))
     mark.labels <- c(6:1)
-  else if(length(mark.labels) == 1 && mark.labels == "USA")
+  else if(length(mark.labels) == 1 && identical(mark.labels, "USA"))
     mark.labels <- c("F","D","C","B","A")
-  else if(length(mark.labels) == 1 && mark.labels == "UK")
+  else if(length(mark.labels) == 1 && identical(mark.labels, "UK"))
     mark.labels <- c("E","D","C","B","A")
-  else if(length(mark.labels) == 1 && mark.labels == "A")
+  else if(length(mark.labels) == 1 && identical(mark.labels, "A"))
     mark.labels <- c("F","E","D","C","B","A") else{}
   }
   # stop if still not useful
@@ -120,9 +120,9 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
   # this function is called to ask for the assigned points
   read.points <- function(markname, maxp){
     points <- ""
-    while(points == ""){
+    while(identical(points, "")){
       points <- readline(paste("Please input the minimum score for mark ",as.character(markname),":", sep=""))
-      if(points != ""){
+      if(!identical(points, "")){
 	if(points <= maxp){
 	  if(points > points.assigned) {
 	    marks[points:maxp] <<- as.character(markname)
@@ -165,11 +165,11 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
 
   ## function scheme.calc
   scheme.calc <- function(scheme, maxp, mark.labels.set, marks){
-    if(scheme == "DIHK"){
+    if(identical(scheme, "DIHK")){
       quants <- c(0, .30, .50, .67, .81, .92)
-    } else if(scheme == "USA"){
+    } else if(identical(scheme, "USA")){
       quants <- c(0, .60, .70, .80, .90)
-    } else if(scheme == "UK"){
+    } else if(identical(scheme, "UK")){
       quants <- c(0, .10, .35, .65, .90)
     } else return(NA)
 
@@ -202,7 +202,7 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
   marks[1:maxp] <- as.character(mark.labels.set[1])
 
   # now read it all in!
-  if(mark.labels == "DIHK" || mark.labels == "USA" || mark.labels == "UK"){
+  if(identical(mark.labels, "DIHK") || identical(mark.labels, "USA") || identical(mark.labels, "UK")){
     marks <- scheme.calc(mark.labels, maxp, mark.labels.set, marks)
   } else
   if(!is.numeric(suggest[["mean"]]) || !is.numeric(suggest[["sd"]])) {

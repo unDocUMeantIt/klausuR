@@ -1,31 +1,34 @@
 \name{klausur.report}
 \alias{klausur.report}
 \title{Generate individual reports on multipe choice test results}
-\usage{klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
-hist=list(points=FALSE, marks=FALSE),
+\usage{klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
+file.name="matn", hist=list(points=FALSE, marks=FALSE),
 hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 marks.info=list(points=FALSE, percent=FALSE),
 descr=list(title=NULL, name=NULL, date=NULL),
 lang="en", alt.candy=TRUE, anon.glob.file="anon.tex")}
-\description{\code{klausur.report} takes (at least) an object of class klausuR and a matriculation number to generate personal test results
+\description{\code{klausur.report} takes (at least) an object of class klausuR (or klausuR.mult) and a matriculation number to generate personal test results
 in LaTeX and/or PDF format.}
-\details{report contains, next to the individual results, a table with all given and correct  answers (using \code{\link[xtable]{xtable}}),
+\details{The report contains, next to the individual results, a table with all given and correct  answers (using \code{\link[xtable]{xtable}}),
 as well as nice histograms showing the distribution of the test results (points and/or marks are supportet). If the matriculation numer
 is set to "all", reports for all subjects are produced. Setting it to "anon" will get you a printable version of the anonymized results.
 
 By default output is sent to standard out. To save them to disk in LaTeX format a "save" parameter is provided. Alternatively, the reports
-can be converted to PDF format as well. \code{klausur.report} is calling \code{\link[texi2dvi]{texi2dvi}} from the \code{tools} package for that.}
+can be converted to PDF format as well. \code{klausur.report} is calling \code{\link[texi2dvi]{texi2dvi}} from the \code{tools} package for that.
+
+If the object is of class klausuR.mult, only the global results for tests with several test forms are evaluated. In case you'd rather like
+reports on each test form, call \code{klausur.report} with the single slots from that object accordingly.}
 \alias{klausur.report}
 \keyword{IO}
 \keyword{file}
 \value{One or several LaTeX documents. If defined two histograms will be plotted.}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[texi2dvi]{texi2dvi}}}
-\arguments{\item{klsr}{An object of class klausuR.}
+\arguments{\item{klsr}{An object of class klausuR or klausuR.mult.}
 \item{matn}{Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 or "glob" (produces a global results document).}
-\item{save}{logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").}
-\item{pdf}{logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
+\item{save}{Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").}
+\item{pdf}{Logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
 If \code{save} is FALSE, a temporary directory is used, that is only the PDF files will be saved.}
 \item{path}{Path for \code{save} and \code{hist} files.}
 \item{file.name}{File name scheme for the reports, either "matn" (matriculation number) or "name" (name and firstname).}

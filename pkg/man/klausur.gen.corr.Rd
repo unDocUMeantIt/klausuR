@@ -13,11 +13,11 @@ as an integer value. If you leave \code{answ=NULL}, you will be asked for the nu
 \keyword{utilities}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur]{klausur}}}
-\arguments{\item{answ}{either an object with item names in klausuR scheme (see \code{\link[klausuR:klausur]{klausur}}),
+\arguments{\item{answ}{Either an object with item names in klausuR scheme (see \code{\link[klausuR:klausur]{klausur}}),
 e.g. your observation data, or an integer representing the maximum score of the test. If NULL, you will
 be asked for the maximum score.}
-\item{items.char}{logical, will the answers be coded as characters or integer numbers (default)?}
-\item{test.forms}{an integer value specifying how many parallel test forms are available}
+\item{items.char}{Logical, will the answers be coded as characters or integer numbers (default)?}
+\item{test.forms}{An integer value specifying how many parallel test forms are available}
 }
 \examples{\dontrun{
 richtig <- klausur.gen.corr(answ=antworten)
