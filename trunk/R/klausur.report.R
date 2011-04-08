@@ -196,13 +196,13 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
     # for a nice printout, check numer of needed digits for points.
     # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
-    if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
-      print.digits <- 0
-    } else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
-      print.digits <- 1
-    } else {
-      print.digits <- 2
-    }
+	if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
+		print.digits <- 0
+	} else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
+		print.digits <- 1
+	} else {
+		print.digits <- 2
+	}
 
   # this function will replace German umlauts with LaTeX equivalents
   # some sanitizing is also done
@@ -259,7 +259,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
       # the indices of all answers
       items <- grep("Item([[:digit:]]{1,3})",names(answers))
-      if(alt.candy){
+      if(isTRUE(alt.candy)){
 	# some eye-candy: put commata between multiple answer alternatives, if applicable
 	# calls the internal function answ.alternatives()
 	geg.antw1 <- answ.alternatives(answers[answers$MatrNo==matn,items], latex=TRUE)

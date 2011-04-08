@@ -6,8 +6,8 @@
 \details{\tabular{ll}{
 Package: \tab klausuR\cr
 Type: \tab Package\cr
-Version: \tab 0.10-1\cr
-Date: \tab 2011-02-14\cr
+Version: \tab 0.11-1\cr
+Date: \tab 2011-04-08\cr
 Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 Encoding: \tab UTF-8\cr
 License: \tab GPL (>= 3)\cr
