@@ -126,8 +126,7 @@ global.results <- function(answ, points, maxp, mark){
     # write all desired information into the data object
     results$FirstName <- answ$FirstName
     results$MatrNo    <- answ$MatrNo
-    # we'll add 0 to forcibly convert logical values to numerics
-    results$Points    <- points + 0
+    results$Points    <- points
     results$Percent   <- round(100*(points/maxp), digits=1)
     results$Mark      <- mark
     # if pseudonyms were given, include them for anonymous feedback
