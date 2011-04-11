@@ -19,7 +19,7 @@
 #' }
 #' @exportMethod show
 #' @rdname show-methods
-setGeneric("show", function(object) standardGeneric("show"))
+setGeneric("show")
 
 #' @rdname show-methods
 setMethod("show", signature(object="klausuR"), function(object){

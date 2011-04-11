@@ -152,7 +152,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		    if(!is.null(wght))
 		      ergebnisse <- data.frame(t(t(wahr.falsch) * wght))
 		    else
-		      ergebnisse <- wahr.falsch
+				# we'll add 0 to forcibly convert logical values to numerics
+		      ergebnisse <- wahr.falsch + 0
 		  }
 
 		  ## calculate points
