@@ -3,13 +3,13 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.11-1\cr
-#' Date: \tab 2011-04-11\cr
+#' Version: \tab 0.11-2\cr
+#' Date: \tab 2011-06-13\cr
 #' Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 #' Encoding: \tab UTF-8\cr
 #' License: \tab GPL (>= 3)\cr
 #' LazyLoad: \tab yes\cr
-#' URL: \tab https://r-forge.r-project.org/projects/klausur, http://www.reaktanz.de \cr
+#' URL: \tab http://r-forge.r-project.org/projects/klausur \cr
 #' }
 #'
 #' A set of functions designed to quickly generate results of
