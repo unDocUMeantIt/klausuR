@@ -45,16 +45,22 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.rm){
 		  if(is.null(wght)){
 		    warning("No weight vector (wght) given.\n  Number of items is used as maximum score.")
 		  } else{
-		    if(length(wght) != length(corr))
+		    if(length(wght) != length(corr)){
 		      stop(simpleError("The number of weights differs from the number if items!"), call.=FALSE)
+		    } else{}
 		  }
 		  if(!identical(score, "solved")){
-		    if(!identical(score, "partial") && !identical(score, "liberal"))
-		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\" or \"liberal\"!"), call.=FALSE)
-		    else if(identical(score, "partial"))
+		    if(!score %in% c("partial", "liberal", "NR", "ET", "NRET")){
+		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", or \"NRET\"!"), call.=FALSE)
+		    } else if(identical(score, "partial")){
 		      warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
-		    else if(identical(score, "liberal"))
+		    } else if(identical(score, "liberal")){
 		      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
+		    } else if(identical(score, "ET")){
+		      warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
+		    } else if(identical(score, "NRET")){
+		      warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
+		    } else{}
 		  } else{}
 
     # return objects that have probably changed
@@ -67,20 +73,23 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.rm){
 # takes the number of items to be generated
 gen.item.names <- function(num){
     # NULL if no valid item number given
-    if(num < 1)
-      return(NULL) else{}
+    if(num < 1){
+      return(NULL)
+    } else{}
     # currently, 999 items are the theoretical limit
-    if(num >= 1000)
-      return(NULL) else{}
+    if(num >= 1000){
+      return(NULL)
+    } else{}
 
-    items <-	if(num < 10)
+    items <- if(num < 10){
 		  paste("Item", c(1:num), sep="")
-		else {
-		  if(num < 100)
+		} else {
+		  if(num < 100){
 		    paste("Item", sprintf("%02d", c(1:num)), sep="")
-		  else
+		  } else {
 		    paste("Item", sprintf("%03d", c(1:num)), sep="")
 		  }
+		}
     return(items)
   } ## end gen.item.names()
 
@@ -120,9 +129,9 @@ global.results <- function(answ, points, maxp, mark){
     if(!is.null(answ$No)){
       results <- data.frame(  No=answ$No,
 			    Name=answ$Name)
-    }
-    else
+    } else {
       results <- data.frame(Name=answ$Name)
+    }
     # write all desired information into the data object
     results$FirstName <- answ$FirstName
     results$MatrNo    <- answ$MatrNo
@@ -130,9 +139,9 @@ global.results <- function(answ, points, maxp, mark){
     results$Percent   <- round(100*(points/maxp), digits=1)
     results$Mark      <- mark
     # if pseudonyms were given, include them for anonymous feedback
-    if(!is.null(answ$Pseudonym))
+    if(!is.null(answ$Pseudonym)){
       results$Pseudonym <- answ$Pseudonym
-    else{}
+    } else{}
   return(results)
 } ## end global.results()
 
@@ -143,9 +152,9 @@ anon.results <- function(glob.res){
 				 Points=glob.res$Points,
 				Percent=glob.res$Percent,
 				   Mark=glob.res$Mark)
-    }
-    else
+    } else {
       results <- data.frame(Anonymous="(no pseudonyms for anonymous feedback available)")
+    }
   return(results)
 } ## end anon.results()
 
@@ -159,10 +168,11 @@ answ.alternatives <- function(answ, latex=FALSE){
   answ.parts <- strsplit(as.character(answ), "")
   names(answ.parts) <- names(answ)
   if(isTRUE(latex)){
-    if(length(answ.parts) > 1)
+    if(length(answ.parts) > 1){
       answ.parts <- lapply(answ.parts, function(x) paste(x, collapse=", "))
-    else
+    } else {
       answ.parts <- paste(answ.parts[[1]], collapse=", ")
+    }
   } else{}
 
   return(answ.parts)
@@ -182,13 +192,13 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
   # check for partially correct answers
   # firstly, extract the item name from the answ vector
   item <- names(item.answ)
-  if(length(item) == 0)
+  if(length(item) == 0){
     stop("Partial results wanted, but incorrect item answers given: no item name defined!\n")
-  else{}
+  } else{}
 
-  if(is.null(wght))
+  if(is.null(wght)){
     wght <- 1
-  else{}
+  } else{}
 
   # divide all correct answers into their parts
   corr.parts <- answ.alternatives(corr)
@@ -201,34 +211,35 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
       result.list <- lapply(answers[[1]],
 			    function(x){
 			   # count only if no more answers were checked than correct answers available
-			      if(length(x) > corr.length)
-				return(0)
-			      else {
-				abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
-				abs.false   <- sum(is.na(pmatch(x, corr.parts[item][[1]])))
-				# if in strict mode, discard if more answers were checked then correct one,
-				# that is, if at least one wrong answer was given, return no points at all
-				if(strict && abs.false > 0)
-				  return(0)
-				else
-				  return(abs.correct)
+			      if(length(x) > corr.length){
+						return(0)
+					} else {
+						abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
+						abs.false   <- sum(is.na(pmatch(x, corr.parts[item][[1]])))
+						# if in strict mode, discard if more answers were checked then correct one,
+						# that is, if at least one wrong answer was given, return no points at all
+						if(isTRUE(strict) && abs.false > 0){
+							return(0)
+						} else {
+							return(abs.correct)
+						}
 			      }
 			    })
       # this corresponds to the "absolute" value
       result <- unlist(lapply(result.list, sum))
       # if we want the percentage instead:
-      if(identical(mode, "percent"))
-	result <- round((result * wght)/corr.length, digits=2)
-      else{}
+      if(identical(mode, "percent")){
+			result <- round((result * wght)/corr.length, digits=2)
+		} else{}
     }
     else {
       # this corresponds to the "absolute" value
       result <- as.numeric(item.answ == corr[item])
       # percentage is irrelevant for dichotomous items,
       # but there might be a weight vector
-      if(identical(mode, "percent"))
-	result <- result * wght
-      else{}
+      if(identical(mode, "percent")){
+			result <- result * wght
+		} else{}
     }
     return(result)
   }
@@ -237,6 +248,127 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
 
   return(part.results)
 } ## end partial()
+
+## function nret.score()
+# as alternative scoring functions, nret.score() implements three modes:
+#  - NR: traditional number right
+#      c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
+#  - ET: elimination testing (strike wrong alternatives)
+#      c(true.pos=0, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
+#  - NRET: number right elimination testing (strike wrong alternatives, mark one as true)
+#      c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
+#
+# answ: given answer to one item (e.g. "-+--")
+# corr: the correct pattern (like answ)
+# num.alt: number of answer alternatives, counted automatically if NULL
+nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", missing="0",
+	num.alt=NULL, true.false=FALSE) {
+
+	all.results <- lapply(answ, function(curr.answ){
+		# first split character vectors into atomic vectors
+		answ.split <- unlist(strsplit(curr.answ, split=""))
+		corr.split <- unlist(strsplit(corr, split=""))
+		# check for equal length
+		if(length(answ.split) != length(corr.split)){
+			stop(simpleError("Given and correct answers are of unequal length!"))
+		} else {}
+		# check for correct input
+		if(sum(!answ.split %in% c(is.true, is.false, missing)) > 0){
+			stop(simpleError("Given answer vector includes invalid characters!"))
+		} else {}
+		if(sum(!corr.split %in% c(is.true, is.false, missing)) > 0){
+			stop(simpleError("Correct answer vector includes invalid characters!"))
+		} else {}
+
+		# count answer alternatives
+		if(is.null(num.alt)){
+			num.alt <- length(corr.split)
+		} else if(!is.number(num.alt)){
+			stop(simpleError("Value of \"num.alt\" must be NULL or a number!"))
+		}
+
+		# in which mode will be scored?
+		if(identical(score, "NR")){
+			mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
+		} else if(identical(score, "ET")){
+			mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
+		} else if(identical(score, "NRET")){
+			mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
+		} else {
+			stop(simpleError(paste("Unknown scoring mode:", score)))
+		}
+
+		# then compare answer by answer
+		points <- sapply(1:length(corr.split), function(idx){
+				answ.given <- as.character(answ.split[idx])
+				answ.crrct <- as.character(corr.split[idx])
+				if(identical(answ.given, answ.crrct)){
+					if(identical(answ.given, is.true)){
+						# this is a true positive
+						if(isTRUE(true.false)){
+							return("P")
+						} else {
+							return(mtx["true.pos"])
+						}
+					} else if(identical(answ.given, is.false)){
+						# this is a true negative
+						if(isTRUE(true.false)){
+							return("N")
+						} else {
+							return(mtx["true.neg"])
+						}
+					} else {
+						# this is impossible...
+						stop(simpleError("Are you sure your answer vector is correct?!"))
+					}
+				} else {
+					if(identical(answ.given, is.true)){
+						# this is a false positive
+						if(isTRUE(true.false)){
+							return("p")
+						} else {
+							return(mtx["false.pos"])
+						}
+					} else if(identical(answ.given, is.false)){
+						# this is a false negative
+						if(isTRUE(true.false)){
+							return("n")
+						} else {
+							return(mtx["false.neg"])
+						}
+					} else {
+						# this is a missing answer
+						if(isTRUE(true.false)){
+							return("0")
+						} else {
+							return(mtx["miss"])
+						}
+					}
+				}
+			}
+		)
+
+		if(isTRUE(true.false)){
+			# return true/false indicators, e.g. "PNNn0"
+			result <- paste(points, collapse="")
+		} else {
+			result <- sum(points)
+		}
+
+		return(result)
+		})
+		
+	## currently, no negative points are valid for mark assignments
+	# so to be sure, we'll globally add num.alt-1 points, so 0 is the minimum
+	## if this gets changed, take care of the calculation of max. points as well!!!
+	if(isTRUE(true.false) || identical(score, "NR")){
+		all.results <- unlist(all.results)
+	} else {
+		all.results <- unlist(all.results) + (nchar(corr)-1)
+	}
+
+	return(all.results)
+} ## end function nret.score()
 
 ## marks.summary()
 # this function takes a vector with marks and returns a summarising matrix
@@ -250,8 +382,7 @@ marks.summary <- function(marks){
     # avoid strange starting points above zero
     if(mark.min <= 1){
       mark.min.pct <- ""
-    }
-    else {
+    } else {
       mark.min.pct <- ceiling(mark.min / maxp * 100)
     }
     mark.max.pct <- ceiling(mark.max / maxp * 100)
@@ -259,8 +390,7 @@ marks.summary <- function(marks){
     if(mark.min == mark.max){
       m.f.points <- mark.min
       m.f.pct <- mark.min.pct
-    }
-    else {
+    } else {
       m.f.points <- paste(mark.min, "-", mark.max, sep="")
       m.f.pct <- paste(mark.min.pct, " < ", mark.max.pct, sep="")
     }

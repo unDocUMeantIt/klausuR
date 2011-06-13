@@ -1,5 +1,10 @@
 ChangeLog for package klausuR
 
+## 0.11-2
+  - added internal function roxy.package() to ease development
+  - added initial support for elimination testing (ET) and number right elimination testing (NRET)
+  - fixed "Form" addition in klausur.gen()
+
 ## 0.11-1
   - fixed bug in points (were logical instead of numeric, which caused trouble for PDF generation)
   - fixed annoying "show" warning

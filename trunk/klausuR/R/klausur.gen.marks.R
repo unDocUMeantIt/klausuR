@@ -192,7 +192,7 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
 
  ## now let's do it!!!
   # call max.score() to calculate maximum score
-  maxp <- max.score(answ, wght)
+	maxp <- max.score(answ, wght)
   # rename the marks
   mark.labels.set <- label.marks(mark.labels)
 

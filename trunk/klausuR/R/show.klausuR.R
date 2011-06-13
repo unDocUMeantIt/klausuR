@@ -25,7 +25,7 @@ setGeneric("show")
 setMethod("show", signature(object="klausuR"), function(object){
   if(length(object@results) == 0){return()}
 
-    if(!is.null(object@item.analysis)){
+    if(!is.na(object@item.analysis)){
       item.analysis <- data.frame(Diffc=round(object@item.analysis$Difficulty, 2),
 		  DiscrPwr=round(object@item.analysis$Item.total, 2),
 		  PartWhole=round(object@item.analysis$Item.Tot.woi, 2),

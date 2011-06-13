@@ -17,13 +17,28 @@ third and fourth answer, you would code this as "134". See \code{\link[klausuR:k
 answer vector. Internally \code{klausur} checks for equality of given answers and correct values, that is,
 it will only give that person a point if the correct answer was coded as "134" as well.
 
-In combination with multiple correct answers for certain items you can specify one of three scoring policies via the \code{score}-parameter. By default it is
+In combination with multiple correct answers for certain items you can specify one of six scoring policies via the \code{score}-parameter. By default it is
 set to \code{"solved"}, which means that one will only get any points for an item if the answer was 100\% correct (that is, all or nothing). If you set it to
 \code{"partial"} or \code{"liberal"}, as the names may suggest you \strong{allow partially given answers} under the condition that the test subject didn't
 check more alternatives than there are correct ones (that is, if you checked four alternatives where three correct ones were possible, you're out).
 In the case of \code{"partial"}, an additional condition is that none of the distractors must be checked, which \code{"liberal"} gracefully allows. An example:
 If the correct answer is "134" and a subject checked "15", \code{"solved"} will give no point (because "15" is not equal to "134"), as will \code{"partial"}
 (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
+
+\strong{(Number Right) Elimination Testing}
+
+In addition to that, there are also the scoring options \code{score="ET"} (elimination testing), \code{score="NRET"} (number right elimination testing)
+and \code{score="NR"} (number right). Note that all of the three will disable \code{wght} as well as \code{item.analysis} as of now, and
+\strong{they need the data in different format} than the other scoring functions! More specific, in contrast to the usual MC procedure ET items are answered
+by eliminating all alternatives a subject considers \emph{wrong}. Adding to this, in an NRET test subjects are asked to eliminate all wrong alternatives
+\emph{and} mark the one they consider the correct answer. For both scoring functions, you need to know for each answer alternative whether a subject saw it
+as right, wrong or was not sure and left it open.
+In this implementation, these answers are to be coded as a plus sign "+" (right answer), a minus sign "-" (wrong answer) or a zero "0" (missing).
+That is, if you have four answer alternatives, a subject thought the second one to be the correct answer and eliminated the rest, you'd have to code
+this item as \code{"-+--"}. The same is true for the vector of correct answers, of course. NR is actually the usual MC scoring (one point for correct answer)
+and implemented merely for completeness, e.g. to compare results of different evaluation techniques.
+
+\strong{Marks}
 
 The \strong{assigned marks} are expected to be in a certain format as well, as long as you don't want \code{klausur} to suggest them itself (see below).
 Just create an empty vector to start with (say \code{your.marks <- c()}) and fill it according to the scheme \code{your.marks[<points from>:<points to>] <- <mark>}.
@@ -36,9 +51,8 @@ Another way to deal with marks is to let klausuR make a suggestion. That is, if 
 kicks in and takes either the \code{mark.labels} you have defined here or will ask you step by step. See the documentation of that function for details. To see the
 suggested result in detail, have a look at the slot \code{marks} of the returned object.
 
-To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.
-
-Note: \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
+To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.}
+\note{\code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
 necessarily yield more diagnostic information, allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
 give quite unfair test results! In addition, please do \strong{always check a sample of the results} to make sure no errors accurred.}
 \value{An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.
@@ -72,7 +86,8 @@ where ### is a number with leading zeros, if needed).}
 \item{mark.labels}{If \code{marks="suggest"}, use these as the marks you want to give.}
 \item{items}{Indices of a subset of variables in \code{answ} to be taken as items.}
 \item{wght}{A vector with weights for each item (named also according to \code{Item###}).}
-\item{score}{Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.}
+\item{score}{Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"},
+\code{"NR"}, \code{"ET"}, or \code{"NRET"}.}
 \item{matn}{A matriculation number of a subject, to receive detailed results for that subject.}
 \item{na.rm}{Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.}
 \item{cronbach}{Logical. If TRUE, Cronbach's alpha will be calculated.}

@@ -16,18 +16,26 @@
 
 klausur.gen <- function(items=NULL, obs=1, items.char=FALSE){
 
-  if(!is.numeric(items) || (floor(items) != items) || !(items < 1000))
-    stop(simpleError("'items' must be an integer < 1000"))
-  if(!is.numeric(obs) || (floor(obs) != obs))
-    stop(simpleError("'obs' must be an integer"))
+	if(!is.numeric(items) || (floor(items) != items) || !(items < 1000))
+		stop(simpleError("'items' must be an integer < 1000"))
+	if(!is.numeric(obs) || (floor(obs) != obs))
+		stop(simpleError("'obs' must be an integer"))
 
-  # generate item names and compute the needed number of leading zeros
-  # gen.item.names() is an internal function of package klausuR
-  item.names <-	gen.item.names(items)
+	# generate item names and compute the needed number of leading zeros
+	# gen.item.names() is an internal function of package klausuR
+	item.names <- gen.item.names(items)
 
-  daten <- data.frame(No=c(1:obs), Name=as.character(c(NA)), FirstName=as.character(c(NA)), MatrNo=as.integer(c(NA)), Pseudonym=as.character(c(NA)), Form=as.character(c(NA)), stringsAsFactors=FALSE)
-  daten[6:(items+5)] <- if(items.char) as.character(c(NA)) else as.integer(NA)
-  names(daten)[6:(items+5)] <- item.names
+	data.filler <- if(items.char){as.character(c(NA))} else {as.integer(NA)}
+
+	eval(parse(text=paste("daten <- data.frame(
+			No=c(1:obs),
+			Name=as.character(c(NA)),
+			FirstName=as.character(c(NA)),
+			MatrNo=as.integer(c(NA)),
+			Pseudonym=as.character(c(NA)),
+			Form=as.character(c(NA)),",
+			paste(item.names, "=data.filler,", collapse=""),
+			"stringsAsFactors=FALSE)")))
 
   return(daten)
 }
