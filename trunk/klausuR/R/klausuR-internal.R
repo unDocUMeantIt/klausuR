@@ -125,7 +125,7 @@ calc.item.analysis <- function(dichot.matrix, cron.alpha.list){
 
 ## global.results()
 # glues together parts of results into an object
-global.results <- function(answ, points, maxp, mark){
+global.results <- function(answ, points, maxp, mark, minp=0){
     if(!is.null(answ$No)){
       results <- data.frame(  No=answ$No,
 			    Name=answ$Name)
@@ -136,7 +136,7 @@ global.results <- function(answ, points, maxp, mark){
     results$FirstName <- answ$FirstName
     results$MatrNo    <- answ$MatrNo
     results$Points    <- points
-    results$Percent   <- round(100*(points/maxp), digits=1)
+    results$Percent   <- round(100*((points-minp)/(maxp-minp)), digits=1)
     results$Mark      <- mark
     # if pseudonyms were given, include them for anonymous feedback
     if(!is.null(answ$Pseudonym)){
@@ -258,10 +258,12 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
 #  - NRET: number right elimination testing (strike wrong alternatives, mark one as true)
 #      c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
 #
+# errors (like both alternatives marked) will be evaluated like missings, pointwise
+#
 # answ: given answer to one item (e.g. "-+--")
 # corr: the correct pattern (like answ)
 # num.alt: number of answer alternatives, counted automatically if NULL
-nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", missing="0",
+nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", missing="0", err="*",
 	num.alt=NULL, true.false=FALSE) {
 
 	# count answer alternatives
@@ -280,10 +282,10 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 			stop(simpleError("Given and correct answers are of unequal length!"))
 		} else {}
 		# check for correct input
-		if(sum(!answ.split %in% c(is.true, is.false, missing)) > 0){
+		if(sum(!answ.split %in% c(is.true, is.false, missing, err)) > 0){
 			stop(simpleError("Given answer vector includes invalid characters!"))
 		} else {}
-		if(sum(!corr.split %in% c(is.true, is.false, missing)) > 0){
+		if(sum(!corr.split %in% c(is.true, is.false, missing, err)) > 0){
 			stop(simpleError("Correct answer vector includes invalid characters!"))
 		} else {}
 
@@ -336,10 +338,10 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 						} else {
 							return(mtx["false.neg"])
 						}
-					} else {
+					} else if(answ.given %in% c(missing, err)){
 						# this is a missing answer
 						if(isTRUE(true.false)){
-							return("0")
+							return(as.character(answ.given))
 						} else {
 							return(mtx["miss"])
 						}

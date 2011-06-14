@@ -34,6 +34,7 @@ by eliminating all alternatives a subject considers \emph{wrong}. Adding to this
 \emph{and} mark the one they consider the correct answer. For both scoring functions, you need to know for each answer alternative whether a subject saw it
 as right, wrong or was not sure and left it open.
 In this implementation, these answers are to be coded as a plus sign "+" (right answer), a minus sign "-" (wrong answer) or a zero "0" (missing).
+If you need to code errors (like both "right" and "wrong" have been marked), you can use the asterisk "*" for these cases.
 That is, if you have four answer alternatives, a subject thought the second one to be the correct answer and eliminated the rest, you'd have to code
 this item as \code{"-+--"}. The same is true for the vector of correct answers, of course. NR is actually the usual MC scoring (one point for correct answer)
 and implemented merely for completeness, e.g. to compare results of different evaluation techniques.

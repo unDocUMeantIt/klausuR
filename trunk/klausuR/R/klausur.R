@@ -29,6 +29,7 @@
 #' \emph{and} mark the one they consider the correct answer. For both scoring functions, you need to know for each answer alternative whether a subject saw it
 #' as right, wrong or was not sure and left it open.
 #' In this implementation, these answers are to be coded as a plus sign "+" (right answer), a minus sign "-" (wrong answer) or a zero "0" (missing).
+#' If you need to code errors (like both "right" and "wrong" have been marked), you can use the asterisk "*" for these cases.
 #' That is, if you have four answer alternatives, a subject thought the second one to be the correct answer and eliminated the rest, you'd have to code
 #' this item as \code{"-+--"}. The same is true for the vector of correct answers, of course. NR is actually the usual MC scoring (one point for correct answer)
 #' and implemented merely for completeness, e.g. to compare results of different evaluation techniques.
@@ -165,6 +166,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 			} else {
 				# in case no weights were given, count each item as one point
 				maxp <- length(items)
+				num.alt <- NULL
 			}
 			# for the results, create a vector of 1's by number of items
 			wght.results <- rep(1, length(items))
@@ -187,9 +189,9 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")))
 			} else {}
 			if(score %in% c("NR", "ET", "NRET")){
-				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0",
+				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
 					num.alt=num.alt, true.false=TRUE)}))
-				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0",
+				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
 					num.alt=num.alt, true.false=FALSE)}))
 			} else {}
 			dimnames(wahr.falsch)[[2]] <- names(answ[items])
@@ -242,7 +244,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		# create data object with name, mat-nr and global results
 		# calls the internal function global.results()
-		ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note)
+		ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=min.score)
 		# if pseudonyms were given, use them for anonymous feedback
 		ergebnis.anonym <- anon.results(ergebnis.daten)
 
