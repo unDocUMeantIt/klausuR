@@ -134,6 +134,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		items <- sane.data$items
 
 		### results section
+		# set default min.score to zero
+		min.score <- 0
 		# probably weight items, to calculate the maximum score
 		# NRET et al. can't be weighted yet
 		if(is.null(wght) || score %in% c("NR", "ET", "NRET")){
@@ -142,11 +144,23 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 				## currently, no negative points are valid for mark assignments
 				# so to be sure, we'll globally add num.alt-1 points, so 0 is the minimum
 				# see also the klausur.gen.marks function below, since this had to be cosidered there, too!
-				num.alt <- nchar(corr)
+				#
+				# get all alternatives
+				num.alt.all <- nchar(corr)
+				# check if they're all of equal length
+				if(all(num.alt.all == num.alt.all[1])){
+					num.alt <- as.numeric(num.alt.all[1])
+				} else {
+					num.alt <- max(num.alt.all)
+					min.score <- sum(num.alt - num.alt.all)
+					warning(paste("Items differ in number of answer alternatives: ", min(num.alt.all), "-", num.alt,
+						"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
+						"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
+				}
 				if(identical(score, "NRET")){
-					maxp <- sum(num.alt + num.alt-1)
+					maxp <- sum(num.alt.all + num.alt-1)
 				}	else {
-					maxp <- sum(num.alt + num.alt-2)
+					maxp <- sum(num.alt.all + num.alt-2)
 				}
 			} else {
 				# in case no weights were given, count each item as one point
@@ -174,9 +188,9 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 			} else {}
 			if(score %in% c("NR", "ET", "NRET")){
 				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0",
-					num.alt=NULL, true.false=TRUE)}))
+					num.alt=num.alt, true.false=TRUE)}))
 				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0",
-					num.alt=NULL, true.false=FALSE)}))
+					num.alt=num.alt, true.false=FALSE)}))
 			} else {}
 			dimnames(wahr.falsch)[[2]] <- names(answ[items])
 			dimnames(ergebnisse)[[2]]  <- names(answ[items])
@@ -204,9 +218,9 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 			##
 			if(score %in% c("ET", "NRET")){
 				# a hack to force the right max. points here
-				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=maxp, suggest=list(mean=mean(punkte), sd=stdabw))
+				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
 			} else {
-				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw))
+				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
 			}
 		}
 
@@ -261,7 +275,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		# and we make a copy with given answers as well
 		antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
 		# use the internal marks.summary() function to create convenient information on the mark definitions
-		marks.info <- marks.summary(marks)
+		marks.info <- marks.summary(marks, minp=min.score)
 		# here we finally take all the partial results an knit them together into one object
 		alle.ergebnisse <- new("klausuR",
 					results=ergebnis.daten,

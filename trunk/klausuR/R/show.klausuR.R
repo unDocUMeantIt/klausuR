@@ -71,6 +71,7 @@ setMethod("show", signature(object="klausuR"), function(object){
       cat("\n\nItem analysis:\n")
       print(item.analysis)
     }
+	cat("\n\n")
 })
 
 #' @rdname show-methods

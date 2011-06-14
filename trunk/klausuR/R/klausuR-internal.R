@@ -264,6 +264,13 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
 nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", missing="0",
 	num.alt=NULL, true.false=FALSE) {
 
+	# count answer alternatives
+	if(is.null(num.alt)){
+		num.alt <- nchar(corr)
+	} else if(!is.numeric(num.alt)){
+		stop(simpleError("Value of \"num.alt\" must be NULL or a number!"))
+	}
+
 	all.results <- lapply(answ, function(curr.answ){
 		# first split character vectors into atomic vectors
 		answ.split <- unlist(strsplit(curr.answ, split=""))
@@ -279,13 +286,6 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 		if(sum(!corr.split %in% c(is.true, is.false, missing)) > 0){
 			stop(simpleError("Correct answer vector includes invalid characters!"))
 		} else {}
-
-		# count answer alternatives
-		if(is.null(num.alt)){
-			num.alt <- length(corr.split)
-		} else if(!is.number(num.alt)){
-			stop(simpleError("Value of \"num.alt\" must be NULL or a number!"))
-		}
 
 		# in which mode will be scored?
 		if(identical(score, "NR")){
@@ -364,7 +364,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 	if(isTRUE(true.false) || identical(score, "NR")){
 		all.results <- unlist(all.results)
 	} else {
-		all.results <- unlist(all.results) + (nchar(corr)-1)
+		all.results <- unlist(all.results) + (num.alt-1)
 	}
 
 	return(all.results)
@@ -372,37 +372,37 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
 ## marks.summary()
 # this function takes a vector with marks and returns a summarising matrix
-# with the effective ranges of poibts and percentage for each mark defined
-marks.summary <- function(marks){
-  marks.levels <- levels(as.factor(marks))
-  maxp <- length(marks)
-  marks.matrix <- sapply(marks.levels, function(x){
-    mark.min <- min(which(marks == x))
-    mark.max <- max(which(marks == x))
-    # avoid strange starting points above zero
-    if(mark.min <= 1){
-      mark.min.pct <- ""
-    } else {
-      mark.min.pct <- ceiling(mark.min / maxp * 100)
-    }
-    mark.max.pct <- ceiling(mark.max / maxp * 100)
-    # if it's only one point value, don't display a range
-    if(mark.min == mark.max){
-      m.f.points <- mark.min
-      m.f.pct <- mark.min.pct
-    } else {
-      m.f.points <- paste(mark.min, "-", mark.max, sep="")
-      m.f.pct <- paste(mark.min.pct, " < ", mark.max.pct, sep="")
-    }
+# with the effective ranges of points and percentage for each mark defined
+marks.summary <- function(marks, minp=0){
+	marks.levels <- levels(as.factor(marks))
+	maxp <- length(marks)
+	marks.matrix <- sapply(marks.levels, function(x){
+		mark.min <- max(c(minp, min(which(marks == x))))
+		mark.max <- max(which(marks == x))
+		# avoid strange starting points above zero
+		if(mark.min <= 1){
+			mark.min.pct <- ""
+		} else {
+			mark.min.pct <- ceiling(mark.min / maxp * 100)
+		}
+		mark.max.pct <- ceiling(mark.max / maxp * 100)
+		# if it's only one point value, don't display a range
+		if(mark.min == mark.max){
+			m.f.points <- mark.min
+			m.f.pct <- mark.min.pct
+		} else {
+			m.f.points <- paste(mark.min, "-", mark.max, sep="")
+			m.f.pct <- paste(mark.min.pct, " < ", mark.max.pct, sep="")
+		}
 
-    mark.frame <- c(
-      Points=m.f.points,
-      Percent=m.f.pct
-      )
-    return(mark.frame)
-    }
-  )
-  return(t(marks.matrix))
+		mark.frame <- c(
+			Points=m.f.points,
+			Percent=m.f.pct
+			)
+		return(mark.frame)
+		}
+	)
+	return(t(marks.matrix))
 } ## end marks.summary()
 
 ## klausur.reorderItems()

@@ -38,6 +38,8 @@
 #'        each item gives a point.
 #' @param suggest A list with the elements \code{mean} and \code{sd}. If both are not NULL, this function will suggest marks for achieved points
 #'	  assuming normal distribution. That is, "mean" and "sd" should be set to the corresponding values of the test's results.
+#' @param minp An integer value, in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and
+#'		different numbers of answer alternatives). Should be left as is in most cases.
 #' @return A character vector.
 #' @keywords utilities
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
@@ -48,7 +50,7 @@
 #' @seealso \code{\link[klausuR:klausur]{klausur}}
 #' @export
 
-klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=list(mean=NULL, sd=NULL)){
+klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=list(mean=NULL, sd=NULL), minp=0){
 
   ## function max.score
   # used to determine the maximum score
@@ -142,26 +144,28 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
     }
   } ## end function read.points
 
-  ## function suggestion
-  # this function takes information un mean and standard deviation of test results,
-  # and suggests marks according to normal distribution
-  suggestion <- function(mark.labels, maxp, mean, sd){
-    # so, which quantiles do we need? obviously, one less that we have marks
-    # we take one more than the number of marks, because the first and last will be 0 and 1,
-    # so we drop the last one again and keep the rest
-    quants <- seq(from=0, to=1, by=(1/length(mark.labels))) [c(-(length(mark.labels)+1))]
-    # now have a look at the normal distribution,
-    # get the quantiles for mean and sd of our test results
-    lapply(mark.labels[-1], function(x){
-      min.points <- ceiling(qnorm(quants[which(mark.labels == x)], mean=mean, sd=sd))
-      # in case results are odd, let's at least not have unrealistic points values:
-      if(min.points > maxp)
-	min.points <- maxp
-      marks[min.points:maxp] <<- x
-      }
-    )
-    return(marks)
-  } ## end function suggestion
+	## function suggestion
+	# this function takes information un mean and standard deviation of test results,
+	# and suggests marks according to normal distribution
+	suggestion <- function(mark.labels, maxp, mean, sd, minp){
+		# so, which quantiles do we need? obviously, one less that we have marks
+		# we take one more than the number of marks, because the first and last will be 0 and 1,
+		# so we drop the last one again and keep the rest
+		quants <- seq(from=0, to=1, by=(1/length(mark.labels))) [c(-(length(mark.labels)+1))]
+
+		# now have a look at the normal distribution,
+		# get the quantiles for mean and sd of our test results
+		lapply(mark.labels[-1], function(x){
+			min.points <- ceiling(qnorm(quants[which(mark.labels == x)], mean=mean, sd=sd)) + minp
+			# in case results are odd, let's at least not have unrealistic points values:
+			if(min.points > maxp){
+				min.points <- maxp
+			} else {}
+			marks[min.points:maxp] <<- x
+			}
+		)
+		return(marks)
+	} ## end function suggestion
 
   ## function scheme.calc
   scheme.calc <- function(scheme, maxp, mark.labels.set, marks){
@@ -182,7 +186,6 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
       lower.lim <- mark.thresholds[x]
       upper.lim <- mark.thresholds[x+1]
       marks[lower.lim:upper.lim] <<- mark.labels.set[x]
-      #  inner.marks <- c(lower.lim, upper.lim)
       return(marks)
     })
 
@@ -212,7 +215,7 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
     mapply(read.points, mark.labels.set[-1], MoreArgs=list(maxp=maxp))
   }
   else
-    marks <- suggestion(mark.labels.set, maxp, mean=suggest[["mean"]], sd=suggest[["sd"]])
+    marks <- suggestion(mark.labels.set, maxp, mean=suggest[["mean"]], sd=suggest[["sd"]], minp=minp)
 
   return(marks)
 }

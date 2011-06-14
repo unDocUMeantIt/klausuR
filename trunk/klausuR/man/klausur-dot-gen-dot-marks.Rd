@@ -42,6 +42,8 @@ be asked for the maximum score.}
 each item gives a point.}
 \item{suggest}{A list with the elements \code{mean} and \code{sd}. If both are not NULL, this function will suggest marks for achieved points
 assuming normal distribution. That is, "mean" and "sd" should be set to the corresponding values of the test's results.}
+\item{minp}{An integer value, in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and
+different numbers of answer alternatives). Should be left as is in most cases.}
 }
 \examples{\dontrun{
 notenschluessel <- klausur.gen.marks(mark.labels=11,answ=antworten)
