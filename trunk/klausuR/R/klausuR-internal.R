@@ -380,12 +380,12 @@ marks.summary <- function(marks, minp=0){
 		mark.min <- max(c(minp, min(which(marks == x))))
 		mark.max <- max(which(marks == x))
 		# avoid strange starting points above zero
-		if(mark.min <= 1){
+		if((mark.min-minp) <= 1){
 			mark.min.pct <- ""
 		} else {
-			mark.min.pct <- ceiling(mark.min / maxp * 100)
+			mark.min.pct <- ceiling((mark.min-minp) / (maxp-minp) * 100)
 		}
-		mark.max.pct <- ceiling(mark.max / maxp * 100)
+		mark.max.pct <- ceiling((mark.max-minp) / (maxp-minp) * 100)
 		# if it's only one point value, don't display a range
 		if(mark.min == mark.max){
 			m.f.points <- mark.min
