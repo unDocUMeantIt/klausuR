@@ -156,7 +156,8 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
 		# now have a look at the normal distribution,
 		# get the quantiles for mean and sd of our test results
 		lapply(mark.labels[-1], function(x){
-			min.points <- ceiling(qnorm(quants[which(mark.labels == x)], mean=mean, sd=sd)) + minp
+			# using max() to make sure min.points can't fall below 1!
+			min.points <- max(1, ceiling(qnorm(quants[which(mark.labels == x)], mean=(mean-(minp/2)), sd=sd)) + minp)
 			# in case results are odd, let's at least not have unrealistic points values:
 			if(min.points > maxp){
 				min.points <- maxp

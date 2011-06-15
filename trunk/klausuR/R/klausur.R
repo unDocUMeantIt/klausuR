@@ -158,6 +158,10 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 						"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
 						"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
 				}
+				# compute baseline, that is, what do you get with all missings?
+				baseline <- length(num.alt.all) * (num.alt-1)
+				warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
+
 				if(identical(score, "NRET")){
 					maxp <- sum(num.alt.all + num.alt-1)
 				}	else {
@@ -220,7 +224,7 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 			##
 			if(score %in% c("ET", "NRET")){
 				# a hack to force the right max. points here
-				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
+				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=baseline)
 			} else {
 				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
 			}
@@ -244,7 +248,11 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 
 		# create data object with name, mat-nr and global results
 		# calls the internal function global.results()
-		ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=min.score)
+		if(score %in% c("ET", "NRET")){
+			ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=baseline)
+		} else {
+			ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=min.score)
+		}
 		# if pseudonyms were given, use them for anonymous feedback
 		ergebnis.anonym <- anon.results(ergebnis.daten)
 

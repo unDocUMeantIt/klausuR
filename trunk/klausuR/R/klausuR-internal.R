@@ -300,61 +300,70 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 			stop(simpleError(paste("Unknown scoring mode:", score)))
 		}
 
-		# then compare answer by answer
-		points <- sapply(1:length(corr.split), function(idx){
-				answ.given <- as.character(answ.split[idx])
-				answ.crrct <- as.character(corr.split[idx])
-				if(identical(answ.given, answ.crrct)){
-					if(identical(answ.given, is.true)){
-						# this is a true positive
-						if(isTRUE(true.false)){
-							return("P")
+		## plausibility checks
+		# too many "correct" answers?
+		num.yeses <- sum(answ.split %in% is.true)
+		num.trues <- sum(corr.split %in% is.true)
+		if(num.yeses > num.trues && !isTRUE(true.false)){
+			result <- 0
+		} else {
+			# then compare answer by answer
+			points <- sapply(1:length(corr.split), function(idx){
+					answ.given <- as.character(answ.split[idx])
+					answ.crrct <- as.character(corr.split[idx])
+					if(identical(answ.given, answ.crrct)){
+						if(identical(answ.given, is.true)){
+							# this is a true positive
+							if(isTRUE(true.false)){
+								return("P")
+							} else {
+								return(mtx["true.pos"])
+							}
+						} else if(identical(answ.given, is.false)){
+							# this is a true negative
+							if(isTRUE(true.false)){
+								return("N")
+							} else {
+								return(mtx["true.neg"])
+							}
 						} else {
-							return(mtx["true.pos"])
-						}
-					} else if(identical(answ.given, is.false)){
-						# this is a true negative
-						if(isTRUE(true.false)){
-							return("N")
-						} else {
-							return(mtx["true.neg"])
+							# this is impossible...
+							stop(simpleError("Are you sure your answer vector is correct?!"))
 						}
 					} else {
-						# this is impossible...
-						stop(simpleError("Are you sure your answer vector is correct?!"))
-					}
-				} else {
-					if(identical(answ.given, is.true)){
-						# this is a false positive
-						if(isTRUE(true.false)){
-							return("p")
-						} else {
-							return(mtx["false.pos"])
-						}
-					} else if(identical(answ.given, is.false)){
-						# this is a false negative
-						if(isTRUE(true.false)){
-							return("n")
-						} else {
-							return(mtx["false.neg"])
-						}
-					} else if(answ.given %in% c(missing, err)){
-						# this is a missing answer
-						if(isTRUE(true.false)){
-							return(as.character(answ.given))
-						} else {
-							return(mtx["miss"])
+						if(identical(answ.given, is.true)){
+							# this is a false positive
+							if(isTRUE(true.false)){
+								return("p")
+							} else {
+								return(mtx["false.pos"])
+							}
+						} else if(identical(answ.given, is.false)){
+							# this is a false negative
+							if(isTRUE(true.false)){
+								return("n")
+							} else {
+								return(mtx["false.neg"])
+							}
+						} else if(answ.given %in% c(missing, err)){
+							# this is a missing answer
+							if(isTRUE(true.false)){
+								return(as.character(answ.given))
+							} else {
+								return(mtx["miss"])
+							}
 						}
 					}
 				}
-			}
-		)
+			)
 
-		if(isTRUE(true.false)){
-			# return true/false indicators, e.g. "PNNn0"
-			result <- paste(points, collapse="")
-		} else {
-			result <- sum(points)
+			if(isTRUE(true.false)){
+				# return true/false indicators, e.g. "PNNn0"
+				result <- paste(points, collapse="")
+			} else {
+				result <- sum(points)
+			}
+
 		}
 
 		return(result)
