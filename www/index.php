@@ -43,23 +43,6 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-  <p>die aktuelle <strong>stabile version</strong> dieses pakets ist auf <a href="https://r-forge.r-project.org/R/?group_id=942" target="_blank">R-forge</a> zu finden und kann direkt aus dem repository installiert werden:</p>
-  <p><code>install.packages("klausuR", repos="http://R-Forge.R-project.org")</code></p>
-
-	<p>per <a href="https://r-forge.r-project.org/scm/?group_id=942" target="_blank">subversion</a> kann man dort auch die aktuelle <strong>entwicklerversion</strong> bekommen. alternativ kann man die entwicklerversion auch &uuml;ber mein eigenes repository f&uuml;r <a href="http://www.r-project.org" title="die freie statistik-software R" target="_blank" class="extlink">R</a>-pakete installieren (<code>http://R.reaktanz.de</code>), oder sie hier herunterladen:</p>
-  <ul>
-    <li>download: <a href="http://R.reaktanz.de/src/contrib/klausuR_0.11-2.tar.gz" title="R-paket klausuR">klausuR_0.11-2.tar.gz</a> (17.06.2011, 42,8 kb)</li>
-    <li><a href="http://R.reaktanz.de/src/contrib/ChangeLog" title="klausuR changelog">ChangeLog</a></li>
-    <li>lizenz: <a href="http://www.gnu.org/licenses/gpl.html" title="GNU general public licence" target="_blank" class="extlink">GPL >= 3</a></li>
-    <li>dokumentation: <a href="http://R.reaktanz.de/klausuR.pdf" title="klausuR (dokumentation)">klausuR.pdf</a> (englisch)</li>
-    <li>beispielberichte:</li>
-    <ul>
-      <li>individuelles feedback: <a href="http://R.reaktanz.de/klausuR-reports.pdf" title="klausuR (individuelles feedback)">klausuR-reports.pdf</a></li>
-      <li>gesamtergebnisse: <a href="http://R.reaktanz.de/klausuR-global.pdf" title="klausuR (gesamtergebnisse)">klausuR-global.pdf</a></li>
-      <li>anonymisierter aushang: <a href="http://R.reaktanz.de/klausuR-anonym.pdf" title="klausuR (anonymes feedback)">klausuR-anonym.pdf</a></li>
-    </ul>
-  </ul>
-  
   <h4>What can you do with klausuR?</h4>
 
 	<p>This package is intended for persons or institutions who/which apply Multiple Choice (MC) tests. Work on it started off in 2009, as a collection of functions we used in our own department (University of D&uuml;sseldorf, Institute of Experimental Psychology, Department of Diagnostics and Differential Psychology). Its main purpose is to evaluate results for each test subject, assign marks accordingly, and produce printable summaries (e.g., to be archived with the test, to be able to verify the correctness of results any time).</p>
