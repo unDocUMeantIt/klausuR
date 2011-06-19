@@ -140,38 +140,11 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 		# probably weight items, to calculate the maximum score
 		# NRET et al. can't be weighted yet
 		if(is.null(wght) || score %in% c("NR", "ET", "NRET")){
-			if(score %in% c("ET", "NRET")){
-				# these need some special treatment, because there can be more points than items
-				## currently, no negative points are valid for mark assignments
-				# so to be sure, we'll globally add num.alt-1 points, so 0 is the minimum
-				# see also the klausur.gen.marks function below, since this had to be cosidered there, too!
-				#
-				# get all alternatives
-				num.alt.all <- nchar(corr)
-				# check if they're all of equal length
-				if(all(num.alt.all == num.alt.all[1])){
-					num.alt <- as.numeric(num.alt.all[1])
-				} else {
-					num.alt <- max(num.alt.all)
-					min.score <- sum(num.alt - num.alt.all)
-					warning(paste("Items differ in number of answer alternatives: ", min(num.alt.all), "-", num.alt,
-						"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
-						"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
-				}
-				# compute baseline, that is, what do you get with all missings?
-				baseline <- length(num.alt.all) * (num.alt-1)
-				warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
-
-				if(identical(score, "NRET")){
-					maxp <- sum(num.alt.all + num.alt-1)
-				}	else {
-					maxp <- sum(num.alt.all + num.alt-2)
-				}
-			} else {
-				# in case no weights were given, count each item as one point
-				maxp <- length(items)
-				num.alt <- NULL
-			}
+			nret.test.chars <- nret.minmax(corr=corr, score=score)
+			maxp <- nret.test.chars["maxp"]
+			min.score <- nret.test.chars["minp"]
+			baseline <- nret.test.chars["baseline"]
+			num.alt <- nret.test.chars["num.alt"]
 			# for the results, create a vector of 1's by number of items
 			wght.results <- rep(1, length(items))
 		} else {
@@ -225,6 +198,8 @@ klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, 
 			if(score %in% c("ET", "NRET")){
 				# a hack to force the right max. points here
 				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=baseline)
+				} else if(identical(score, "NR")){
+					marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
 			} else {
 				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
 			}

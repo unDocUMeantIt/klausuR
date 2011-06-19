@@ -1,5 +1,9 @@
 ChangeLog for package klausuR
 
+## 0.11-3
+  - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring
+  - for NRET/ET, moved determination of max. points etc. to new internal function nret.minmax()
+
 ## 0.11-2
   - added internal function roxy.package() to ease development
   - added initial support for elimination testing (ET) and number right elimination testing (NRET)

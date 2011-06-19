@@ -43,7 +43,7 @@ data.check.klausur <- function(answ, corr, marks, items, wght, score, na.rm){
 		    stop(simpleError(paste("Please check:", fehl.items.corr, fehl.items.answ, "\n\n The number of items differs between observed and correct answers!")), call.=FALSE)
 		  }
 		  if(is.null(wght)){
-		    warning("No weight vector (wght) given.\n  Number of items is used as maximum score.")
+		    message("No weight vector (wght) given. Maximum score was determined from items and scoring method.")
 		  } else{
 		    if(length(wght) != length(corr)){
 		      stop(simpleError("The number of weights differs from the number if items!"), call.=FALSE)
@@ -193,7 +193,7 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
   # firstly, extract the item name from the answ vector
   item <- names(item.answ)
   if(length(item) == 0){
-    stop("Partial results wanted, but incorrect item answers given: no item name defined!\n")
+    stop(simpleError("Partial results wanted, but incorrect item answers given: no item name defined!\n"), call.=FALSE)
   } else{}
 
   if(is.null(wght)){
@@ -270,7 +270,18 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 	if(is.null(num.alt)){
 		num.alt <- nchar(corr)
 	} else if(!is.numeric(num.alt)){
-		stop(simpleError("Value of \"num.alt\" must be NULL or a number!"))
+		stop(simpleError("Value of \"num.alt\" must be NULL or a number!"), call.=FALSE)
+	}
+
+	# in which mode will be scored?
+	if(identical(score, "NR")){
+		mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
+	} else if(identical(score, "ET")){
+		mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
+	} else if(identical(score, "NRET")){
+		mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
+	} else {
+		stop(simpleError(paste("Unknown scoring mode:", score)), call.=FALSE)
 	}
 
 	all.results <- lapply(answ, function(curr.answ){
@@ -279,31 +290,25 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 		corr.split <- unlist(strsplit(corr, split=""))
 		# check for equal length
 		if(length(answ.split) != length(corr.split)){
-			stop(simpleError("Given and correct answers are of unequal length!"))
+			stop(simpleError("Given and correct answers are of unequal length!"), call.=FALSE)
 		} else {}
 		# check for correct input
 		if(sum(!answ.split %in% c(is.true, is.false, missing, err)) > 0){
-			stop(simpleError("Given answer vector includes invalid characters!"))
+			stop(simpleError("Given answer vector includes invalid characters!"), call.=FALSE)
 		} else {}
 		if(sum(!corr.split %in% c(is.true, is.false, missing, err)) > 0){
-			stop(simpleError("Correct answer vector includes invalid characters!"))
+			stop(simpleError("Correct answer vector includes invalid characters!"), call.=FALSE)
 		} else {}
-
-		# in which mode will be scored?
-		if(identical(score, "NR")){
-			mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
-		} else if(identical(score, "ET")){
-			mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
-		} else if(identical(score, "NRET")){
-			mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
-		} else {
-			stop(simpleError(paste("Unknown scoring mode:", score)))
-		}
 
 		## plausibility checks
 		# too many "correct" answers?
 		num.yeses <- sum(answ.split %in% is.true)
 		num.trues <- sum(corr.split %in% is.true)
+			# if more than one correct answer is defined, the penalty for
+			# marking one "wrong" must be aligned
+			if(num.trues > 1 && score %in% c("ET","NRET")){
+				mtx["false.neg"] <- (1-num.alt)/num.trues
+			} else {}
 		if(num.yeses > num.trues && !isTRUE(true.false)){
 			result <- 0
 		} else {
@@ -328,7 +333,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 							}
 						} else {
 							# this is impossible...
-							stop(simpleError("Are you sure your answer vector is correct?!"))
+							stop(simpleError("Are you sure your answer vector is correct?!"), call.=FALSE)
 						}
 					} else {
 						if(identical(answ.given, is.true)){
@@ -380,6 +385,57 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
 	return(all.results)
 } ## end function nret.score()
+
+## function nret.minmax()
+# compute minimum/maximum points, number of alternatives and baseline
+nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
+	# initial value for minimum score
+	min.score <- 0
+	# split whole answer vector
+	corr.split <- unlist(strsplit(corr, split=""))
+	num.trues <- sum(corr.split %in% is.true)
+	num.false <- sum(corr.split %in% is.false)
+
+	if(score %in% c("ET", "NRET")){
+		# these need some special treatment, because there can be more points than items
+		## currently, no negative points are valid for mark assignments
+		# so to be sure, we'll globally add num.alt-1 points, so 0 is the minimum
+		# see also the klausur.gen.marks function below, since this had to be cosidered there, too!
+		#
+		# get all alternatives
+		num.alt.all <- nchar(corr)
+		# check if they're all of equal length
+		if(all(num.alt.all == num.alt.all[1])){
+			num.alt <- as.numeric(num.alt.all[1])
+		} else {
+			num.alt <- max(num.alt.all)
+			min.score <- sum(num.alt - num.alt.all)
+			warning(paste("Items differ in number of answer alternatives: ", min(num.alt.all), "-", num.alt,
+				"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
+				"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
+		}
+		# compute baseline, that is, what do you get with all missings?
+		baseline <- length(num.alt.all) * (num.alt-1)
+		warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
+
+		if(identical(score, "NRET")){
+			maxp <- num.trues + num.false + (length(corr) * (num.alt-1))
+		}	else {
+			maxp <- num.false + (length(corr) * (num.alt-1))
+		}
+	} else if(identical(score, "NR")){
+		# in case no weights were given, count each item as one point
+		maxp <- num.trues
+		num.alt <- NULL
+		baseline <- 0
+		min.score <- 0
+	} else {
+		stop(simpleError("Unknown scoring function!"), call.=FALSE)
+	}
+
+	results <- c(maxp=maxp, minp=min.score, baseline=baseline, num.alt=num.alt)
+	return(results)
+} ## end function nret.minmax()
 
 ## marks.summary()
 # this function takes a vector with marks and returns a summarising matrix
