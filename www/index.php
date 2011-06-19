@@ -43,7 +43,63 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+  <p>die aktuelle <strong>stabile version</strong> dieses pakets ist auf <a href="https://r-forge.r-project.org/R/?group_id=942" target="_blank">R-forge</a> zu finden und kann direkt aus dem repository installiert werden:</p>
+  <p><code>install.packages("klausuR", repos="http://R-Forge.R-project.org")</code></p>
+
+	<p>per <a href="https://r-forge.r-project.org/scm/?group_id=942" target="_blank">subversion</a> kann man dort auch die aktuelle <strong>entwicklerversion</strong> bekommen. alternativ kann man die entwicklerversion auch &uuml;ber mein eigenes repository f&uuml;r <a href="http://www.r-project.org" title="die freie statistik-software R" target="_blank" class="extlink">R</a>-pakete installieren (<code>http://R.reaktanz.de</code>), oder sie hier herunterladen:</p>
+  <ul>
+    <li>download: <a href="http://R.reaktanz.de/src/contrib/klausuR_0.11-2.tar.gz" title="R-paket klausuR">klausuR_0.11-2.tar.gz</a> (17.06.2011, 42,8 kb)</li>
+    <li><a href="http://R.reaktanz.de/src/contrib/ChangeLog" title="klausuR changelog">ChangeLog</a></li>
+    <li>lizenz: <a href="http://www.gnu.org/licenses/gpl.html" title="GNU general public licence" target="_blank" class="extlink">GPL >= 3</a></li>
+    <li>dokumentation: <a href="http://R.reaktanz.de/klausuR.pdf" title="klausuR (dokumentation)">klausuR.pdf</a> (englisch)</li>
+    <li>beispielberichte:</li>
+    <ul>
+      <li>individuelles feedback: <a href="http://R.reaktanz.de/klausuR-reports.pdf" title="klausuR (individuelles feedback)">klausuR-reports.pdf</a></li>
+      <li>gesamtergebnisse: <a href="http://R.reaktanz.de/klausuR-global.pdf" title="klausuR (gesamtergebnisse)">klausuR-global.pdf</a></li>
+      <li>anonymisierter aushang: <a href="http://R.reaktanz.de/klausuR-anonym.pdf" title="klausuR (anonymes feedback)">klausuR-anonym.pdf</a></li>
+    </ul>
+  </ul>
+  
+  <h4>What can you do with klausuR?</h4>
+
+	<p>This package is intended for persons or institutions who/which apply Multiple Choice (MC) tests. Work on it started off in 2009, as a collection of functions we used in our own department (University of D&uuml;sseldorf, Institute of Experimental Psychology, Department of Diagnostics and Differential Psychology). Its main purpose is to evaluate results for each test subject, assign marks accordingly, and produce printable summaries (e.g., to be archived with the test, to be able to verify the correctness of results any time).</p>
+
+	<p>Over time the package gained a lot of features we don't actually needed ourselves, but which might be interesting for research. For instance it cannot only apply the typical Number Right scoring (one point for each correctly marked alternative), but also Coombs Elimination Testing and Number Right Elimination Testing (development version).</p>
+
+	<h4>Core features</h4>
+	<ul>
+		<li>Global results (<a href="http://R.reaktanz.de/klausuR-global.pdf" title="klausuR (global results)">example PDF</a>), including</li>
+		<ul>
+			<li>Achieved number of points</li>
+			<li>Percentage of correct answers</li>
+			<li>Marks, according to a given key</li>
+		</ul>
+		<li>Anonymous feedback (e.g., to publish the results; <a href="http://R.reaktanz.de/klausuR-anonym.pdf" title="klausuR (anonymous feedback)">example PDF</a>)</li>
+		<li>Detailed individual results (<a href="http://R.reaktanz.de/klausuR-reports.pdf" title="klausuR (individual feedback)">example PDF</a>), including</li>
+		<ul>
+			<li>A table listing given answers, correct answers, and points gained for each test item</li>
+			<li>Optionally as LaTeX report</li>
+			<li>Direct export of PDF reports</li>
+			<li>Optionally including distribution graphs of global results (points and/or marks)</li>
+		</ul>
+		<li>Test item analysis</li>
+		<ul>
+			<li>Cronbach's alpha</li>
+			<li>Discriminatory power (part-whole corrected)</li>
+			<li>Difficulty</li>
+		</ul>
+		<li>Optionally suggestions for mark assignments by distribution (e.g., according to DIHK standards)</li>
+		<li>Various ways of coping with partial answers (incl. ET, NRET)</li>
+		<li>Can cope with several parallel test forms</li>
+		<li>Comparison of two sets manually entered results</li>
+	</ul>
+
+	<h4>Graphical user interface</h4>
+	<p>There is also a GUI to work with the package, implemented as a <a href="http://reaktanz.de/?c=hacking&amp;s=RKWard#klausuR" title="RKWard-plugin">plugin for RKWard</a>.<p>
+
+  <h4>Limitations</h4>
+
+  <p>Some of the advanced features, especially in the development version, are not extensively tested in all possible combinations. If you should run into a bug, please don't hesitate to send a report! But even if everything runs smoothly, <strong>please do always check at least a sample of the results to make sure no errors occurred</strong>.</p>
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
