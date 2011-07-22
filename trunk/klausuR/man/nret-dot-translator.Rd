@@ -1,0 +1,54 @@
+\name{nret.translator}
+\alias{nret.translator}
+\title{Convert NRET/ET data between klausuR and other software}
+\usage{nret.translator(dat, items=NULL, spss="out",
+corr=FALSE, num.alt=NULL,
+klausuR.alt=c(is.true="+", is.false="-", missing="0", err="*"),
+spss.alt=c(is.true="2", is.false="1", missing="0", err="3"),
+rm.old.vars=TRUE, items.only=FALSE)}
+\description{This function should help to interchange answer data between R and other statistical software packages -- especially
+SPSS, but it's probably useful for other products as well.}
+\details{\code{\link[klausuR:klausur]{klausur}} expects data in a special format if it should be evaluated according to (Number Right) Elimination
+Testing (NRET/ET), only one variable per item. Other software products might not be able to process this rather
+condensed format. In that case, you will most likely need several variables for each item, i.e. one per answer alternative.
+Adding to that, the coding of answers is by default done with "+", "-", "0" and "*" in \code{klausuR}, again a
+solution that might confuse other products.
+
+This function translates data in both directions, and does also convert vectors giving the correct answer. The latter
+will turn a \code{klausuR} type answer string into a number indicating the correct alternative (and the other way round).
+This means that it will only work if there's exactly one valid answer to each item. If you convert towards SPSS,
+the resulting list will also include SPSS syntax to define variables respectively.}
+\note{The conversion is done on an object basis, that is, \code{nret.translator} will not open or write files,
+but take and return R objects. The function should ignore any other columns/variables in the object.}
+\value{If \code{corr=FALSE}, a data.frame with more or less columns (depending on \code{rm.old.vars} and \code{items.only}).
+If \code{corr=TRUE}, returns a named vector if \code{spss="in"} and a list if \code{spss="out"} (containing SPSS syntax
+in the element \code{syntax} and also a named vector, called \code{answ}).}
+\author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
+\seealso{\code{\link[klausuR:klausur]{klausur}}}
+\keyword{misc}
+\arguments{\item{dat}{A data.frame, the object to convert.}
+\item{items}{Optional vector defining the columns to convert. If \code{NULL}, the function will try to autodetect
+Items: \code{klausuR} type items are expected to be named \code{"ItemXXX"}, with XXX indicating the item number,
+SPSS type items \code{"itemXXXaYY"},  with XXX indicating the item number and YY the number of the answer alternative.}
+\item{spss}{Either "in" or "out", depending on the direction of conversion.}
+\item{corr}{Logical. Set to \code{TRUE} if \code{dat} is a vector with the correct answers. If \code{corr=TRUE} and
+\code{spss="in"}, you must also set \code{num.alt} accordingly!}
+\item{num.alt}{A numeric value definig the number of answer alternatives for each item. Can be a vector, if items
+have different numbers of options. If it is shorter than the number of items, it will be repeated for all items.}
+\item{klausuR.alt}{A named vector defining the codes for \code{klausuR} type of answers.}
+\item{spss.alt}{A named vector defining the codes for SPSS type of answers.}
+\item{rm.old.vars}{Logical. If \code{TRUE}, the converted columns will not be returned. Only relevant if \code{corr=FALSE}.}
+\item{items.only}{Logical. If \code{TRUE}, only the converted columns will be returned. Only relevant if \code{corr=FALSE}.}
+}
+\examples{\dontrun{
+# from SPSS to R
+klausuR.data <- nret.translator(spss.data, spss="in")
+klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE, num.alt=4)
+
+# from R to SPSS
+spss.data <- nret.translator(klausuR.data)
+spss.corr <- nret.translator(klausuR.corr, corr=TRUE, num.alt=4)
+# if you find the syntax useful
+cat(spss.corr$syntax, file="~/somewhere/NRET.sps")
+}}
+

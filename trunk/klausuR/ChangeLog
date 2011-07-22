@@ -1,5 +1,8 @@
 ChangeLog for package klausuR
 
+## 0.11-4
+  - added function nret.translator() to convert NRET/ET data from/to SPSS
+
 ## 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring
   - for NRET/ET, moved determination of max. points etc. to new internal function nret.minmax()
