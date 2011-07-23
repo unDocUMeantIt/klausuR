@@ -449,7 +449,7 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 		min.score <- 0
 	} else {
 		# in case this is no (NR)ET data at all
-		maxp <- length(corr.split)
+		maxp <- length(corr)
 		num.alt <- NULL
 		baseline <- 0
 		min.score <- 0
