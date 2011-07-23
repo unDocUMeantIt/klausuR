@@ -1,6 +1,13 @@
 ChangeLog for package klausuR
 
-## 0.11-4
+## 0.12-0
+  - drastic changes: klausur() and klausur.mufo() from now on only take objects of the new class
+    klausur.answ, which replaces the 'answ' and 'corr' arguments completely. Most of the time
+    it took to evaluate tests was squeezing data with exotic variable names and loads of
+    surprises into a valid data.frame. Those days should finally be numbered now...
+  - added function klausur.data() to do the squeezing into klausur.answ class objects (s.o.)
+  - the class klausuR gained a new slot 'misc' to preserve whatever unused variables are left over
+    from the squeezing process.
   - added function nret.translator() to convert NRET/ET data from/to SPSS
 
 ## 0.11-3

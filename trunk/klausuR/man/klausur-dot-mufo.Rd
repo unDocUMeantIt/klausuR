@@ -29,18 +29,14 @@ Not all slots are shown by default (refer to \code{\link[show,klausuR.mult-metho
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur]{klausur}}}
 \keyword{misc}
-\arguments{\item{answ}{A \code{\link{data.frame}} which has to include at least these variables:
-\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo} and \code{Form}, as well as \code{Pseudonym} (optional)
-and variables for the ansered items (according to the scheme \code{Item###},
-where ### is a number with leading zeros, if needed).}
-\item{corr}{A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).}
-\item{corr.key}{A data.frame or matrix indicating the positions of all items (columns) in all forms (rows). Must have
-a column called \code{Form} (like \code{answ}), and the item columns must follow the explained name scheme \code{Item###}.}
+\arguments{\item{data}{An object of class \code{\link[klausuR]{klausuR.answ-class}}.}
 \item{marks}{A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
-\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.}
+\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
+If \code{NULL}, this value must be set in the \code{data} object.}
 \item{mark.labels}{If \code{marks="suggest"}, use these as the marks you want to give.}
 \item{items}{Indices of a subset of variables in \code{answ} to be taken as items.}
-\item{wght}{A vector with weights for each item (named also according to \code{Item###}).}
+\item{wght}{A vector with weights for each item (named also according to \code{Item###}). If \code{NULL}, the value from the \code{data} object
+will be used.}
 \item{score}{Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.}
 \item{matn}{A matriculation number of a subject, to receive detailed results for that subject.}
 \item{na.replace}{A single value to replace NAs with in \code{answ}.}

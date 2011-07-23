@@ -94,7 +94,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 						return(true.one)
 					}
 				})
-			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", names(dat), perl=TRUE))
+			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", names(dat), perl=TRUE))
 			new.names <- paste("corr", old.digits, sep="")
 			names(new.answers) <- new.names
 			# for convenience, create some SPSS syntax
@@ -109,7 +109,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# extract items (ItemXXX)
 			# get columns with items
 			if(is.null(items)){
-				items.idx <- grep("(item|Item)([[:digit:]]{1,3})", names(dat))
+				items.idx <- grep("^(item|Item)([[:digit:]]{1,3})$", names(dat))
 			} else {
 				items.idx <- items
 			}
@@ -119,7 +119,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# split answers into alternatives
 			old.item.names <- names(dat[, items.idx])
 			num.items <- length(old.item.names)
-			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", old.item.names, perl=TRUE))
+			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", old.item.names, perl=TRUE))
 			# if the data is ok, the numbers of alternatives in the first row
 			# should suffice to get them for all subjects
 			num.alternatives <- nchar(dat[1,items.idx])
@@ -186,7 +186,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 					answ <- paste(answ, collapse="")
 					return(answ)
 				})
-			old.digits <- as.numeric(gsub("(corr|Corr)([[:digit:]]{1,3})", "\\2", names(dat), perl=TRUE))
+			old.digits <- as.numeric(gsub("^(corr|Corr)([[:digit:]]{1,3})$", "\\2", names(dat), perl=TRUE))
 			new.item.names <- if(num.items < 10){
 			paste("Item", old.digits, sep="")
 			} else if(num.items < 100){
@@ -200,7 +200,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# extract items (itemXaY (X=Item, Y=Antwortalternative))
 			# get columns with items
 			if(is.null(items)){
-				items.idx <- grep("(item|Item)([[:digit:]]{1,3}a([[:digit:]]{1,2}))", names(dat))
+				items.idx <- grep("^(item|Item)([[:digit:]]{1,3}a([[:digit:]]{1,2}))$", names(dat))
 			} else {
 				items.idx <- items
 			}
@@ -208,7 +208,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			items.idx <- items.idx[order(names(dat[, items.idx]))]
 
 			# this holds just the "itemXX" prefix
-			items.pre <- gsub("((item|Item)[[:digit:]]{1,3})(a[[:digit:]]{1,2})", "\\1", names(dat[, items.idx]), perl=TRUE)
+			items.pre <- gsub("^((item|Item)[[:digit:]]{1,3})(a[[:digit:]]{1,2})$", "\\1", names(dat[, items.idx]), perl=TRUE)
 			# unique item names
 			item.names <- unique(items.pre)
 
@@ -228,7 +228,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 
 			# rename the results (ItemXXX)
 			num.items <- length(item.names)
-			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", item.names, perl=TRUE))
+			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", item.names, perl=TRUE))
 			new.item.names <- if(num.items < 10){
 			paste("Item", old.digits, sep="")
 			} else if(num.items < 100){

@@ -4,9 +4,10 @@
 \usage{klausur(answ, corr, marks, mark.labels=NULL, items=NULL,
 wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
 cronbach=FALSE, item.analysis=FALSE)}
-\description{The function \code{klausur} expects a \code{\link{data.frame}} containing some identification data on all subjects and their answers to the test items,
-a vector with the correct answers, and a vector with marks assigned to the points achieved. It will compute global test results as well as
-some item analysis (including Cronbach's alpha and discriminatory power of the test items), and anonymous feedback for the test subjects.}
+\description{The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}\code{\link{data.frame}}, containing some
+identification data on all subjects and their answers to the test items, a vector with the correct answers, and optionally a vector with
+marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha and
+discriminatory power of the test items), and anonymous feedback for the test subjects.}
 \details{\code{klausur} automatically parses the variable names to decide \strong{which variables are actual test items}, if they are named according to
 the given scheme \code{Item###}. To help in constructing a data set with correct variable names one can call the
 \code{\link[klausuR:klausur.gen]{klausur.gen}} utility to generate an empty data object of a given number of items and test subjects.
@@ -77,20 +78,18 @@ Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{s
 \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
 \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}}
 \keyword{misc}
-\arguments{\item{answ}{A \code{\link{data.frame}} which has to include at least these variables:
-\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
-and variables for the answered items (according to the scheme \code{Item###},
-where ### is a number with leading zeros, if needed).}
-\item{corr}{A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).}
+\arguments{\item{data}{An object of class \code{\link[klausuR]{klausuR.answ-class}}.}
 \item{marks}{A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
-\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.}
+\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
+If \code{NULL}, this value must be set in the \code{data} object.}
 \item{mark.labels}{If \code{marks="suggest"}, use these as the marks you want to give.}
-\item{items}{Indices of a subset of variables in \code{answ} to be taken as items.}
-\item{wght}{A vector with weights for each item (named also according to \code{Item###}).}
+\item{items}{Indices of a subset of variables in \code{data} to be taken as items.}
+\item{wght}{A vector with weights for each item (named also according to \code{Item###}). If \code{NULL}, the value from the \code{data} object
+will be used.}
 \item{score}{Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"},
 \code{"NR"}, \code{"ET"}, or \code{"NRET"}.}
 \item{matn}{A matriculation number of a subject, to receive detailed results for that subject.}
-\item{na.rm}{Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.}
+\item{na.rm}{Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.}
 \item{cronbach}{Logical. If TRUE, Cronbach's alpha will be calculated.}
 \item{item.analysis}{Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.}

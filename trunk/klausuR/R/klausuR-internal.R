@@ -5,68 +5,86 @@
 ## data.check.klausur()
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the given data
-data.check.klausur <- function(answ, corr, marks, items, wght, score, na.rm){
+data.check.klausur <- function(answ, corr, items, na.rm){
 
-		  # in case no items were specified, take variables of names "Item##" as items
-		  if(is.null(items)){
-		    items <- grep("Item([[:digit:]]{1,3})", names(answ))
-		  } else{}
+		# in case no items were specified, take variables of names "Item##" as items
+		if(is.null(items)){
+			items <- grep("^(Item|item)([[:digit:]]{1,3})$", names(answ))
+		} else{}
 
-		  # are all needed variables present in the answers data?
-		  if(is.null(answ$Name) || is.null(answ$FirstName) || is.null(answ$MatrNo)){
-		    stop(simpleError("The observation data is not complete (Name, FirstName, MatrNo)!"), call.=FALSE)
-		  } else{}
+		# are all needed variables present in the answers data?
+		needed.names <- c("No", "Name", "FirstName", "MatrNo")
+		if(any(!needed.names %in% names(answ))){
+				missing.vars <- needed.names[!needed.names %in% names(answ)]
+				stop(simpleError(paste("Missing variables in observation data:\n ", paste(missing.vars, collapse=", "))))
+		} else {}
 
-		  # we'll check for NAs only in variables we will use, so define them here
-		  relevant.items <- c(grep("^Name$", names(answ)), grep("^FirstName$", names(answ)), grep("^MatrNo$", names(answ)), items)
+		# we'll check for NAs only in variables we will use, so define them here
+		relevant.items <- c(grep("^Name$|^FirstName$|^MatrNo$", names(answ)), items)
 
-		  # are there missing values in answ, at least in the relevant parts?
-		  if(sum(is.na(answ[, relevant.items]) > 0)){
-		    if(isTRUE(na.rm)){
-		      warning(paste("NAs were present in ",deparse(substitute(answ))," and removed!\n", sep=""), call.=FALSE)
-		      answ <- na.omit(answ)
-		    }
-		    else
-		      warning(paste("NAs were present in ",deparse(substitute(answ)),"\"!\n", sep=""), call.=FALSE)
-		  } else{}
-		  if(sum(is.na(corr) > 0)){
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")), call.=FALSE)
-		  } else{}
-		  if(sum(is.na(marks) > 0)){
-		      stop(simpleError(paste("NAs present in ",deparse(substitute(marks)),"!\n", sep="")), call.=FALSE)
-		  } else{}
+		# are there missing values in answ, at least in the relevant parts?
+		if(sum(is.na(answ[, relevant.items]) > 0)){
+			if(isTRUE(na.rm)){
+			warning(paste("NAs were present in ",deparse(substitute(answ))," and removed!\n", sep=""))
+				for (na.var in relevant.items){
+					answ <- answ[!is.na(answ[, na.var]),]
+				}
+			}
+			else
+			warning(paste("NAs were present in ",deparse(substitute(answ)),"\"!\n", sep=""))
+		} else{}
+		if(sum(is.na(corr) > 0)){
+			stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")))
+		} else{}
 
-		  # now let's check wheter all defined correct answers match the variables in answers data
-		  if(!setequal(names(answ[, items]),names(corr))){
-		    fehl.items.corr <- names(corr[!is.element(names(corr),names(answ[,items]))])
-		    fehl.items.answ <- names(answ[!is.element(names(answ[, items]),names(corr))])
-		    stop(simpleError(paste("Please check:", fehl.items.corr, fehl.items.answ, "\n\n The number of items differs between observed and correct answers!")), call.=FALSE)
-		  }
-		  if(is.null(wght)){
-		    message("No weight vector (wght) given. Maximum score was determined from items and scoring method.")
-		  } else{
-		    if(length(wght) != length(corr)){
-		      stop(simpleError("The number of weights differs from the number if items!"), call.=FALSE)
-		    } else{}
-		  }
-		  if(!identical(score, "solved")){
-		    if(!score %in% c("partial", "liberal", "NR", "ET", "NRET")){
-		      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", or \"NRET\"!"), call.=FALSE)
-		    } else if(identical(score, "partial")){
-		      warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
-		    } else if(identical(score, "liberal")){
-		      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
-		    } else if(identical(score, "ET")){
-		      warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
-		    } else if(identical(score, "NRET")){
-		      warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
-		    } else{}
-		  } else{}
+		# now let's check wheter all defined correct answers match the variables in answers data
+		if(!setequal(names(answ[, items]),names(corr))){
+			fehl.items.corr <- names(corr[!is.element(names(corr),names(answ[,items]))])
+			fehl.items.answ <- names(answ[!is.element(names(answ[, items]),names(corr))])
+			stop(simpleError(paste("Please check:\n  ", paste(fehl.items.corr, fehl.items.answ, collapse=", "),
+			"\n  The number of items differs between observed and correct answers!", sep="")))
+		}
 
-    # return objects that have probably changed
-    checked.data <- list(answ=answ, items=items)
-    return(checked.data)
+	# return objects that have probably changed
+	checked.data <- list(answ=answ, items=items)
+	return(checked.data)
 } ## end data.check.klausur()
+
+## scoring.check.klausur()
+# this function is called by klausur() and klausur.mufo()
+# for some sanity checks of the desired scoring
+scoring.check.klausur <- function(corr, marks, wght, score){
+
+		# are there missing values?
+		if(!is.null(marks)){
+			if(sum(is.na(marks) > 0)){
+				stop(simpleError(paste("NAs present in ",deparse(substitute(marks)),"!\n", sep="")))
+			} else{}
+		} else{}
+
+		if(is.null(wght)){
+			message("No weight vector (wght) given. Maximum score is determined from items and scoring method.")
+		} else{
+			if(length(wght) != length(corr)){
+			stop(simpleError("The number of weights differs from the number if items!"))
+			} else{}
+		}
+		if(!identical(score, "solved")){
+			if(!score %in% c("partial", "liberal", "NR", "ET", "NRET")){
+			stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", or \"NRET\"!"))
+			} else if(identical(score, "partial")){
+			warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
+			} else if(identical(score, "liberal")){
+			warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
+			} else if(identical(score, "ET")){
+			warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
+			} else if(identical(score, "NRET")){
+			warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
+			} else{}
+		} else{}
+
+	return(TRUE)
+} ## end scoring.check.klausur()
 
 ## gen.item.names()
 # an internal function to generate item names
@@ -193,7 +211,7 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
   # firstly, extract the item name from the answ vector
   item <- names(item.answ)
   if(length(item) == 0){
-    stop(simpleError("Partial results wanted, but incorrect item answers given: no item name defined!\n"), call.=FALSE)
+    stop(simpleError("Partial results wanted, but incorrect item answers given: no item name defined!\n"))
   } else{}
 
   if(is.null(wght)){
@@ -270,7 +288,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 	if(is.null(num.alt)){
 		num.alt <- nchar(corr)
 	} else if(!is.numeric(num.alt)){
-		stop(simpleError("Value of \"num.alt\" must be NULL or a number!"), call.=FALSE)
+		stop(simpleError("Value of \"num.alt\" must be NULL or a number!"))
 	}
 
 	# in which mode will be scored?
@@ -281,7 +299,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 	} else if(identical(score, "NRET")){
 		mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
 	} else {
-		stop(simpleError(paste("Unknown scoring mode:", score)), call.=FALSE)
+		stop(simpleError(paste("Unknown scoring mode:", score)))
 	}
 
 	all.results <- lapply(answ, function(curr.answ){
@@ -290,14 +308,14 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 		corr.split <- unlist(strsplit(corr, split=""))
 		# check for equal length
 		if(length(answ.split) != length(corr.split)){
-			stop(simpleError("Given and correct answers are of unequal length!"), call.=FALSE)
+			stop(simpleError("Given and correct answers are of unequal length!"))
 		} else {}
 		# check for correct input
 		if(sum(!answ.split %in% c(is.true, is.false, missing, err)) > 0){
-			stop(simpleError("Given answer vector includes invalid characters!"), call.=FALSE)
+			stop(simpleError("Given answer vector includes invalid characters!"))
 		} else {}
 		if(sum(!corr.split %in% c(is.true, is.false, missing, err)) > 0){
-			stop(simpleError("Correct answer vector includes invalid characters!"), call.=FALSE)
+			stop(simpleError("Correct answer vector includes invalid characters!"))
 		} else {}
 
 		## plausibility checks
@@ -333,7 +351,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 							}
 						} else {
 							# this is impossible...
-							stop(simpleError("Are you sure your answer vector is correct?!"), call.=FALSE)
+							stop(simpleError("Are you sure your answer vector is correct?!"))
 						}
 					} else {
 						if(identical(answ.given, is.true)){
@@ -392,7 +410,7 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 	# initial value for minimum score
 	min.score <- 0
 	# split whole answer vector
-	corr.split <- unlist(strsplit(corr, split=""))
+	corr.split <- unlist(strsplit(as.character(corr), split=""))
 	num.trues <- sum(corr.split %in% is.true)
 	num.false <- sum(corr.split %in% is.false)
 
@@ -430,7 +448,11 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 		baseline <- 0
 		min.score <- 0
 	} else {
-		stop(simpleError("Unknown scoring function!"), call.=FALSE)
+		# in case this is no (NR)ET data at all
+		maxp <- length(corr.split)
+		num.alt <- NULL
+		baseline <- 0
+		min.score <- 0
 	}
 
 	results <- c(maxp=maxp, minp=min.score, baseline=baseline, num.alt=num.alt)
@@ -481,7 +503,7 @@ klausur.reorderItems <- function(slot, order){
   # now let's reorder the stuff
   part.slot.reordered <- part.slot[,order]
   names(part.slot.reordered) <- slot.names
-  # finally glue MatNo back
+  # finally glue MatrNo back
   reordered.items <- cbind(matn.slot, part.slot.reordered)
   return(reordered.items)
 } ## end klausur.reorderItems()

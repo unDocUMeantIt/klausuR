@@ -16,6 +16,7 @@
 #' @slot sd Standard deviation of the test results
 #' @slot cronbach Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)
 #' @slot item.analysis A data.frame with information on difficulty, discriminant power and discriminant factor of all items.
+#' @slot misc Anything that was stored in the \code{misc} slot of the input data.
 #' @name klausuR,-class
 #' @import methods
 #' @keywords classes
@@ -36,7 +37,8 @@ setClass("klausuR",
 	mean="table",
 	sd="numeric",
 	cronbach="list",
-	item.analysis="data.frame"),
+	item.analysis="data.frame",
+	misc="data.frame"),
     prototype(results=data.frame(),
 	answ=data.frame(),
 	corr=NULL,
@@ -49,7 +51,8 @@ setClass("klausuR",
 	mean=table(NULL),
 	sd=numeric(),
 	cronbach=list(alpha=NULL, ci=NULL, deleted=NULL),
-	item.analysis=data.frame())
+	item.analysis=data.frame(),
+	misc=data.frame())
 )
 
 #setValidity("klausuR", function(object){
