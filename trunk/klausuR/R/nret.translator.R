@@ -94,7 +94,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 						return(true.one)
 					}
 				})
-			old.digits <- gsub("(item|Item)([[:digit:]]{1,3})", "\\2", names(dat), perl=TRUE)
+			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", names(dat), perl=TRUE))
 			new.names <- paste("corr", old.digits, sep="")
 			names(new.answers) <- new.names
 			# for convenience, create some SPSS syntax
@@ -119,7 +119,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# split answers into alternatives
 			old.item.names <- names(dat[, items.idx])
 			num.items <- length(old.item.names)
-			old.digits <- gsub("(item|Item)([[:digit:]]{1,3})", "\\2", old.item.names, perl=TRUE)
+			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", old.item.names, perl=TRUE))
 			# if the data is ok, the numbers of alternatives in the first row
 			# should suffice to get them for all subjects
 			num.alternatives <- nchar(dat[1,items.idx])
@@ -228,7 +228,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 
 			# rename the results (ItemXXX)
 			num.items <- length(item.names)
-			old.digits <- gsub("(item|Item)([[:digit:]]{1,3})", "\\2", item.names, perl=TRUE)
+			old.digits <- as.numeric(gsub("(item|Item)([[:digit:]]{1,3})", "\\2", item.names, perl=TRUE))
 			new.item.names <- if(num.items < 10){
 			paste("Item", old.digits, sep="")
 			} else if(num.items < 100){
