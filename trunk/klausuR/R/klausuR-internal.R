@@ -295,10 +295,12 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
 	# in which mode will be scored?
 	if(identical(score, "NR")){
-		mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
+		mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0, err.true=1, err.false=0)
 	} else if(identical(score, "ET")){
-		mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
-	} else if(score %in% c("NRET","NRET+")){
+		mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0, err.true=as.numeric(1-num.alt), err.false=1)
+	} else if(identical(score, "NRET")){
+		mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0, err.true=as.numeric(2-num.alt), err.false=1)
+	} else if(identical(score, "NRET+")){
 		mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
 	} else {
 		stop(simpleError(paste("Unknown scoring mode:", score)))
@@ -329,7 +331,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 			if(num.trues > 1 && score %in% c("ET","NRET","NRET+")){
 				mtx["false.neg"] <- (1-num.alt)/num.trues
 			} else {}
-		if(score %in% c("ET","NRET+") && num.yeses > num.trues && !isTRUE(true.false)){
+		if(identical(score, "NRET+") && num.yeses > num.trues && !isTRUE(true.false)){
 			result <- 0
 		} else {
 			# then compare answer by answer
@@ -371,11 +373,24 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 								return(mtx["false.neg"])
 							}
 						} else if(answ.given %in% c(missing, err)){
-							# this is a missing answer
 							if(isTRUE(true.false)){
 								return(as.character(answ.given))
 							} else {
-								return(mtx["miss"])
+								if(score %in% c("NR","ET","NRET")){
+									# the authors didn't discuss failed answers, so this is by the book
+									if(identical(answ.given, missing)){
+										return(mtx["miss"])
+									} else {
+										# ok, it's an error. did it happen to a wrong or right alternative?
+										if(identical(answ.crrct, is.true)){
+											return(mtx["err.true"])
+										} else {
+											return(mtx["err.false"])
+										}
+									}
+								} else {
+									return(mtx["miss"])
+								}
 							}
 						}
 					}

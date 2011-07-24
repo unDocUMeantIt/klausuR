@@ -44,7 +44,9 @@ the evaluated answer alternatives, with the following elements:
 \item{\code{N}} {True negative: Alternative was checked as wrong and is wrong. \emph{Points: +1 (+ constant)}}
 \item{\code{n}} {False negative: Alternative was checked as wrong but is right. \emph{Points: -(alternatives-1) (+ constant)}}
 \item{\code{0}} {Missing: Alternative wasn't checked at all. \emph{Points: 0 (+ constant)}}
-\item{\code{*}} {Error: Alternative was checked both wrong and right. \emph{Points: 0 (+ constant)}}
+\item{\code{*}} {Error: Alternative was checked both wrong and right. \emph{Points NRET+: 0 (+ constant);
+NR scores 1 point if this was the correct alternative, ET 1 point if it hit a wrong one,
+and NRET sums up the points for both the positive and negative answer (all + constant)}}
 }
 An example: If we have an item with four alternatives, and the third one is right (i.e., "\code{--+-}"), and a test subject considered the first alternative
 to be correct and eliminated all others (i.e., "\code{+---}"), it would be evaluated as "\code{pNnN}", that is 0+1-3+1=-1 point, not considering the constant.
