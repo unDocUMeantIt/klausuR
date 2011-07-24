@@ -18,7 +18,8 @@ that is identical in both sets compared, but all dubious values will be replaced
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \keyword{utilities}
 \seealso{\code{\link[klausuR:klausur]{klausur}}}
-\arguments{\item{set1,set2}{The data sets to be compared}
+\arguments{\item{set1,set2}{The data sets to be compared. Can be two data.frames or objects of class \code{\link[klausuR]{klausuR.answ-class}}.
+If the latter, their slots \code{id} and \code{items} will be compared.}
 \item{select}{A vector with variables that should be compared, all others are omitted. At least "No", "FirstName" and "Name" are needed for the output!}
 \item{new.set}{A character string representing a valid name for an R object}
 }

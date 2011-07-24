@@ -70,15 +70,15 @@ scoring.check.klausur <- function(corr, marks, wght, score){
 			} else{}
 		}
 		if(!identical(score, "solved")){
-			if(!score %in% c("partial", "liberal", "NR", "ET", "NRET")){
-			stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", or \"NRET\"!"))
+			if(!score %in% c("partial", "liberal", "NR", "ET", "NRET", "NRET+")){
+			stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", \"NRET\", or \"NRET+\"!"))
 			} else if(identical(score, "partial")){
 			warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
 			} else if(identical(score, "liberal")){
 			warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
 			} else if(identical(score, "ET")){
 			warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
-			} else if(identical(score, "NRET")){
+			} else if(score %in% c("NRET", "NRET+")){
 			warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
 			} else{}
 		} else{}
@@ -275,6 +275,8 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
 #      c(true.pos=0, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
 #  - NRET: number right elimination testing (strike wrong alternatives, mark one as true)
 #      c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
+#  - NRET+: number right elimination testing (strike wrong alternatives, mark one as true; 0 points if too many "+")
+#      c(true.pos=1, false.pos=0, true.neg=1, false.neg=1-num.alt, miss=0)
 #
 # errors (like both alternatives marked) will be evaluated like missings, pointwise
 #
@@ -296,7 +298,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 		mtx <- c(true.pos=1, false.pos=0, true.neg=0, false.neg=0, miss=0)
 	} else if(identical(score, "ET")){
 		mtx <- c(true.pos=0, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
-	} else if(identical(score, "NRET")){
+	} else if(score %in% c("NRET","NRET+")){
 		mtx <- c(true.pos=1, false.pos=0, true.neg=1, false.neg=as.numeric(1-num.alt), miss=0)
 	} else {
 		stop(simpleError(paste("Unknown scoring mode:", score)))
@@ -324,10 +326,10 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 		num.trues <- sum(corr.split %in% is.true)
 			# if more than one correct answer is defined, the penalty for
 			# marking one "wrong" must be aligned
-			if(num.trues > 1 && score %in% c("ET","NRET")){
+			if(num.trues > 1 && score %in% c("ET","NRET","NRET+")){
 				mtx["false.neg"] <- (1-num.alt)/num.trues
 			} else {}
-		if(num.yeses > num.trues && !isTRUE(true.false)){
+		if(score %in% c("ET","NRET+") && num.yeses > num.trues && !isTRUE(true.false)){
 			result <- 0
 		} else {
 			# then compare answer by answer
@@ -414,7 +416,7 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 	num.trues <- sum(corr.split %in% is.true)
 	num.false <- sum(corr.split %in% is.false)
 
-	if(score %in% c("ET", "NRET")){
+	if(score %in% c("ET", "NRET", "NRET+")){
 		# these need some special treatment, because there can be more points than items
 		## currently, no negative points are valid for mark assignments
 		# so to be sure, we'll globally add num.alt-1 points, so 0 is the minimum
@@ -436,7 +438,7 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 		baseline <- length(num.alt.all) * (num.alt-1)
 		warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
 
-		if(identical(score, "NRET")){
+		if(score %in% c("NRET", "NRET+")){
 			maxp <- num.trues + num.false + (length(corr) * (num.alt-1))
 		}	else {
 			maxp <- num.false + (length(corr) * (num.alt-1))

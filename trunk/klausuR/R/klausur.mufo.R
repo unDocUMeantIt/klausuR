@@ -5,22 +5,22 @@
 #' results. Cronbach alpha and item analysis will be calculated for all subjects accordingly, therefore the test items of
 #' all tests will be re-ordered to fit the order of the first given test form (this does not apply to the partial results).
 #'
-#' The parameters are mostly the same as those for \code{\link[klausuR:klausur]{klausur}}. One new parameter \code{corr.key}
-#' is needed to communicate the order of items in each test form, and the data.frame \code{answ} needs one additional variable
-#' called \code{Form}.
+#' The parameters are mostly the same as those for \code{\link[klausuR:klausur]{klausur}}. However, in the \code{data} object the
+#' slot \code{corr} must also contain \code{corr.key}, to communicate the order of items in each test form, and the slot \code{id}
+#' needs one additional variable called \code{Form}.
 #' 
-#' An example: You have prepared a test in two different parallel forms "A" an "B", So in addition to the variables in \code{answ}
+#' An example: You have prepared a test in two different parallel forms "A" an "B", So in addition to the variables in \code{data@@id}
 #' you need to create a variable called \code{Form}, to document which test subject was given which test form. Since form "B" holds the same
 #' items as form "A", only in a different order, we only need to define these positions and we're done. Therefore \code{corr.key} must
-#' be a matrix or data.frame, again with a column called "Form", one for each item, and one row of data for each test form. That is, you'd need
+#' be a matrix or data.frame, again with a column called "Form", one column for each item, and one row of data for each test form. That is, you'd need
 #' one row for test form "A" and one for test form "B", giving an index for each item where it is placed in the form. For "A" this is
 #' simply ascending numbers from 1 to how many questions you asked, but for row "B" each number indicates at which position an item
 #' of "A" is to be found. See the example below.
 #' 
 #' @title A function to evaluate multiple choice tests
-#' @usage klausur.mufo(answ, corr, corr.key, marks, mark.labels=NULL,
-#' items = NULL, wght = NULL, score="solved", matn = NULL,
-#' na.replace = NULL, cronbach=FALSE, item.analysis=FALSE)
+#' @usage klausur.mufo(data, marks=NULL, mark.labels=NULL,
+#'		items=NULL, wght=NULL, score="solved", matn=NULL,
+#'		na.rm=TRUE, cronbach=FALSE, item.analysis=FALSE)
 #' @param data An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
 #'		\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
@@ -29,19 +29,20 @@
 #' @param items Indices of a subset of variables in \code{answ} to be taken as items.
 #' @param wght A vector with weights for each item (named also according to \code{Item###}). If \code{NULL}, the value from the \code{data} object
 #'		will be used.
-#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.
+#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"},
+#'		\code{"NR"}, \code{"ET"}, \code{"NRET"}, or \code{"NRET+"}.
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
-#' @param na.replace A single value to replace NAs with in \code{answ}.
+#' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @return An object of class \code{\link[klausuR.mult]{klausuR.mult-class}} with the following slots.
 #'	\item{forms}{A character vector naming all test forms}
-#'	\item{results.part}{A list of object of class klausuR, holding all partial results}
-#'	\item{results.glob}{An object of class klausuR with the global results}
+#'	\item{results.part}{A list of objects of class \code{klausuR}, holding all partial results}
+#'	\item{results.glob}{An object of class \code{klausuR} with the global results}
 #'	Not all slots are shown by default (refer to \code{\link[show,klausuR.mult-method]{show}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @seealso \code{\link[klausuR:klausur]{klausur}}
+#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.data]{klausur.data}}
 #' @keywords misc
 #' @import psychometric
 #' @export
@@ -72,13 +73,14 @@
 #' notenschluessel[25:26] <- 1.7
 #' notenschluessel[27:29] <- 1.3
 #' notenschluessel[30:32] <- 1.0
-#' 
+#'
+#' # now combine all test data into one object of class klausur.answ
+#' mufo.data.obj <- klausur.data(answ=antworten.mufo, corr=richtig, marks=notenschluessel, corr.key=corr.key)
 #' # expect some warnings here, because some items have no variance
 #' # in their subtest results, hence item analysis fails on them
-#' klsr.mufo.obj <- klausur(answ=antworten.mufo, corr=richtig,
-#'      corr.key=corr.key, marks=notenschluessel)
+#' klsr.mufo.obj <- klausur.mufo(mufo.data.obj)
 
-klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.replace=NULL, cronbach=TRUE, item.analysis=TRUE){
+klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
 
 	if(!inherits(data, "klausuR.answ")){
 		stop(simpleError("'data' must be of class 'klausuR.answ'!"))
@@ -88,7 +90,15 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
 	corr.key <- data@corr$corr.key
 	if(is.null(wght)){
 		wght <- data@score$wght
-	} else {}
+		if(is.null(wght)){
+			# for the results, create a vector of 1's by number of items
+			wght.results <- rep(1, length(corr))
+		} else {
+			wght.results <- wght
+		}
+	} else {
+		wght.results <- wght
+	}
 	if(is.null(marks)){
 		marks <- data@score$marks
 	} else {}
@@ -115,7 +125,7 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
 		warning("Only one test form was supplied. Called klausur() instead.")
 		klausur.mufo.results <- klausur(data=data, marks=marks,
 						mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
-						na.replace=na.replace, cronbach=cronbach, item.analysis=item.analysis)
+						na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
 		## calculation would end here if only one form was submitted
 	}
 	else {
@@ -125,7 +135,8 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
 	# first save the names of all test forms to the first slot
 	klausur.mufo.results@forms <- test.forms.answ
 	# create an empty object of class klausuR to store combined global results
-	klausur.mufo.global <- new("klausuR", corr=corr, marks=marks, marks.sum=marks.summary(marks), misc=data@misc)
+	klausur.mufo.global <- new("klausuR", corr=corr, marks=marks, marks.sum=marks.summary(marks),
+		wght=wght.results, misc=as.data.frame(data@misc, stringsAsFactors=FALSE))
 	for(single.test in test.forms.answ){
 		corr.inices <- as.numeric(corr.key[corr.key[, "Form"] == single.test,][!dimnames(corr.key)[[2]] == "Form"])
 		corr.part <- corr[corr.inices]
@@ -133,13 +144,13 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
 		subj.in.test <- data@id$Form == single.test
 		data.part <- new("klausuR.answ",
 			corr=list(corr=corr.part, corr.key=NULL),
-			id=data@id[subj.in.test,],
-			items=data@items[subj.in.test,],
+			id=subset(data@id, subj.in.test),
+			items=subset(data@items, subj.in.test),
 			score=list(marks=marks, wght=wght),
-			misc=data@misc[subj.in.test,])
+			misc=subset(data@misc, subj.in.test))
 		klausur.part.results <- klausur(data=data.part, marks=marks,
 						mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
-						na.replace=na.replace, cronbach=cronbach, item.analysis=item.analysis)
+						na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
 		result.part <- list(Form=single.test, Results=klausur.part.results)
 		klausur.mufo.results@results.part[[single.test]] <- result.part
 		# append partial results to global results

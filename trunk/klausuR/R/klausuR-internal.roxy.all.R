@@ -118,8 +118,11 @@ roxy.package <- function(
 			# re-write DESCRIPTION files
 			cat(paste(pckg.dscrptn), file=file.path(local.r.dir, "DESCRIPTION"))
 			cat(paste(pckg.package), file=file.path(local.r.dir, "R", paste(pck.package, "-package.R", sep="")))
+## TODO:
+# 			require(roxygen2)
+# 			roxygenize(local.r.dir, roxygen.dir=local.roxy.dir, unlink.target=TRUE)
 			require(roxygen)
-			roxygenize(local.r.dir, roxygen.dir=local.roxy.dir, use.Rd2=TRUE, unlink.target=TRUE)
+ 			roxygenize(local.r.dir, roxygen.dir=local.roxy.dir, use.Rd2=TRUE, unlink.target=TRUE)
 		} else {}
 
 	if("package" %in% actions){

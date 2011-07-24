@@ -9,8 +9,8 @@
 #' @title S4 class klausuR.answ
 #' @slot corr Contains two elements:
 #'		\itemize{
-#'			\item{\code{corr}}{The correct answers to each item.}
-#'			\item{\code{corr.key}}{An optional data.frame or matrix for test with multiple test forms, indicating the positions
+#'			\item{\code{corr}} {The correct answers to each item.}
+#'			\item{\code{corr.key}} {An optional data.frame or matrix for test with multiple test forms, indicating the positions
 #'				of all items (columns) in all forms (rows). Must have a column called \code{Form} (like in \code{id}), and the
 #'				item columns must follow the usual name scheme \code{Item###}. \code{NULL} if not needed.}
 #'		}
@@ -18,8 +18,8 @@
 #' @slot items Contains a copy of \code{id$MatrNo} and all answers to the test items (one item per column).
 #' @slot score Contains two elements:
 #'		\itemize{
-#'			\item{\code{marks}}{The assigned marks for achieved points (\code{NULL} if none)}
-#'			\item{\code{wght}}{Weights for each item (\code{NULL} if none)}
+#'			\item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
+#'			\item{\code{wght}} {Weights for each item (\code{NULL} if none)}
 #'		}
 #' @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
 #'		e.g. table data from/for other software products. Won't be used for anything.
@@ -66,6 +66,10 @@ setValidity("klausuR.answ", function(object){
 		stop(simpleError(paste("Missing variable 'MatrNo' in slot 'items'!")))
 	} else if(!"MatrNo" %in% names(obj.misc)){
 		stop(simpleError(paste("Missing variable 'MatrNo' in slot 'misc'!")))
+	} else {}
+	if(length(obj.items$MatrNo) != length(unique(obj.items$MatrNo))){
+		dupl.matn <- obj.items$MatrNo[duplicated(obj.items$MatrNo)]
+		stop(simpleError(paste("Duplicate entries for 'MatrNo' are not allowed:\n", paste(dupl.matn, collapse=", "))))
 	} else {}
 	# everything in its place?
 	if(any(!id.names %in% names(obj.id))){
