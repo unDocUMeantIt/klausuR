@@ -6,6 +6,8 @@ ChangeLog for package klausuR
     it took to evaluate tests was squeezing data with exotic variable names and loads of
     surprises into a valid data.frame. Those days should finally be numbered now...
   - added function klausur.data() to do the squeezing into klausur.answ class objects (s.o.)
+  - added scoring function NRET+, which is more conservative than NRET when it comes to errors
+  - added function nret.rescale() to change scaling of points in result objects (NR/ET/NRET/NRET+)
   - added function grand.table() to export all results back to CSV format
   - the class klausuR gained a new slot 'misc' to preserve whatever unused variables are left over
     from the squeezing process.

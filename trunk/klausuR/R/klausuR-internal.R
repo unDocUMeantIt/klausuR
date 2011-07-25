@@ -423,7 +423,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
 ## function nret.minmax()
 # compute minimum/maximum points, number of alternatives and baseline
-nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
+nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-", quiet=FALSE){
 	# initial value for minimum score
 	min.score <- 0
 	# split whole answer vector
@@ -445,13 +445,17 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 		} else {
 			num.alt <- max(num.alt.all)
 			min.score <- sum(num.alt - num.alt.all)
-			warning(paste("Items differ in number of answer alternatives: ", min(num.alt.all), "-", num.alt,
-				"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
-				"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
+			if(!isTRUE(quiet)){
+				warning(paste("Items differ in number of answer alternatives: ", min(num.alt.all), "-", num.alt,
+					"\n  Took the maximum (", num.alt, ") to determine additive constant to avoid negative points.",
+					"\n  In effect, the lowest achievable score is ", min.score ," points.", sep=""), call.=FALSE)
+			} else {}
 		}
 		# compute baseline, that is, what do you get with all missings?
 		baseline <- length(num.alt.all) * (num.alt-1)
-		warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
+		if(!isTRUE(quiet)){
+			warning(paste("The baseline (all missings) used for solved percentage is ", baseline ," points.", sep=""), call.=FALSE)
+		} else {}
 
 		if(score %in% c("NRET", "NRET+")){
 			maxp <- num.trues + num.false + (length(corr) * (num.alt-1))
@@ -479,14 +483,15 @@ nret.minmax <- function(corr, score="NRET", is.true="+", is.false="-"){
 ## marks.summary()
 # this function takes a vector with marks and returns a summarising matrix
 # with the effective ranges of points and percentage for each mark defined
-marks.summary <- function(marks, minp=0){
+marks.summary <- function(marks, minp=0, add.const=0){
+	# since 0 doesn't get counted, adjust add.const values below 0
 	marks.levels <- levels(as.factor(marks))
-	maxp <- length(marks)
+	maxp <- length(marks) + add.const
 	marks.matrix <- sapply(marks.levels, function(x){
-		mark.min <- max(c(minp, min(which(marks == x))))
-		mark.max <- max(which(marks == x))
+		mark.min <- max(c(minp, min(which(marks == x)))) + add.const
+		mark.max <- max(which(marks == x)) + add.const
 		# avoid strange starting points above zero
-		if((mark.min-minp) <= 1){
+		if((mark.min-minp) <= 1 & ((add.const >= 0 & minp >= 0) | add.const == minp)){
 			mark.min.pct <- ""
 		} else {
 			mark.min.pct <- ceiling((mark.min-minp) / (maxp-minp) * 100)
@@ -494,11 +499,11 @@ marks.summary <- function(marks, minp=0){
 		mark.max.pct <- ceiling((mark.max-minp) / (maxp-minp) * 100)
 		# if it's only one point value, don't display a range
 		if(mark.min == mark.max){
-			m.f.points <- mark.min
-			m.f.pct <- mark.min.pct
+			m.f.points <- sprintf("%3s",mark.min)
+			m.f.pct <- sprintf("%3s",mark.min.pct)
 		} else {
-			m.f.points <- paste(mark.min, "-", mark.max, sep="")
-			m.f.pct <- paste(mark.min.pct, " < ", mark.max.pct, sep="")
+			m.f.points <- paste(sprintf("%3s", mark.min), " - ", sprintf("%3s",mark.max), sep="")
+			m.f.pct <- paste(sprintf("%3s", mark.min.pct), " < ", sprintf("%3s",mark.max.pct), sep="")
 		}
 
 		mark.frame <- c(
