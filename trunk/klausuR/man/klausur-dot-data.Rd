@@ -1,7 +1,8 @@
 \name{klausur.data}
 \alias{klausur.data}
 \title{A function to create data objects with given and correct answers to a test.}
-\usage{klausur.data(answ, corr, items, marks, wght, corr.key, rename=c(), dummies=c(), disc.misc=FALSE, na.rm=TRUE)
+\usage{klausur.data(answ, corr, items, marks, wght, corr.key, rename=c(), dummies=c(),
+    disc.misc=FALSE, na.rm=TRUE)
 }
 \description{A function to create data objects with given and correct answers to a test.}
 \details{\code{klausur.data} automatically parses the variable names in \code{answ}to decide \strong{which variables are actual test items},
