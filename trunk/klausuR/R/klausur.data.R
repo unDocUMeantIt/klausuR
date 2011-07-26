@@ -141,9 +141,8 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 	}
 	found.vars <- names(answ)[names(answ) %in% c("No", "MatrNo")]
 	for (char.var in found.vars){
-		answ[[char.var]] <- as.numeric(answ[[char.var]])
+		answ[[char.var]] <- as.numeric(as.character(answ[[char.var]]))
 	}
-	
 	# sort data by MatrNo
 	answ <- answ[order(answ$MatrNo),]
 

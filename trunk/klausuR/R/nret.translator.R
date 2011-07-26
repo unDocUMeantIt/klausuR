@@ -116,6 +116,9 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# just in case item names are in the wrong order
 			items.idx <- items.idx[order(names(dat[, items.idx]))]
 
+			# as a precaution, replace NAs with valid "missing" values
+			dat[is.na(dat)] <- klausuR.alt["missing"]
+
 			# split answers into alternatives
 			old.item.names <- names(dat[, items.idx])
 			num.items <- length(old.item.names)
@@ -190,9 +193,9 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			new.item.names <- if(num.items < 10){
 			paste("Item", old.digits, sep="")
 			} else if(num.items < 100){
-				paste("Item", sprintf("%02d", old.digits), sep="")
+				paste("Item", sprintf("%02g", old.digits), sep="")
 			} else {
-				paste("Item", sprintf("%03d", old.digits), sep="")
+				paste("Item", sprintf("%03g", old.digits), sep="")
 			}
 			names(new.answers) <- new.item.names
 			results <- new.answers
@@ -211,6 +214,9 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			items.pre <- gsub("^((item|Item)[[:digit:]]{1,3})(a[[:digit:]]{1,2})$", "\\1", names(dat[, items.idx]), perl=TRUE)
 			# unique item names
 			item.names <- unique(items.pre)
+
+			# as a precaution, replace NAs with valid "missing" values
+			dat[is.na(dat)] <- spss.alt["missing"]
 
 			# translate alternatives
 			dat <- trans.alt(data=dat, items=items.idx, alt.in=spss.alt, alt.out=klausuR.alt)
@@ -232,9 +238,9 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			new.item.names <- if(num.items < 10){
 			paste("Item", old.digits, sep="")
 			} else if(num.items < 100){
-				paste("Item", sprintf("%02d", old.digits), sep="")
+				paste("Item", sprintf("%02g", old.digits), sep="")
 			} else {
-				paste("Item", sprintf("%03d", old.digits), sep="")
+				paste("Item", sprintf("%03g", old.digits), sep="")
 			}
 			dimnames(new.items) <- list(NULL,new.item.names)
 			new.items <- as.data.frame(new.items, stringsAsFactors=FALSE)

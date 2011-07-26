@@ -149,7 +149,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 
 		corr <- data@corr$corr
 		if(!is.null(data@corr$corr.key)){
-			warning("This test seems to have multiple test forms. Perhaps try klausur.mufo() instead?", .call=FALSE)
+			warning("This test seems to have multiple test forms. Perhaps try klausur.mufo() instead?", call.=FALSE)
 		} else {}
 
 		if(is.null(wght)){
@@ -196,18 +196,18 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 			# weights will be considered here as well
 			# if partial answers should be considered
 			if(identical(score, "partial")){
-				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")))
-				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")))
+				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
 			} else {}
 			if(identical(score, "liberal")){
-				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")))
-				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")))
+				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
 			} else {}
 			if(score %in% c("NR", "ET", "NRET", "NRET+")){
 				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
-					num.alt=num.alt, true.false=TRUE)}))
+					num.alt=num.alt, true.false=TRUE)}), stringsAsFactors=FALSE)
 				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
-					num.alt=num.alt, true.false=FALSE)}))
+					num.alt=num.alt, true.false=FALSE)}), stringsAsFactors=FALSE)
 			} else {}
 			dimnames(wahr.falsch)[[2]] <- names(answ[items])
 			dimnames(ergebnisse)[[2]]  <- names(answ[items])
@@ -320,7 +320,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		# return all data or just for one matriculation number?
 		if(!is.null(matn)){
 			if(!sum(answ$MatrNo == matn) == 1){
-			stop(simpleError("The given matriculation number is not defined!"), call.=FALSE)
+			stop(simpleError("The given matriculation number is not defined!"))
 			}
 			pers.ergebnisse <- ergebnis.daten[ergebnis.daten$MatrNo == matn,]
 			items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn, -1]

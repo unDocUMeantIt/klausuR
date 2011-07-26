@@ -39,27 +39,36 @@
 
 klausur.compare <- function(set1, set2, select=NA, new.set=NA){
 
-	# see if we have klausuR.answ class objects
-	if(inherits(set1, "klausuR.answ")){
-		set1 <- cbind(set1@id, set1@items)
-	} else {}
-	if(inherits(set1, "klausuR.answ")){
-		set2 <- cbind(set2@id, set2@items)
-	} else {}
-
 	# get the names of the given sets, to better understand the outcome later
 	set1.name <- deparse(substitute(set1))
 	set2.name <- deparse(substitute(set2))
+
+	# see if we have klausuR.answ class objects
+	if(inherits(set1, "klausuR.answ")){
+		set1 <- cbind(set1@id, subset(set1@items, select=-MatrNo))
+	} else {}
+	if(inherits(set2, "klausuR.answ")){
+		set2 <- cbind(set2@id, subset(set2@items, select=-MatrNo))
+	} else {}
 
 	# first thing, if both sets are indeed the same, we can quit immediately
 	if(identical(set1, set2)) {
 		return(cat("\nThe compared objects (",set1.name," & ",set2.name,") are identical!\n", sep=""))
 	} else {
 		# before any values are even compared, check for equality of elements
-		if(!identical(names(set1), names(set2)))
+		if(!identical(names(set1), names(set2))){
 			stop(simpleError("The objects do not include elements of the same name, cannot compare."))
-		if(!identical(dim(set1)[1], dim(set2)[1]))
-			stop(simpleError("The objects differ in the number of oservations, cannot compare."))
+		} else {}
+		if(!identical(dim(set1)[1], dim(set2)[1])){
+			missingVarsIn1 <- which(!set1[["MatrNo"]] %in% set2[["MatrNo"]])
+			missingVarsIn2 <- which(!set2[["MatrNo"]] %in% set1[["MatrNo"]])
+			missingMatrNosIn1 <- set1[missingVarsIn1,"MatrNo"]
+			missingMatrNosIn2 <- set2[missingVarsIn2,"MatrNo"]
+			stop(simpleError(paste("The objects differ in the number of oservations, cannot compare.\n",
+					if(length(missingVarsIn1)>0){paste("Missing MatrNos in ", set1.name, ":\n  ", paste(missingMatrNosIn1, collapse=", "), "\n", sep="")} else {},
+					if(length(missingVarsIn2)>0){paste("Missing MatrNos in ", set2.name, ":\n  ", paste(missingMatrNosIn2, collapse=", "), "\n", sep="")} else {}
+				)))
+		} else {}
 
 		## prepare sets for comparison
 		# first create subsets, if necessary

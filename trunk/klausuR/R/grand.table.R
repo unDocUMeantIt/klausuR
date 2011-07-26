@@ -53,10 +53,10 @@ grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL,
 		}
 	}
 
-	new.table <- cbind(new.table, kansw=given.obj[[1]]@answ[,-1], ktrfls=given.obj[[1]]@trfls[,-1], kpoints=given.obj[[1]]@points[,-1])
+	new.table <- cbind(new.table, kansw=subset(given.obj[[1]]@answ, select=-MatrNo), ktrfls=subset(given.obj[[1]]@trfls, select=-MatrNo), kpoints=subset(given.obj[[1]]@points, select=-MatrNo))
 	# include misc if values present
 	if(dim(given.obj[[1]]@misc)[[2]] > 1){
-		new.table <- cbind(new.table, given.obj[[1]]@misc[,-1])
+		new.table <- cbind(new.table, subset(given.obj[[1]]@mis, select=-MatrNo))
 	} else {}
 
 	# write to disk?
