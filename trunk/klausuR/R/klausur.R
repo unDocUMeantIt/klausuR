@@ -45,10 +45,11 @@
 #' }
 #' An example: If we have an item with four alternatives, and the third one is right (i.e., "\code{--+-}"), and a test subject considered the first alternative
 #' to be correct and eliminated all others (i.e., "\code{+---}"), it would be evaluated as "\code{pNnN}", that is 0+1-3+1=-1 point, not considering the constant.
-#' As you can see, it would be possible to end up with a negativ sum of points. If you consider how in the end a mark will be assigned to the achieved points,
+#' As you can see, it would be possible to end up with a negative sum of points. If you consider how in the end a mark will be assigned to the achieved points,
 #' this would be a problem, because a vactor cannot have negative inices. To circumvent this issue, klausuR automatically adds a constant to all results, so
 #' that the worst possible result is not negative but 0. This constant is simply (alternatives-1), i.e. 3 for the example. In other words, if our test had 10
-#' such items, the results minus 30 would be equivalent to scoring without that constant.
+#' such items, the results minus 30 would be equivalent to scoring without that constant. You can use \code{\link[klausuR:nret.rescale]{nret.rescale}} to remove
+#' the constant from the results afterwards.
 #' 
 #' \strong{Marks}
 #'

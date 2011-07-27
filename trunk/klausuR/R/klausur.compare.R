@@ -6,18 +6,21 @@
 #' with this function, which can then be corrected by looking up the original answer in the test.
 #'
 #' If you don't want to compare all variables but only a subset, you can use the \code{select} option (see examples below).
-#' But be careful with this, at least the variables "No", "FirstName" and "Name" are needed for the output!
+#' But be careful with this, at least the variables \code{No}, \code{FirstName} and \code{Name} are needed for readable output.
 #'
 #' For convenience, if \code{new.set} is set to a character string, a new object is created with this name. It contains the data
-#' that is identical in both sets compared, but all dubious values will be replaced by NA.
+#' that is identical in both sets compared, but all dubious values will be replaced by \code{NA}.
 #' 
 #' @title Comparison of data sets
-#' @usage klausur.compare(set1, set2, select=NA, new.set=NA)
+#' @usage klausur.compare(set1, set2, select=NA, new.set=NA, rename=c())
 #' @aliases klausur.compare
 #' @param set1,set2 The data sets to be compared. Can be two data.frames or objects of class \code{\link[klausuR]{klausuR.answ-class}}.
 #'		If the latter, their slots \code{id} and \code{items} will be compared.
 #' @param select A vector with variables that should be compared, all others are omitted. At least "No", "FirstName" and "Name" are needed for the output!
 #' @param new.set A character string representing a valid name for an R object
+#' @param rename A named vector defining if variables in \code{set1} and \code{set2} need to be renamed into the klausuR name scheme. Accepts elements
+#'		named \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}. The values of these elements
+#'		represent the variable names of the input data.
 #' @return A data.frame of the differences, if found. If not, just a message is returned.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @keywords utilities
@@ -37,7 +40,7 @@
 #'   new.set="antworten.comp")
 #' }
 
-klausur.compare <- function(set1, set2, select=NA, new.set=NA){
+klausur.compare <- function(set1, set2, select=NA, new.set=NA, rename=c()){
 
 	# get the names of the given sets, to better understand the outcome later
 	set1.name <- deparse(substitute(set1))
@@ -57,17 +60,66 @@ klausur.compare <- function(set1, set2, select=NA, new.set=NA){
 	} else {
 		# before any values are even compared, check for equality of elements
 		if(!identical(names(set1), names(set2))){
-			stop(simpleError("The objects do not include elements of the same name, cannot compare."))
+			missingVarsIn1 <- which(!names(set1) %in% names(set2))
+			missingVarsIn2 <- which(!names(set2) %in% names(set1))
+			missingColsIn1 <- names(set1)[missingVarsIn1]
+			missingColsIn2 <- names(set2)[missingVarsIn2]
+			if(length(missingVarsIn1)>0){
+				set1 <- set1[,-missingVarsIn1]
+				missing.message1 <- paste("Missing columns in ", set2.name, ":\n    ", paste(missingColsIn1, collapse=", "), "\n  ", sep="")
+			} else {
+				missing.message1 <- ""
+			}
+			if(length(missingVarsIn2)>0){
+				set2 <- set2[,-missingVarsIn2]
+				missing.message2 <- paste("Missing columns in ", set1.name, ":\n    ", paste(missingColsIn2, collapse=", "), "\n  ", sep="")
+			} else {
+				missing.message2 <- ""
+			}
+			warning(paste("\nThe objects do not include columns of the same name. Missing ones have been ignored in both:\n  ", missing.message1, missing.message2, sep=""), call.=FALSE)
 		} else {}
+
+		# do we need renaming?
+		if(length(rename) > 0){
+			vars.to.rename <- names(rename)
+			id.names <- c("No", "Name", "FirstName", "MatrNo")
+			id.possible.names <- c(id.names, "Pseudonym", "Form")
+			if(any(vars.to.rename %in% names(set1))){
+				double.vars <- vars.to.rename[vars.to.rename %in% names(set1)]
+				warning(paste("Probably duplicate variable names found, please double check the outcome:\n ", paste(double.vars, collapse=", ")), call.=FALSE)
+			} else {}
+			id.invalid.names <- vars.to.rename[!vars.to.rename %in% id.possible.names]
+			if(length(id.invalid.names) > 0){
+				stop(simpleError(paste("Invalid variable names in 'rename':\n ",
+					paste(id.invalid.names, collapse=", "))))
+			} else {}
+			# rename columns, if any
+			for (ren.var in vars.to.rename){
+				ren.from <- rename[ren.var]
+				ren.to	<- ren.var
+				dimnames(set1)[[2]][dimnames(set1)[[2]] == rename[ren.var]] <- ren.var
+				dimnames(set2)[[2]][dimnames(set2)[[2]] == rename[ren.var]] <- ren.var
+			}
+		} else {}
+
 		if(!identical(dim(set1)[1], dim(set2)[1])){
 			missingVarsIn1 <- which(!set1[["MatrNo"]] %in% set2[["MatrNo"]])
 			missingVarsIn2 <- which(!set2[["MatrNo"]] %in% set1[["MatrNo"]])
 			missingMatrNosIn1 <- set1[missingVarsIn1,"MatrNo"]
 			missingMatrNosIn2 <- set2[missingVarsIn2,"MatrNo"]
-			stop(simpleError(paste("The objects differ in the number of oservations, cannot compare.\n",
-					if(length(missingVarsIn1)>0){paste("Missing MatrNos in ", set1.name, ":\n  ", paste(missingMatrNosIn1, collapse=", "), "\n", sep="")} else {},
-					if(length(missingVarsIn2)>0){paste("Missing MatrNos in ", set2.name, ":\n  ", paste(missingMatrNosIn2, collapse=", "), "\n", sep="")} else {}
-				)))
+			if(length(missingVarsIn1)>0){
+				set1 <- set1[-missingVarsIn1,]
+				missing.message1 <- paste("Missing MatrNos in ", set2.name, ":\n    ", paste(missingMatrNosIn1, collapse=", "), "\n  ", sep="")
+			} else {
+				missing.message1 <- ""
+			}
+			if(length(missingVarsIn2)>0){
+				set2 <- set2[-missingVarsIn2,]
+				missing.message2 <- paste("Missing MatrNos in ", set1.name, ":\n    ", paste(missingMatrNosIn2, collapse=", "), "\n  ", sep="")
+			} else {
+				missing.message2 <- ""
+			}
+			warning(paste("\nThe objects differ in the number of oservations.  Missing ones have been ignored in both:\n  ", missing.message1, missing.message2, sep=""), call.=FALSE)
 		} else {}
 
 		## prepare sets for comparison
@@ -81,9 +133,6 @@ klausur.compare <- function(set1, set2, select=NA, new.set=NA){
 			if(identical(set1, set2))
 		return(cat("\nThe compared objects (",set1.name," & ",set2.name,") are identical!\n\n", sep=""))
 		} else{}
-		# replace NAs, they're always trouble, and we only care for equality, not particular values
-		set1[is.na(set1)] <- "--"
-		set2[is.na(set2)] <- "--"
 		# then sort the data according to LfdNr
 		set1 <- set1[order(set1$No),]
 		set2 <- set2[order(set2$No),]
@@ -91,7 +140,7 @@ klausur.compare <- function(set1, set2, select=NA, new.set=NA){
 
 		## the actual comparison
 		# create an array with indices of differences
-		set.diff.array <- which(set1 != set2, arr.ind=TRUE)
+		set.diff.array <- rbind(which(set1 != set2, arr.ind=TRUE), which(is.na(set1) != is.na(set2), arr.ind=TRUE))
 		# total number of differences, needed for the sapply() call below
 		uneq <- dim(set.diff.array)[1]
 		# results are sorted by column, but we want them sorted by row
@@ -99,23 +148,22 @@ klausur.compare <- function(set1, set2, select=NA, new.set=NA){
 
 		# the main act!
 		differences <- t(
-			sapply(1:uneq,
-		function(x){
-		if(uneq > 1) {
-			idx <- set.diff.array[x,]
-		} else {
-			idx <- set.diff.array
-		}
-		varname <- names(set1)[idx[2]]
-		# what values are present in both sets?
-		value1 <- set1[idx[1],idx[2]]
-		value2 <- set2[idx[1],idx[2]]
-		# find LfdNr and full name to that case
-		lfdnr <- set1[idx[1],"No"]
-		name <- paste(set1[idx[1],"FirstName"],set1[idx[1],"Name"])
-		result <- data.frame(No=lfdnr, Name=name, Item=varname, Set1=value1, Set2=value2, stringsAsFactors=FALSE)
-		return(result)
-		} # end function(x)
+			sapply(1:uneq, function(x){
+					if(uneq > 1) {
+						idx <- set.diff.array[x,]
+					} else {
+						idx <- set.diff.array
+					}
+					varname <- names(set1)[idx[2]]
+					# what values are present in both sets?
+					value1 <- set1[idx[1],idx[2]]
+					value2 <- set2[idx[1],idx[2]]
+					# find LfdNr and full name to that case
+					lfdnr <- set1[idx[1],"No"]
+					name <- paste(set1[idx[1],"FirstName"],set1[idx[1],"Name"])
+					result <- data.frame(No=lfdnr, Name=name, Item=varname, Set1=value1, Set2=value2, stringsAsFactors=FALSE)
+					return(result)
+				} # end function(x)
 			) # end sapply()
 		) # end t()
 

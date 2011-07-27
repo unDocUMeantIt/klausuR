@@ -12,6 +12,10 @@ ChangeLog for package klausuR
   - the class klausuR gained a new slot 'misc' to preserve whatever unused variables are left over
     from the squeezing process.
   - added function nret.translator() to convert NRET/ET data from/to SPSS
+  - added options 'table.size' and 'NRET.legend' to klausur.report()
+  - klausur.compare() can now cope with NAs, unequal cases and unequal variables (will cause verbose warnings),
+    and rename input variables, if necessary
+  - fixed some NRET/ET related bugs in the plot method, klausur.gen.marks()
 
 ## 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring

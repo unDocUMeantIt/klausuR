@@ -24,17 +24,25 @@ data.check.klausur <- function(answ, corr, items, na.rm){
 
 		# are there missing values in answ, at least in the relevant parts?
 		if(sum(is.na(answ[, relevant.items]) > 0)){
+			invalid.cases.row <- sort(unique(unlist(sapply(relevant.items, function(na.var){
+					return(which(is.na(answ[,na.var])))
+				}))))
+			invalid.cases <- unlist(sapply(invalid.cases.row, function(this.case){
+					case.summary <- paste("  MatrNo ", answ[this.case, "MatrNo"], " (", paste(names(answ)[is.na(answ[this.case,])], collapse=", "), ")", sep="")
+				}))
 			if(isTRUE(na.rm)){
-			warning(paste("NAs were present in ",deparse(substitute(answ))," and removed!\n", sep=""))
-				for (na.var in relevant.items){
-					answ <- answ[!is.na(answ[, na.var]),]
-				}
+				warning(paste("NAs were present in '",deparse(substitute(answ)),"' and cases have been removed:\n",
+					paste(invalid.cases, collapse="\n"), sep=""), call.=FALSE)
+				answ <- answ[-invalid.cases.row,]
+# 				for (na.var in relevant.items){
+# 					answ <- answ[!is.na(answ[, na.var]),]
+# 				}
+			} else {
+				warning(paste("NAs were present in '",deparse(substitute(answ)),"'\n  MatrNo: ", paste(invalid.cases.matn, collapse=", "), sep=""), call.=FALSE)
 			}
-			else
-			warning(paste("NAs were present in ",deparse(substitute(answ)),"\"!\n", sep=""))
 		} else{}
 		if(sum(is.na(corr) > 0)){
-			stop(simpleError(paste("NAs present in ",deparse(substitute(corr)),"!\n", sep="")))
+			stop(simpleError(paste("NAs present in '",deparse(substitute(corr)),"'!\n", sep="")))
 		} else{}
 
 		# now let's check wheter all defined correct answers match the variables in answers data
