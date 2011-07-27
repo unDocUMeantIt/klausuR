@@ -40,9 +40,12 @@
 #' @param alt.candy If TRUE, a comma will be inserted for items with multiple alternatives ("235" becomes "2, 3, 5" in the printout)
 #' @param anon.glob.file If \code{matn="anon"} or \code{matn="glob"}, you can specify a filename for this particular report.
 #' @param NRET.legend Logical, If ET/NRET data is reported, you can demand a legend in the table caption by setting this to true.
+#' @param table.size Character string to shrink the tables, must be one of \code{"auto"}, \code{"normalsize"}, \code{"small"},
+#'		\code{"footnotesize"}, \code{"scriptsize"} or \code{"tiny"}. The default \code{table.size="auto"} tries to decide between
+#'		\code{"normalsize"} and \code{"footnotesize"} to avoid pages with only one or two rows. If that fails, try to manually set the size.
 #' @aliases klausur.report
 #' @keywords IO file
-#' @return One or several LaTeX documents. If defined two histograms will be plotted.
+#' @return One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[texi2dvi]{texi2dvi}}
 #' @import xtable graphics tools
@@ -80,7 +83,7 @@
 klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
 			    hist=list(points=FALSE, marks=FALSE), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 			    descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
-			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE){
+			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto"){
 
 	# before we start let's look at klsr
 	# if it's of class "klausuR.mult", extract global results and drop the rest
@@ -88,28 +91,44 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		klsr <- klsr@results.glob
 		} else{
 			# check whether klsr is an object of class "klausuR" instead
-			if(!inherits(klsr, "klausuR"))
+			if(!inherits(klsr, "klausuR")){
 				stop(simpleError("The given object is not of class \"klausuR\"!"))
+			} else {}
 		}
 
-	if(!is.numeric(matn) && !identical(matn, "all") && !identical(matn, "anon") && !identical(matn, "glob"))
+	if(!is.numeric(matn) && !identical(matn, "all") && !identical(matn, "anon") && !identical(matn, "glob")){
 		stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
+	} else {}
 
-	if((isTRUE(save) || isTRUE(pdf) || isTRUE(hist$points) || isTRUE(hist$marks)) && is.null(path))
+	if((isTRUE(save) || isTRUE(pdf) || isTRUE(hist$points) || isTRUE(hist$marks)) && is.null(path)){
 		stop(simpleError("Files have to be saved, but path is empty!"))
+	} else {}
 
 	## path handling
 	# check if path exists
-	if(!isTRUE(file.info(path)$isdir))
+	if(!isTRUE(file.info(path)$isdir)) {
 		stop(simpleError(paste(path,"is not a valid path!")))
+	} else {}
 	# PDF creation will be done in an temporal directory if "save" is FALSE
 	# we'll make "path" "path.orig" and override it with that tempdir internally
 	if(!isTRUE(save) && isTRUE(pdf)){
 		path.orig <- path
 		path <- tempfile("klausuR")
-			if(!dir.create(path, recursive=TRUE)) stop(simpleError("Couldn't create temporary directory! Try with save=TRUE"))
+		if(!dir.create(path, recursive=TRUE)){
+			stop(simpleError("Couldn't create temporary directory! Try with save=TRUE"))
+		} else {}
 		# if the function is done, remove the tempdir
-		on.exit(if(!identical(path, path.orig)) unlink(path, recursive=TRUE))
+		on.exit(
+			if(!identical(path, path.orig)){
+				unlink(path, recursive=TRUE)
+			} else {}
+		)
+	} else {}
+
+	# check value for table.size
+	if(!table.size %in% c("auto", "normalsize", "small", "footnotesize", "scriptsize", "tiny")){
+		warning(paste("Invalid value for 'tabe.size':\n  ", table.size,"\n  Reverted to \"normal\"."), call.=FALSE)
+		table.size <- "auto"
 	} else {}
 
 	# define the text of the LaTeX document...
@@ -134,11 +153,12 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				Name="Name",
 				Vorname="Vorname",
 				Notenschluessel="Notenschlüssel",
- 				NRET.expl=". \\emph{Erl\"auterung:} >>$+$<< -- richtig; >>$-$<< -- falsch; >>$0$<< -- keine Angabe; >>$*$<< -- fehlerhafte Angabe.")
-#				NRET.expl="bla")
+ 				NRET.expl=". \\emph{Erl\"auterung:} >>+<< -- richtig; >>-<< -- falsch; >>0<< -- keine Angabe; >>*<< -- fehlerhafte Angabe."
+		)
 		# ... and that of the plots
 		hist.text <- list(P.xlab="Punkte",P.ylab="Häufigkeit",P.main="Verteilung nach Punkten",
-				N.xlab="Note",N.ylab="Häufigkeit",N.main="Verteilung nach Noten")
+				N.xlab="Note",N.ylab="Häufigkeit",N.main="Verteilung nach Noten"
+		)
 	} ## end of german l10n
 	else {
 		text <- list(Auswertung="Individual Report",
@@ -161,52 +181,54 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				Name="Name",
 				Vorname="First name",
 				Notenschluessel="Marks defined",
-				NRET.expl=". \\emph{Explaination:} >>$+$<< -- right; >>$-$<< -- wrong; >>$0$<< -- not answered; >>$*$<< -- errenous answer.")
+				NRET.expl=". \\emph{Explaination:} >>+<< -- right; >>-<< -- wrong; >>0<< -- not answered; >>*<< -- errenous answer."
+		)
 		# ... and that of the plots
 		hist.text <- list(P.xlab="Points",P.ylab="Frequency",P.main="Distribution by points",
-				N.xlab="Marks",N.ylab="Frequency",N.main="Distribution by marks")
+				N.xlab="Marks",N.ylab="Frequency",N.main="Distribution by marks"
+		)
 	}
 
 	if(hist$points || hist$marks) {
 		if(hist$points) {
-			pdf(file = file.path(path, hist.points),
-			width = 10, height = 10,
-			pointsize = 22, bg = "white")
+			pdf(file=file.path(path, hist.points),
+			width=10, height=10,
+			pointsize=22, bg="white")
 			plot(klsr, xlab=hist.text$P.xlab, ylab=hist.text$P.ylab, main=hist.text$P.main)
 			dev.off()
-		}
+		} else {}
 
 		if(hist$marks) {
-			pdf(file = file.path(path, hist.marks),
-			width = 10, height = 10,
-			pointsize = 22, bg = "white")
+			pdf(file=file.path(path, hist.marks),
+			width=10, height=10,
+			pointsize=22, bg="white")
 			plot(klsr, marks=TRUE, xlab=hist.text$N.xlab, ylab=hist.text$N.ylab, main=hist.text$N.main)
 			dev.off()
-		}
+		} else {}
+	} else {}
+
+	## let's grab some info out of the klausuR-object for code readability
+	results <- klsr@results
+	res.points <- klsr@points
+	truefalse <- klsr@trfls
+	answers <- klsr@answ
+	correct <- klsr@corr
+	wght <- klsr@wght
+	# if informatin on marks is wanted, only grab the intended stuff
+	if(sum(unlist(marks.info)) > 0){
+		marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
+		colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
+	} else {}
+
+	# for a nice printout, check numer of needed digits for points.
+	# e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
+	if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
+		print.digits <- 0
+	} else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
+		print.digits <- 1
+	} else {
+		print.digits <- 2
 	}
-
-		## let's grab some info out of the klausuR-object for code readability
-		results <- klsr@results
-		res.points <- klsr@points
-		truefalse <- klsr@trfls
-		answers <- klsr@answ
-		correct <- klsr@corr
-		wght <- klsr@wght
-		# if informatin on marks is wanted, only grab the intended stuff
-		if(sum(unlist(marks.info)) > 0){
-			marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
-			colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
-		}
-
-		# for a nice printout, check numer of needed digits for points.
-		# e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
-		if(identical(round(res.points[,-1], digits=0), res.points[,-1])){
-			print.digits <- 0
-		} else if(identical(round(res.points[,-1], digits=1), res.points[,-1])){
-			print.digits <- 1
-		} else {
-			print.digits <- 2
-		}
 
 	# this function will replace German umlauts with LaTeX equivalents
 	# some sanitizing is also done
@@ -260,7 +282,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		einzelergebnis <- results[results$MatrNo==matn,]
 		geg.items <- grep("Item([[:digit:]]{1,3})",names(points.mtrx))
 		geg.points <- as.numeric(points.mtrx[,geg.items])
-
 		# the indices of all answers
 		items <- grep("Item([[:digit:]]{1,3})",names(answers))
 		if(isTRUE(alt.candy)){
@@ -271,6 +292,18 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		} else {
 			geg.antw1 <- answers[answers$MatrNo==matn,items]
 			loesungen <- correct
+		}
+
+		# define table size
+		if(identical(table.size, "auto")){
+			if(length(items) > 37 & length(items) < 43){
+				# to avoid ugly tables with few lines on one page, shrink by heuristics
+				table.size <- "\\footnotesize\n"
+			} else {
+				table.size <- "\\normalsize\n"
+			}
+		} else {
+			table.size <- paste("\\",table.size,"\n")
 		}
 
 		# name and first name from the answer matrix
@@ -343,15 +376,15 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				\\end{figure}", sep="")
 			} else {},"
 				\\newpage",
-				sep="")
+		sep="")
 
-			# here comes the foot, that is after the table
-			latex.foot <- paste("
+		# here comes the foot, that is after the table
+		latex.foot <- paste("
 			\\end{document}\n",
-			sep="")
+		sep="")
 
 		# combine parts to a document
-		write(latex.head, file=dateiname)
+		write(paste(latex.head, table.size), file=dateiname)
 		# create table
 		pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.points)
 		rownames(pre.erg.tabelle) <- c(text$Antwort,text$Korrekt,text$Punkte)
@@ -395,6 +428,19 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			colnames(anon.glob.table) <- c((if(!is.null(anon.glob.table$No)) text$LfdNr),text$Name,text$Vorname,text$GMatNr,text$Punkte,text$AProzent,text$ANote,(if(!is.null(anon.glob.table$Pseudonym)) text$Pseudonym))
 			anon.glob.digits <- c(0,(if(!is.null(anon.glob.table$No)) 0),0,0,0,0,1,1,(if(!is.null(anon.glob.table$Pseudonym)) 0))
       }
+
+		# define table size
+		if(identical(table.size, "auto")){
+			if((nrow(anon.glob.table) > 25 & nrow(anon.glob.table) < 31)
+				| (nrow(anon.glob.table) > 68 & nrow(anon.glob.table) < 78)){
+				# to avoid ugly tables with few lines on one page, shrink by heuristics
+				table.size <- "\\footnotesize\n"
+			} else {
+				table.size <- "\\normalsize\n"
+			}
+		} else {
+			table.size <- paste("\\",table.size,"\n")
+		}
 
 		# prepare the LaTeX code
 		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}
@@ -449,7 +495,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		\\end{document}\n",
 		sep="")
 		# combine parts to a document
-		write(latex.head, file=dateiname)
+		write(paste(latex.head, table.size), file=dateiname)
 		# create table with anonymous feedback
 		print(xtable(anon.glob.table, digits=anon.glob.digits,
 		caption=paste(text$Ergebnisse,": ",latex.umlaute(descr$title)," (",latex.umlaute(descr$name),", ",descr$date,")", sep="")),
@@ -469,13 +515,11 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
 	if(identical(matn, "all")){
 		for(i in results$MatrNo) tabellenbau(matn=i)
-	}
-	else if(identical(matn, "anon")){
+	} else if(identical(matn, "anon")){
 		global.report(form="anon")
-	}
-	else if(identical(matn, "glob")){
+	} else if(identical(matn, "glob")){
 		global.report(form="global")
-	}
-	else
+	} else {
 		tabellenbau(matn)
+	}
 }

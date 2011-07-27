@@ -21,7 +21,7 @@ reports on each test form, call \code{klausur.report} with the single slots from
 \alias{klausur.report}
 \keyword{IO}
 \keyword{file}
-\value{One or several LaTeX documents. If defined two histograms will be plotted.}
+\value{One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[texi2dvi]{texi2dvi}}}
 \arguments{\item{klsr}{An object of class klausuR or klausuR.mult.}
@@ -43,6 +43,10 @@ how marks were assigned to points achieved and/or percent solved, respectively.}
 \item{lang}{Set to "de" for reports in German, English is the default.}
 \item{alt.candy}{If TRUE, a comma will be inserted for items with multiple alternatives ("235" becomes "2, 3, 5" in the printout)}
 \item{anon.glob.file}{If \code{matn="anon"} or \code{matn="glob"}, you can specify a filename for this particular report.}
+\item{NRET.legend}{Logical, If ET/NRET data is reported, you can demand a legend in the table caption by setting this to true.}
+\item{table.size}{Character string to shrink the tables, must be one of \code{"auto"}, \code{"normalsize"}, \code{"small"},
+\code{"footnotesize"}, \code{"scriptsize"} or \code{"tiny"}. The default \code{table.size="auto"} tries to decide between
+\code{"normalsize"} and \code{"footnotesize"} to avoid pages with only one or two rows. If that fails, try to manually set the size.}
 }
 \examples{data(antworten)
 

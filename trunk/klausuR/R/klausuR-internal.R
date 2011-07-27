@@ -502,7 +502,7 @@ marks.summary <- function(marks, minp=0, add.const=0){
 			m.f.points <- sprintf("%3s",mark.min)
 			m.f.pct <- sprintf("%3s",mark.min.pct)
 		} else {
-			m.f.points <- paste(sprintf("%3s", mark.min), " - ", sprintf("%3s",mark.max), sep="")
+			m.f.points <- paste(sprintf("%3s", mark.min), " -- ", sprintf("%3s",mark.max), sep="")
 			m.f.pct <- paste(sprintf("%3s", mark.min.pct), " < ", sprintf("%3s",mark.max.pct), sep="")
 		}
 

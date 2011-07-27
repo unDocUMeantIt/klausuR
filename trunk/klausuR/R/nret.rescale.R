@@ -14,7 +14,7 @@ nret.rescale <- function(res.obj, score="NRET", points=TRUE, percent=TRUE, marks
 
 	if(isTRUE(points)){
 		# correct points for items
-		no.const.points <- cbind(res.obj@points$MatrNo, (res.obj@points[,2:dim(res.obj@answ)[[2]]] - item.const))
+		no.const.points <- cbind(MatrNo=res.obj@points$MatrNo, (res.obj@points[,2:dim(res.obj@answ)[[2]]] - item.const))
 		res.obj@points <- no.const.points
 		# correct sums
 		no.const.sum <- old.sum - test.const
