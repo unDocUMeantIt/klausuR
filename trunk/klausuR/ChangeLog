@@ -1,6 +1,7 @@
 ChangeLog for package klausuR
 
 ## 0.12-0
+  - 0.12 is not fully downward compatible with earlier versions of the klausuR package!
   - drastic changes: klausur() and klausur.mufo() from now on only take objects of the new class
     klausur.answ, which replaces the 'answ' and 'corr' arguments completely. Most of the time
     it took to evaluate tests was squeezing data with exotic variable names and loads of
@@ -13,8 +14,9 @@ ChangeLog for package klausuR
     from the squeezing process.
   - added function nret.translator() to convert NRET/ET data from/to SPSS
   - added options 'table.size' and 'NRET.legend' to klausur.report()
-  - klausur.compare() can now cope with NAs, unequal cases and unequal variables (will cause verbose warnings),
-    and rename input variables, if necessary
+  - klausur.compare() was renamed to compare() and can now cope with NAs, unequal cases and
+    unequal variables (will cause verbose warnings), and rename input variables, if necessary.
+    it is also no longer limited to compare klausuR data, hence the renaming.
   - fixed some NRET/ET related bugs in the plot method, klausur.gen.marks()
 
 ## 0.11-3

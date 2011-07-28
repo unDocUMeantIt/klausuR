@@ -70,7 +70,7 @@ roxy.description <- function(val, version, date=Sys.Date()){
 			"\n#' @keywords package",
 			"\n#' @seealso \\code{\\link[klausuR:klausur]{klausur}}, \\code{\\link[klausuR:klausur.mufo]{klausur.mufo}},",
 			"\n#'  \\code{\\link[klausuR:klausur.report]{klausur.report}},",
-			"\n#'  \\code{\\link[klausuR:klausur.gen]{klausur.gen}}, \\code{\\link[klausuR:klausur.compare]{klausur.compare}},",
+			"\n#'  \\code{\\link[klausuR:klausur.gen]{klausur.gen}}, \\code{\\link[klausuR:compare]{compare}},",
 			"\n#'  \\code{\\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}, \\code{\\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}",
 			"\nroxygen <- function() NULL",
 			"\nroxygen()\n",

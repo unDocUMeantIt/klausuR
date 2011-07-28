@@ -6,7 +6,7 @@
 #' @param items.char Logical, will the answers be coded as characters or integer numbers (default)?
 #' 
 #' @return A data.frame containing the variables "No", "Name", "FirstName", "MatrNo", "Pseudonym", "Form" and the number of items as needed.
-#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.compare]{klausur.compare}},
+#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:compare]{compare}},
 #'   \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}, \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
 #' @keywords datagen
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}

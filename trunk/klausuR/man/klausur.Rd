@@ -86,7 +86,7 @@ give quite unfair test results! In addition, please do \strong{always check a sa
 Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{show}} and \code{\link[plot,klausuR]{plot}}).}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur.data]{klausur.data}}, \code{\link[klausuR:klausur.report]{klausur.report}},
-\code{\link[klausuR:klausur.compare]{klausur.compare}},
+\code{\link[klausuR:compare]{compare}},
 \code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
 \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
 \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}}
