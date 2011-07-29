@@ -284,11 +284,11 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 				# using alpha() from package "psychometric"
 				item.analyse <- calc.item.analysis(wahr.falsch, cron.alpha.list)
 			} else {
-				item.analyse <- data.frame(NA)
+				item.analyse <- data.frame(NULL)
 			}
 		} else {
 			cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
-			item.analyse <- data.frame(NA)
+			item.analyse <- data.frame(NULL)
 		}
 
 		## compose the resulting object

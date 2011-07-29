@@ -16,6 +16,7 @@
 #' @slot sd Standard deviation of the test results
 #' @slot cronbach Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)
 #' @slot item.analysis A data.frame with information on difficulty, discriminant power and discriminant factor of all items.
+#' @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 #' @slot misc Anything that was stored in the \code{misc} slot of the input data.
 #' @name klausuR,-class
 #' @import methods
@@ -25,34 +26,36 @@
 #' @rdname klausuR-class
 
 setClass("klausuR",
-    representation=representation(results="data.frame",
-	answ="data.frame",
-	corr="vector",
-	wght="vector",
-	points="data.frame",
-	marks="vector",
-	marks.sum="matrix",
-	trfls="data.frame",
-	anon="data.frame",
-	mean="table",
-	sd="numeric",
-	cronbach="list",
-	item.analysis="data.frame",
-	misc="data.frame"),
-    prototype(results=data.frame(),
-	answ=data.frame(),
-	corr=NULL,
-	wght=NULL,
-	points=data.frame(),
-	marks=NULL,
-	marks.sum=NULL,
-	trfls=data.frame(),
-	anon=data.frame(),
-	mean=table(NULL),
-	sd=numeric(),
-	cronbach=list(alpha=NULL, ci=NULL, deleted=NULL),
-	item.analysis=data.frame(),
-	misc=data.frame())
+		representation=representation(results="data.frame",
+		answ="data.frame",
+		corr="vector",
+		wght="vector",
+		points="data.frame",
+		marks="vector",
+		marks.sum="matrix",
+		trfls="data.frame",
+		anon="data.frame",
+		mean="table",
+		sd="numeric",
+		cronbach="list",
+		item.analysis="data.frame",
+		test="klausuR.test",
+		misc="data.frame"),
+	prototype(results=data.frame(NULL),
+		answ=data.frame(NULL),
+		corr=NULL,
+		wght=NULL,
+		points=data.frame(NULL),
+		marks=NULL,
+		marks.sum=NULL,
+		trfls=data.frame(NULL),
+		anon=data.frame(NULL),
+		mean=table(NULL),
+		sd=numeric(),
+		cronbach=list(alpha=NULL, ci=NULL, deleted=NULL),
+		item.analysis=data.frame(NULL),
+		test=new("klausuR.test"),
+		misc=data.frame(NULL))
 )
 
 #setValidity("klausuR", function(object){

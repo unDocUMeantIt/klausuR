@@ -21,6 +21,7 @@
 #'			\item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
 #'			\item{\code{wght}} {Weights for each item (\code{NULL} if none)}
 #'		}
+#' @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 #' @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
 #'		e.g. table data from/for other software products. Won't be used for anything.
 #' @name klausuR.answ,-class
@@ -36,6 +37,7 @@ setClass("klausuR.answ",
 		id="data.frame",
 		items="data.frame",
 		score="list",
+		test="klausuR.test",
 		misc="data.frame"
   ),
   prototype(
@@ -43,6 +45,7 @@ setClass("klausuR.answ",
 		id=data.frame(No=NA, Name=NA, FirstName=NA, MatrNo=NA, Pseudonym=NA, Form=NA),
 		items=data.frame(MatrNo=NA, Item1=NA),
 		score=list(marks=NULL, wght=NULL),
+		test=new("klausuR.test"),
 		misc=data.frame(MatrNo=NA)
   )
 )
