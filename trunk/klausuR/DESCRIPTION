@@ -2,7 +2,7 @@ Package: klausuR
 Type: Package
 Title: Multiple Choice Test Evaluation
 Version: 0.12-0
-Date: 2011-07-30
+Date: 2011-07-31
 Author: m.eik michalke
 Maintainer: m.eik michalke <meik.michalke@uni-duesseldorf.de>
 Depends: R (>= 2.9.0),xtable,psychometric,methods,graphics,tools

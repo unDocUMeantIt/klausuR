@@ -44,10 +44,10 @@
 #' @param corr.key If test has several test forms: A data.frame or matrix indicating the positions of all items (columns) in all
 #'		forms (rows). Must have a column called \code{Form} (like \code{answ}), and the item columns must follow the explained name
 #'		scheme \code{Item###}. \code{NULL} if not needed.
-#' param rename A named vector defining if variables in \code{answ} need to be renamed into the klausuR name scheme. Accepts elements
+#' @param rename A named vector defining if variables in \code{answ} need to be renamed into the klausuR name scheme. Accepts elements
 #'		named \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}. The values of these elements
 #'		represent the variable names of the input data.
-#' param dummies A vector of dummy variables to be created, e.g. if you don't need/want actual data in the \code{id} slot.
+#' @param dummies A vector of dummy variables to be created, e.g. if you don't need/want actual data in the \code{id} slot.
 #'		Can include \code{"No"}, \code{"Name"}, \code{"FirstName"}, \code{"MatrNo"} and \code{"Pseudonym"}. Columns will just be filled
 #'		with increasing integers.
 #' @param disc.misc Logical. If \code{TRUE}, left over columns from \code{answ} will not be stored in slot \code{misc} but silently discarded.
