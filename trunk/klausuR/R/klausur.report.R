@@ -326,9 +326,19 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			dateiname <- ""
 		}
 
+			if(hist$points & hist$marks & any(unlist(marks.info))){
+				hist.and.marks <- TRUE
+				hist.minipage.width <- "0.6\\linewidth"
+			} else {
+				hist.and.marks <- FALSE
+			}
+
 		# use paste to create the LaTeX head, that is up to the table
-		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}
-			\\usepackage{longtable}
+		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}",
+			if(isTRUE(hist.and.marks)){
+				paste("			\\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}")
+			} else {},
+			"			\\usepackage{longtable}
 			\\usepackage{mathptmx}
 			\\usepackage{helvet}
 			\\usepackage{courier}
@@ -361,20 +371,46 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
 			text$Erreicht,": \\textbf{",punkte,"} (\\textbf{",prozent,"\\%}",text$Prozent,").
 			\\\\",text$Note,": ",format(note, nsmall=1),"}",
-			if(hist$points || hist$marks){
+			if(hist$points | hist$marks){
 				paste("
-				\\begin{figure}[h]
-				\\centerline{",
-				if(hist$points){
-					paste("\\mbox{\\includegraphics[width=9cm]{",hist.points,"}}", sep="")
-				} else {},
-				if(hist$marks){
-					paste("\\mbox{\\includegraphics[width=9cm]{",hist.marks,"}}", sep="")
-				} else {},
-				"}
+				\\begin{table}[ht]
+					\\begin{minipage}[b]{0.6\\linewidth}
+					\\centering
+					\\begin{tabular}{c@{\\hskip 0cm}c}
+						\\includegraphics[width=0.6\\linewidth]{",hist.points,"}&\\includegraphics[width=0.6\\linewidth]{",hist.marks,"}
+					\\end{tabular}
+					\\end{minipage}
+					\\hspace{0.8cm}
+					\\begin{minipage}[b]{0.4\\linewidth}
+						\\footnotesize
+						\\centering",
+						if(sum(unlist(marks.info)) > 0){
+							# summary on the defined marks
+							paste(gsub("\\\\end\\{center\\}\\n\\\\end\\{table\\}\\n","",
+								gsub("\\\\begin\\{table\\}\\[ht\\]\\n\\\\begin\\{center\\}\\n", "",
+								print(xtable(invisible(MC.results@marks.sum)),
+								sanitize.text.function=function(x){latex.umlaute(x)}))))
+						} else {},"
+					\\end{minipage}
 					\\caption{",text$VertErgs,"}
-				\\end{figure}", sep="")
-			} else {},"
+				\\end{table}%", sep="")
+			} else {},#"
+
+# 			if(hist$points || hist$marks){
+# 				paste("
+# 				\\begin{figure}[h]
+# 				\\centerline{",
+# 				if(hist$points){
+# 					paste("\\mbox{\\includegraphics[width=9cm]{",hist.points,"}}", sep="")
+# 				} else {},
+# 				if(hist$marks){
+# 					paste("\\mbox{\\includegraphics[width=9cm]{",hist.marks,"}}", sep="")
+# 				} else {},
+#				"}
+# 					\\caption{",text$VertErgs,"}
+# 				\\end{figure}", sep="")
+# 			} else {},"
+			"
 				\\newpage",
 		sep="")
 
@@ -397,11 +433,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		print(xtable(t(pre.erg.tabelle), digits=c(0,0,0,print.digits),
 		caption=paste(text$Auswertung," ",vorname," ",name," (",text$MatrikelNr," ",matn,")", cap.extra, sep="")),
 		file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
-		if(sum(unlist(marks.info)) > 0){
-			# summary on the defined marks
-			print(xtable(marks.information, caption=latex.umlaute(text$Notenschluessel)),
-			file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, floating=TRUE)
-		} else {}
 		write(latex.foot, file=dateiname, append=TRUE)
 
 		# check if PDF creation is demanded
