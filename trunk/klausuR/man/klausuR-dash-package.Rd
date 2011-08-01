@@ -7,7 +7,7 @@
 Package: \tab klausuR\cr
 Type: \tab Package\cr
 Version: \tab 0.12-0\cr
-Date: \tab 2011-07-31\cr
+Date: \tab 2011-08-01\cr
 Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 Encoding: \tab UTF-8\cr
 License: \tab GPL (>= 3)\cr

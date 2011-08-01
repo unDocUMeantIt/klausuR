@@ -214,11 +214,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 	answers <- klsr@answ
 	correct <- klsr@corr
 	wght <- klsr@wght
-	# if informatin on marks is wanted, only grab the intended stuff
-	if(sum(unlist(marks.info)) > 0){
-		marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
-		colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
-	} else {}
 
 	# for a nice printout, check numer of needed digits for points.
 	# e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
@@ -326,12 +321,96 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			dateiname <- ""
 		}
 
-			if(hist$points & hist$marks & any(unlist(marks.info))){
-				hist.and.marks <- TRUE
-				hist.minipage.width <- "0.6\\linewidth"
+		## prepare histograms and/or marks info
+		if(any(unlist(marks.info))){
+			# if informatin on marks is wanted, only grab the intended stuff
+			marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
+			colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
+			# summary on the defined marks
+			# use capture.output() to get rid of the printout; the table tags need to be removed,
+			# we need only the tabular environment
+			unused.garbage <- capture.output(
+					marks.info.table <- print(xtable(marks.information),
+					sanitize.text.function=function(x){latex.umlaute(x)})
+				)
+			marks.info.tabular <- paste(
+				gsub("\\\\end\\{center\\}\\n\\\\end\\{table\\}\\n","",
+				gsub("\\\\begin\\{table\\}\\[ht\\]\\n\\\\begin\\{center\\}\\n", "", marks.info.table))
+			)
+		} else {
+			marks.info.table <- ""
+			marks.info.tabular <- ""
+		}
+		# first cases including histograms
+		if(any(unlist(hist))){
+			if(any(unlist(marks.info))){
+				if(sum(unlist(hist)) == 1){
+					hist.and.marks <- FALSE
+					# one graph and marks
+					marks.hist.stuff <- paste("
+					\\begin{table}[ht]
+						\\begin{minipage}[b]{0.5\\linewidth}
+						\\centering
+						\\begin{tabular}{c}
+							\\includegraphics[width=9cm]{",
+							if(hist$points){
+								paste(hist.points)
+							} else {
+								paste(hist.marks)
+							},"}
+						\\end{tabular}
+						\\end{minipage}
+						\\hspace{0.8cm}
+						\\begin{minipage}[b]{0.5\\linewidth}
+							\\small
+							\\centering
+							",marks.info.tabular,"
+						\\end{minipage}
+						\\caption{", latex.umlaute(text$VertErgs), ", ", latex.umlaute(text$Notenschluessel),"}
+					\\end{table}%", sep="")
+				} else {
+					hist.and.marks <- TRUE
+					# two graphs and marks
+					marks.hist.stuff <- paste("
+					\\begin{table}[ht]
+						\\begin{minipage}[b]{0.6\\linewidth}
+						\\centering
+						\\begin{tabular}{c@{\\hskip 0cm}c}
+							\\includegraphics[width=0.6\\linewidth]{",hist.points,"}&\\includegraphics[width=0.6\\linewidth]{",hist.marks,"}
+						\\end{tabular}
+						\\end{minipage}
+						\\hspace{0.8cm}
+						\\begin{minipage}[b]{0.4\\linewidth}
+							\\footnotesize
+							\\centering
+							",marks.info.tabular,"
+						\\end{minipage}
+						\\caption{", latex.umlaute(text$VertErgs), ", ", latex.umlaute(text$Notenschluessel),"}
+					\\end{table}%", sep="")
+				}
 			} else {
+				# just one or two graphs
 				hist.and.marks <- FALSE
+				marks.hist.stuff <- paste("
+				\\begin{figure}[h]
+				\\centerline{",
+				if(hist$points){
+					paste("\\mbox{\\includegraphics[width=9cm]{",hist.points,"}}", sep="")
+				} else {},
+				if(hist$marks){
+					paste("\\mbox{\\includegraphics[width=9cm]{",hist.marks,"}}", sep="")
+				} else {},
+				"}
+					\\caption{",text$VertErgs,"}
+				\\end{figure}", sep="")
 			}
+		} else if(any(unlist(marks.info))){
+			# cases without histograms but marks
+			marks.hist.stuff <- marks.info.table
+		} else {
+			# cases with neither histograms nor marks
+			marks.hist.stuff <- ""
+		}
 
 		# use paste to create the LaTeX head, that is up to the table
 		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}",
@@ -370,47 +449,9 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			\\author{",vorname," ",name,",\\\\",text$MatrikelNr," ",matn,"}
 			\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
 			text$Erreicht,": \\textbf{",punkte,"} (\\textbf{",prozent,"\\%}",text$Prozent,").
-			\\\\",text$Note,": ",format(note, nsmall=1),"}",
-			if(hist$points | hist$marks){
-				paste("
-				\\begin{table}[ht]
-					\\begin{minipage}[b]{0.6\\linewidth}
-					\\centering
-					\\begin{tabular}{c@{\\hskip 0cm}c}
-						\\includegraphics[width=0.6\\linewidth]{",hist.points,"}&\\includegraphics[width=0.6\\linewidth]{",hist.marks,"}
-					\\end{tabular}
-					\\end{minipage}
-					\\hspace{0.8cm}
-					\\begin{minipage}[b]{0.4\\linewidth}
-						\\footnotesize
-						\\centering",
-						if(sum(unlist(marks.info)) > 0){
-							# summary on the defined marks
-							paste(gsub("\\\\end\\{center\\}\\n\\\\end\\{table\\}\\n","",
-								gsub("\\\\begin\\{table\\}\\[ht\\]\\n\\\\begin\\{center\\}\\n", "",
-								print(xtable(invisible(MC.results@marks.sum)),
-								sanitize.text.function=function(x){latex.umlaute(x)}))))
-						} else {},"
-					\\end{minipage}
-					\\caption{",text$VertErgs,"}
-				\\end{table}%", sep="")
-			} else {},#"
-
-# 			if(hist$points || hist$marks){
-# 				paste("
-# 				\\begin{figure}[h]
-# 				\\centerline{",
-# 				if(hist$points){
-# 					paste("\\mbox{\\includegraphics[width=9cm]{",hist.points,"}}", sep="")
-# 				} else {},
-# 				if(hist$marks){
-# 					paste("\\mbox{\\includegraphics[width=9cm]{",hist.marks,"}}", sep="")
-# 				} else {},
-#				"}
-# 					\\caption{",text$VertErgs,"}
-# 				\\end{figure}", sep="")
-# 			} else {},"
-			"
+			\\\\",text$Note,": ",format(note, nsmall=1),"}
+			",
+			marks.hist.stuff,"
 				\\newpage",
 		sep="")
 

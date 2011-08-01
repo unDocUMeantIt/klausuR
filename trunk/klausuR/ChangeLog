@@ -21,6 +21,7 @@ ChangeLog for package klausuR
     it is also no longer limited to compare klausuR data, hence the renaming.
   - fixed some NRET/ET related bugs in the plot method, klausur.gen.marks()
   - fixed 'if' statement error in show method for klausuR-class objects
+  - smarter handling of histograms and marks info in klausur.report()
 
 ## 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring
