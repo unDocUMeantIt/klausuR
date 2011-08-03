@@ -1,0 +1,4 @@
+Warning message:
+In klausur(answ = antworten, corr = klausuRtest.answers, marks = klausuRtest.marks) :
+  No weight vector (wght) given.
+  Number of items is used as maximum score.

@@ -1,0 +1,48 @@
+<!DOCTYPE rkpluginmap>
+
+<document base_prefix="" namespace="rkward" id="klausuR_rkward">
+	<about
+		name="klausuR"
+		shortinfo="Evaluate multiple choice tests."
+		version="0.12-0"
+		releasedate="2011-07-31"
+		url="http://reaktanz.de/index.php?content=hacking&amp;subcat=klausuR"
+		license="GPL"
+		category="Multiple Choice">
+		<author
+			name="m.eik michalke"
+			email="m@reaktanz.de"
+			url="http://reaktanz.de"
+		/>
+		<dependencies
+			rkward_min_version="0.5.3"
+			rkward_max_version=""
+			R_min_verion="2.10"
+			R_max_verion="">
+			<package
+				name="klausuR"
+				min_version="0.12-0"
+				max_version=""
+				repository="http://r-forge.r-project.org"
+			/>
+		</dependencies>
+	</about>
+
+	<components>
+		<component type="standard" id="klausuR_test_data" file="plugins/test_data.xml" label="Prepare Test Data" />
+		<component type="standard" id="klausuR_eval_test" file="plugins/eval_test.xml" label="Evaluate Test" />
+	</components>
+
+	<hierarchy>
+		<menu id="data" label="Data" index="4">
+			<menu id="menu_klausuR" label="Multiple Choice">
+				<entry component="klausuR_test_data" />
+			</menu>
+		</menu>
+		<menu id="analysis" label="Analysis" index="4">
+			<menu id="menu_klausuR" label="Multiple Choice">
+				<entry component="klausuR_eval_test" />
+			</menu>
+		</menu>
+	</hierarchy>
+</document>
