@@ -51,14 +51,14 @@ echo $contents; } ?>
 
 	<h4>Core features</h4>
 	<ul>
-		<li>Global results (<a href="http://R.reaktanz.de/klausuR-global.pdf" title="klausuR (global results)">example PDF</a>), including</li>
+		<li>Global results (<a href="http://R.reaktanz.de/klausuR/klausuR-global.pdf" title="klausuR (global results)">example PDF</a>), including</li>
 		<ul>
 			<li>Achieved number of points</li>
 			<li>Percentage of correct answers</li>
 			<li>Marks, according to a given key</li>
 		</ul>
-		<li>Anonymous feedback (e.g., to publish the results; <a href="http://R.reaktanz.de/klausuR-anonym.pdf" title="klausuR (anonymous feedback)">example PDF</a>)</li>
-		<li>Detailed individual results (<a href="http://R.reaktanz.de/klausuR-reports.pdf" title="klausuR (individual feedback)">example PDF</a>), including</li>
+		<li>Anonymous feedback (e.g., to publish the results; <a href="http://R.reaktanz.de/klausuR/klausuR-anonym.pdf" title="klausuR (anonymous feedback)">example PDF</a>)</li>
+		<li>Detailed individual results (<a href="http://R.reaktanz.de/klausuR/klausuR-reports.pdf" title="klausuR (individual feedback)">example PDF</a>), including</li>
 		<ul>
 			<li>A table listing given answers, correct answers, and points gained for each test item</li>
 			<li>Optionally as LaTeX report</li>
@@ -78,7 +78,7 @@ echo $contents; } ?>
 	</ul>
 
 	<h4>Graphical user interface</h4>
-	<p>There is also a GUI to work with the package, implemented as a <a href="http://reaktanz.de/?c=hacking&amp;s=RKWard#klausuR" title="RKWard-plugin">plugin for RKWard</a>.<p>
+	<p>There is also a GUI to work with the package, implemented as a <a href="http://reaktanz.de/?c=hacking&amp;s=klausuR#RKWard" title="RKWard-plugin">plugin for RKWard</a>.<p>
 
   <h4>Limitations</h4>
 
