@@ -38,7 +38,7 @@ data.check.klausur <- function(answ, corr, items, na.rm){
 # 					answ <- answ[!is.na(answ[, na.var]),]
 # 				}
 			} else {
-				warning(paste("NAs were present in '",deparse(substitute(answ)),"'\n  MatrNo: ", paste(invalid.cases.matn, collapse=", "), sep=""), call.=FALSE)
+				warning(paste("NAs were present in '",deparse(substitute(answ)),"':\n", paste(invalid.cases, collapse=", "), sep=""), call.=FALSE)
 			}
 		} else{}
 		if(sum(is.na(corr) > 0)){

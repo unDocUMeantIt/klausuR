@@ -405,9 +405,11 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				\\end{figure}", sep="")
 			}
 		} else if(any(unlist(marks.info))){
+			hist.and.marks <- FALSE
 			# cases without histograms but marks
 			marks.hist.stuff <- marks.info.table
 		} else {
+			hist.and.marks <- FALSE
 			# cases with neither histograms nor marks
 			marks.hist.stuff <- ""
 		}
