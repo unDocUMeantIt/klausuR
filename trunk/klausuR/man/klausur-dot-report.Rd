@@ -2,7 +2,7 @@
 \alias{klausur.report}
 \title{Generate individual reports on multipe choice test results}
 \usage{klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
-file.name="matn", hist=list(points=FALSE, marks=FALSE),
+file.name="matn", hist=list(points=FALSE, marks=FALSE), hist.merge=list(),
 hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 marks.info=list(points=FALSE, percent=FALSE),
 descr=list(title=NULL, name=NULL, date=NULL),
@@ -24,7 +24,8 @@ reports on each test form, call \code{klausur.report} with the single slots from
 \value{One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \seealso{\code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[texi2dvi]{texi2dvi}}}
-\arguments{\item{klsr}{An object of class klausuR or klausuR.mult.}
+\arguments{\item{klsr}{An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration, you can
+also give them in one list here, which will cause the function to call itself recursively.}
 \item{matn}{Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 or "glob" (produces a global results document).}
 \item{save}{Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").}
@@ -35,6 +36,7 @@ If \code{save} is FALSE, a temporary directory is used, that is only the PDF fil
 \item{hist}{A list with the logical elements \code{points} and \code{marks}: If TRUE, the reports will include histograms
 of the distribution of points and/or marks. The needed PDF files will be created by \code{\link[plot,klausuR]{plot}} and saved as well.
 (see \code{path}, \code{hist.points} and \code{hist.marks}).}
+\item{hist.merge}{If you need/want to combine results from several \code{klausuR} class objects for the histograms, provide them all in a list here.}
 \item{hist.points}{File name for the histogram of points.}
 \item{hist.marks}{File name for the histogram of marks.}
 \item{descr}{Details on the test: List with the elements \code{title} (title of the test), \code{name} (your name) and \code{date}.}

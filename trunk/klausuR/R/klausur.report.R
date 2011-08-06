@@ -15,12 +15,13 @@
 #' @method klausur.report klausuR klausuR.mult
 #' @usage
 #' klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
-#'  file.name="matn", hist=list(points=FALSE, marks=FALSE),
+#'  file.name="matn", hist=list(points=FALSE, marks=FALSE), hist.merge=list(),
 #'  hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 #'  marks.info=list(points=FALSE, percent=FALSE),
 #'  descr=list(title=NULL, name=NULL, date=NULL),
 #'  lang="en", alt.candy=TRUE, anon.glob.file="anon.tex")
-#' @param klsr An object of class klausuR or klausuR.mult.
+#' @param klsr An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration, you can
+#'		also give them in one list here, which will cause the function to call itself recursively.
 #' @param matn Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 #'	or "glob" (produces a global results document).
 #' @param save Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").
@@ -31,6 +32,7 @@
 #' @param hist A list with the logical elements \code{points} and \code{marks}: If TRUE, the reports will include histograms
 #'	of the distribution of points and/or marks. The needed PDF files will be created by \code{\link[plot,klausuR]{plot}} and saved as well.
 #'	(see \code{path}, \code{hist.points} and \code{hist.marks}).
+#' @param hist.merge If you need/want to combine results from several \code{klausuR} class objects for the histograms, provide them all in a list here.
 #' @param hist.points File name for the histogram of points.
 #' @param hist.marks File name for the histogram of marks.
 #' @param descr Details on the test: List with the elements \code{title} (title of the test), \code{name} (your name) and \code{date}.
@@ -81,11 +83,21 @@
 #' 	name="Dr. T. Aeter", date="24.09.2010"))
 
 klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
-			    hist=list(points=FALSE, marks=FALSE), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
+			    hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 			    descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
 			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto"){
 
 	# before we start let's look at klsr
+	# if klsr is a list, iterate through it recusively
+	if(is.list(klsr)){
+		for(this.klsr in klsr){
+			klausur.report(klsr=this.klsr, matn=matn, save=save, pdf=pdf, path=path, file.name=file.name,
+				hist=hist, hist.points=hist.points, hist.marks=hist.marks,
+				descr=descr, marks.info=marks.info, lang=lang, alt.candy=alt.candy, anon.glob.file=anon.glob.fil,
+				NRET.legend=NRET.legend, table.size=table.size)
+		}
+		return("done")
+	} else {}
 	# if it's of class "klausuR.mult", extract global results and drop the rest
 	if(inherits(klsr, "klausuR.mult")){
 		klsr <- klsr@results.glob
@@ -189,12 +201,17 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		)
 	}
 
-	if(hist$points || hist$marks) {
+	klsr.to.plot <- klsr
+	if(is.list(hist.merge) & length(hist.merge) > 0){
+		klsr.to.plot@results <- plot.merger(hist.merge)
+	} else {}
+
+	if(hist$points | hist$marks) {
 		if(hist$points) {
 			pdf(file=file.path(path, hist.points),
 			width=10, height=10,
 			pointsize=22, bg="white")
-			plot(klsr, xlab=hist.text$P.xlab, ylab=hist.text$P.ylab, main=hist.text$P.main)
+			plot(klsr.to.plot, xlab=hist.text$P.xlab, ylab=hist.text$P.ylab, main=hist.text$P.main)
 			dev.off()
 		} else {}
 
@@ -202,7 +219,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			pdf(file=file.path(path, hist.marks),
 			width=10, height=10,
 			pointsize=22, bg="white")
-			plot(klsr, marks=TRUE, xlab=hist.text$N.xlab, ylab=hist.text$N.ylab, main=hist.text$N.main)
+			plot(klsr.to.plot, marks=TRUE, xlab=hist.text$N.xlab, ylab=hist.text$N.ylab, main=hist.text$N.main)
 			dev.off()
 		} else {}
 	} else {}

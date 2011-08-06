@@ -537,3 +537,16 @@ klausur.reorderItems <- function(slot, order){
   reordered.items <- cbind(matn.slot, part.slot.reordered)
   return(reordered.items)
 } ## end klausur.reorderItems()
+
+## function plot.merger()
+# a hack to produce combined histograms from several objects of class klausuR
+# takes a list of klausuR objects and returns a combined results slot
+plot.merger <- function(klsr=list()){
+	# first combine all result slots into one data.frame
+	k.merged.results <- data.frame()
+	for(this.klsr in klsr){
+		stopifnot(inherits(this.klsr, "klausuR"))
+		k.merged.results <- rbind(k.merged.results, this.klsr@results)
+	}
+	return(k.merged.results)
+} ## end function plot.merger()

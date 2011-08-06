@@ -22,6 +22,8 @@ ChangeLog for package klausuR
   - fixed some NRET/ET related bugs in the plot method, klausur.gen.marks()
   - fixed 'if' statement error in show method for klausuR-class objects
   - smarter handling of histograms and marks info in klausur.report()
+  - klausur.report() can now also create histograms with data from several klausuR objects
+  - klausur.report() can now produce reports from more than one object, if you give them in a list
   - added the full RKWard plugin as inst/rkward, so both get updated simultanously
 
 ## 0.11-3

@@ -1,3 +1,20 @@
+#' Try this function to combine results from an evaluated test into a matrix and export it to a table, e.g. to import
+#' in other software products. It can be particularily helpful for ET/NRET coded tests, if you want to compare the results of
+#' different valid scoring functions.
+#'
+#' @title Export results to a table
+#' @usage grand.table(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL,
+#'		rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...)
+#' @param {NR.res, NRET.res, NRETp.res, ET.res} One or several objects of class \code{klausuR}. Usual MC tests must be
+#'		given as \code{NR.res}.
+#' @param rescale Logical, whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.
+#' @param file A character string giving a file name to save to. If \code{NULL}, no file will be written.
+#' @param csv2 Logical. If \code{FALSE}, \code{write.csv} will be used instead of \code{write.csv2}.
+#' @param encoding Encoding of the exported table.
+#' @param ... Additional options for \code{write.csv}/\code{write.csv2}.
+#' @return A data.frame.
+#' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
+#' @keywords misc
 #' @export
 
 grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL, rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...){
