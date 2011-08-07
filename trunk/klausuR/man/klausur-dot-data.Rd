@@ -1,7 +1,7 @@
 \name{klausur.data}
 \alias{klausur.data}
 \title{A function to create data objects with given and correct answers to a test.}
-\usage{klausur.data(answ, corr, items, marks, wght, corr.key, rename=c(), dummies=c(), disc.misc=FALSE, na.rm=TRUE)
+\usage{klausur.data(answ, corr, items, marks, wght, corr.key, rename=c(), dummies=c(), disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name")
 }
 \description{A function to create data objects with given and correct answers to a test.}
 \details{\code{klausur.data} automatically parses the variable names in \code{answ}to decide \strong{which variables are actual test items},
@@ -55,6 +55,9 @@ Can include \code{"No"}, \code{"Name"}, \code{"FirstName"}, \code{"MatrNo"} and 
 with increasing integers.}
 \item{disc.misc}{Logical. If \code{TRUE}, left over columns from \code{answ} will not be stored in slot \code{misc} but silently discarded.}
 \item{na.rm}{Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.}
+\item{item.prefix}{A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
+used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.}
+\item{sort.by}{A character string naming the variable to sort the \code{answ} data by. Set to \code{c()} to skip any re-ordering.}
 }
 \examples{data(antworten)
 

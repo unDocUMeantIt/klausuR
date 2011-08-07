@@ -75,7 +75,9 @@ notenschluessel[25:26] <- 1.7
 notenschluessel[27:29] <- 1.3
 notenschluessel[30:32] <- 1.0
 
-klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
+data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
+klsr.obj <- klausur(data.obj)
+
 klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
 name="Dr. T. Aeter", date="24.09.2010"))}
 

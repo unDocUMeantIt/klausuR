@@ -31,7 +31,6 @@
 #' \code{your.marks[27:30] <- "1.7"} (see example section below). It is crucial to assign marks to the whole range of points that can be achieved in the test.
 #' On the other hand, it's irrelevant wheter you assign decimal marks as in the example, only integer values, a 15 marks scheme or whatever. The convenience
 #' function \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} can assist you in creating such a valid vector.
-
 #'
 #' @param answ A \code{\link{data.frame}} which has to include at least these variables:
 #'	\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
@@ -52,6 +51,9 @@
 #'		with increasing integers.
 #' @param disc.misc Logical. If \code{TRUE}, left over columns from \code{answ} will not be stored in slot \code{misc} but silently discarded.
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.
+#' @param item.prefix A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
+#'		used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.
+#' @param sort.by A character string naming the variable to sort the \code{answ} data by. Set to \code{c()} to skip any re-ordering.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -86,11 +88,15 @@
 #' # if that went well, get the test results
 #' klsr.obj <- klausur(data.obj)
 
-klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(), disc.misc=FALSE, na.rm=TRUE){
+klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
+	disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name"){
+
+	# check for var names to use
+	item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
 
 	# in case no items were specified, take variables of names "Item##" as items
 	if(is.null(items)){
-		items <- grep("^(Item|item)([[:digit:]]{1,3})$", names(answ))
+		items <- grep(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ))
 	} else{}
 
 	vars.to.rename <- names(rename)
@@ -129,7 +135,7 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 		}
 	}
 
-	sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm)
+	sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix)
 	stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved"))
 	answ <- sane.data$answ
 	items <- sane.data$items
@@ -143,8 +149,15 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 	for (char.var in found.vars){
 		answ[[char.var]] <- as.numeric(as.character(answ[[char.var]]))
 	}
-	# sort data by MatrNo
-	answ <- answ[order(answ$MatrNo),]
+
+	# re-order cases?
+	if(length(sort.by) > 0){
+		if(!sort.by %in% names(answ)){
+			stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
+		} else {}
+		new.order <- order(answ[[sort.by]])
+		answ <- answ[new.order,]
+	} else {}
 
 	# prepare columns for resulting data.frames
 	if("Pseudonym" %in% names(answ)){
@@ -164,6 +177,13 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 		unused.stuff <- answ[, !names(answ) %in% c(id.possible.names, names(answ[, items]))]
 		misc.data <- data.frame(MatrNo=answ[["MatrNo"]], unused.stuff)
 	}
+
+	# force items into klausuR name scheme
+	if(!identical(item.prefix[["item"]], "Item")){
+		old.digits <- as.numeric(gsub(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", items, perl=TRUE))
+		new.item.names <- gen.item.names(old.digits, prefix="Item")
+		dimnames(answ[, items]) <- list(NULL,new.item.names)
+	} else {}
 
 	# create resulting object
 	results <- new("klausuR.answ",

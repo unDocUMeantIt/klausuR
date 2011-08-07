@@ -3,7 +3,7 @@
 \title{A function to evaluate multiple choice tests}
 \usage{klausur(data, marks=NULL, mark.labels=NULL, items=NULL,
 wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
-cronbach=FALSE, item.analysis=FALSE)}
+cronbach=FALSE, item.analysis=FALSE, sort.by="Name")}
 \description{The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}, containing some
 identification data on all subjects and their answers to the test items, a vector with the correct answers, and optionally a vector with
 marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha and
@@ -33,9 +33,10 @@ will give no point (because "15" is not equal to "134"), as will \code{"partial"
 
 \strong{(Number Right) Elimination Testing}
 
-Note that \code{"ET"}, \code{"NRET"}/\code{"NRET+"} and \code{"NR"} will disable \code{wght} as well as \code{item.analysis} as of now, and \strong{need the data in
-different format} than the other scoring functions (see \code{\link[klausuR:klausur.data]{klausur.data}} for details). \code{klausur} will evaluate each
-answer individually and sum up the points for each item. The alternative-wise evaluations will be documented in the \code{trfls} slot of the results.
+Note that \code{"ET"}, \code{"NRET"}/\code{"NRET+"} and \code{"NR"} will disable \code{wght} as of now,
+and \strong{need the data in different format} than the other scoring functions (see \code{\link[klausuR:klausur.data]{klausur.data}} for details).
+\code{klausur} will evaluate each answer individually and sum up the points for each item. The alternative-wise evaluations will be documented in the
+\code{trfls} slot of the results.
 Therefore, in these cases that matrix is not boolean, but more complex. For each item and each subject, a character string represents
 the evaluated answer alternatives, with the following elements:
 \itemize{
@@ -104,7 +105,8 @@ will be used.}
 \item{matn}{A matriculation number of a subject, to receive detailed results for that subject.}
 \item{na.rm}{Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.}
 \item{cronbach}{Logical. If TRUE, Cronbach's alpha will be calculated.}
-\item{item.analysis}{Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
+\item{item.analysis}{Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.}
+\item{sort.by}{A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
 If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.}
 }
 \examples{data(antworten)

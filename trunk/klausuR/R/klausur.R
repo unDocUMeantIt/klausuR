@@ -28,9 +28,10 @@
 #'
 #' \strong{(Number Right) Elimination Testing}
 #'
-#' Note that \code{"ET"}, \code{"NRET"}/\code{"NRET+"} and \code{"NR"} will disable \code{wght} as well as \code{item.analysis} as of now, and \strong{need the data in
-#' different format} than the other scoring functions (see \code{\link[klausuR:klausur.data]{klausur.data}} for details). \code{klausur} will evaluate each
-#' answer individually and sum up the points for each item. The alternative-wise evaluations will be documented in the \code{trfls} slot of the results.
+#' Note that \code{"ET"}, \code{"NRET"}/\code{"NRET+"} and \code{"NR"} will disable \code{wght} as of now,
+#' and \strong{need the data in different format} than the other scoring functions (see \code{\link[klausuR:klausur.data]{klausur.data}} for details).
+#' \code{klausur} will evaluate each answer individually and sum up the points for each item. The alternative-wise evaluations will be documented in the
+#' \code{trfls} slot of the results.
 #' Therefore, in these cases that matrix is not boolean, but more complex. For each item and each subject, a character string represents
 #' the evaluated answer alternatives, with the following elements:
 #' \itemize{
@@ -68,7 +69,7 @@
 #' @title A function to evaluate multiple choice tests
 #' @usage klausur(data, marks=NULL, mark.labels=NULL, items=NULL,
 #' wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
-#' cronbach=FALSE, item.analysis=FALSE)
+#' cronbach=FALSE, item.analysis=FALSE, sort.by="Name")
 #' @param data An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
 #'		\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
@@ -83,6 +84,7 @@
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
+#' @param sort.by A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @return An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.
 #'	\item{results}{A data.frame with global results}
@@ -141,7 +143,8 @@
 #' # if that went well, get the test results
 #' klsr.obj <- klausur(data.obj)
 
-klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
+klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved",
+		matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name"){
 		## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
 		if(!inherits(data, "klausuR.answ")){
@@ -172,6 +175,15 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		stopifnot(scoring.check.klausur(corr, marks, wght, score))
 		answ <- sane.data$answ
 		items <- sane.data$items
+
+		# probably sort cases
+		if(length(sort.by) > 0){
+			if(!sort.by %in% names(answ)){
+				stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
+			} else {}
+			new.order <- order(answ[[sort.by]])
+			answ <- answ[new.order,]
+		} else {}
 
 		### results section
 		# set default min.score to zero
@@ -271,25 +283,30 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		ergebnis.anonym <- anon.results(ergebnis.daten)
 
 		## psychometic quality of the items
-		if(!score %in% c("NR", "ET", "NRET", "NRET+")){
+		if(score %in% c("ET", "NRET", "NRET+")){
+			# if ET/NRET type items are to be analyzed, try with points instead of true/false matrix
+			# this has implication for interpretation
+			item.values.to.anl <- ergebnisse
+			if(isTRUE(item.analysis)){
+				warning("Be careful with interpreting item analysis on ET/NRET data.\n  It's not dichotomously scaled, analysis was done with the achieved scores.", call.=FALSE)
+			} else {}
+		} else {
+			item.values.to.anl <- wahr.falsch
+		}
 			if(isTRUE(cronbach)){
 				# calling an internal function which is
 				# using alpha() from package "psychometric"
-				cron.alpha.list <- calc.cronbach.alpha(na.omit(wahr.falsch))
+				cron.alpha.list <- calc.cronbach.alpha(na.omit(item.values.to.anl))
 			} else {
 				cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
 			}
 			if(isTRUE(item.analysis)){
 				# calling another internal function which is also
 				# using alpha() from package "psychometric"
-				item.analyse <- calc.item.analysis(wahr.falsch, cron.alpha.list)
+				item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
 			} else {
 				item.analyse <- data.frame(NULL)
 			}
-		} else {
-			cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
-			item.analyse <- data.frame(NULL)
-		}
 
 		## compose the resulting object
 		# here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually

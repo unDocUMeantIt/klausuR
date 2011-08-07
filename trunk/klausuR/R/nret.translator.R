@@ -20,7 +20,7 @@
 #'		corr=FALSE, num.alt=NULL,
 #'		klausuR.alt=c(is.true="+", is.false="-", missing="0", err="*"),
 #'		spss.alt=c(is.true="2", is.false="1", missing="0", err="3"),
-#'		rm.old.vars=TRUE, items.only=FALSE)
+#'		rm.old.vars=TRUE, items.only=FALSE, klausuR.prefix=c(), spss.prefix=c())
 #' @param dat A data.frame, the object to convert.
 #' @param items Optional vector defining the columns to convert. If \code{NULL}, the function will try to autodetect
 #'		Items: \code{klausuR} type items are expected to be named \code{"ItemXXX"}, with XXX indicating the item number,
@@ -34,6 +34,9 @@
 #' @param spss.alt A named vector defining the codes for SPSS type of answers.
 #' @param rm.old.vars Logical. If \code{TRUE}, the converted columns will not be returned. Only relevant if \code{corr=FALSE}.
 #' @param items.only Logical. If \code{TRUE}, only the converted columns will be returned. Only relevant if \code{corr=FALSE}.
+#' @param klausuR.prefix A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
+#'		used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.
+#' @param spss.prefix Like \code{klausuR.prefix}, but for the SPSS data. Defaults to \code{item="item"} and \code{corr="corr"}.
 #' @return If \code{corr=FALSE}, a data.frame with more or less columns (depending on \code{rm.old.vars} and \code{items.only}).
 #'		If \code{corr=TRUE}, returns a named vector if \code{spss="in"} and a list if \code{spss="out"} (containing SPSS syntax
 #'		in the element \code{syntax} and also a named vector, called \code{answ}).
@@ -57,7 +60,10 @@
 nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NULL,
 	klausuR.alt=c(is.true="+", is.false="-", missing="0", err="*"),
 	spss.alt=c(is.true="2", is.false="1", missing="0", err="3"),
-	rm.old.vars=TRUE, items.only=FALSE){
+	rm.old.vars=TRUE, items.only=FALSE, klausuR.prefix=c(), spss.prefix=c()){
+
+	klausuR.prefix <- check.prefixes(prefixes=klausuR.prefix, package="klausuR")
+	spss.prefix    <- check.prefixes(prefixes=spss.prefix, package="SPSS")
 
 	# local copy of data:
 	dat.orig <- dat
@@ -94,8 +100,8 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 						return(true.one)
 					}
 				})
-			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", names(dat), perl=TRUE))
-			new.names <- paste("corr", old.digits, sep="")
+			old.digits <- as.numeric(gsub(paste("^(", klausuR.prefix[["corr"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", names(dat), perl=TRUE))
+			new.names <- paste(spss.prefix[["corr"]], old.digits, sep="")
 			names(new.answers) <- new.names
 			# for convenience, create some SPSS syntax
 			SPSS.compute <- sapply(1:num.items, function(item.idx){
@@ -109,7 +115,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# extract items (ItemXXX)
 			# get columns with items
 			if(is.null(items)){
-				items.idx <- grep("^(item|Item)([[:digit:]]{1,3})$", names(dat))
+				items.idx <- grep(paste("^(", klausuR.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(dat))
 			} else {
 				items.idx <- items
 			}
@@ -122,17 +128,17 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			# split answers into alternatives
 			old.item.names <- names(dat[, items.idx])
 			num.items <- length(old.item.names)
-			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", old.item.names, perl=TRUE))
+			old.digits <- as.numeric(gsub(paste("^(", klausuR.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", old.item.names, perl=TRUE))
 			# if the data is ok, the numbers of alternatives in the first row
 			# should suffice to get them for all subjects
 			num.alternatives <- nchar(dat[1,items.idx])
 			new.item.names <- as.vector(sapply(1:num.items, function(item.idx){
 					item.pre <- if(num.items < 10){
-						paste("item", old.digits[item.idx], sep="")
+						paste(spss.prefix[["item"]], old.digits[item.idx], sep="")
 						} else if(num.items < 100){
-							paste("item", sprintf("%02d", old.digits[item.idx]), sep="")
+							paste(spss.prefix[["item"]], sprintf("%02d", old.digits[item.idx]), sep="")
 						} else {
-							paste("item", sprintf("%03d", old.digits[item.idx]), sep="")
+							paste(spss.prefix[["item"]], sprintf("%03d", old.digits[item.idx]), sep="")
 						}
 
 					n.items <- if(max(num.alternatives) < 10){
@@ -153,7 +159,9 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 
 			# translate alternatives
 			new.dat <- trans.alt(data=new.dat, items=new.item.names, alt.in=klausuR.alt, alt.out=spss.alt)
-
+			# re-order by new names
+			new.dat <- new.dat[,order(names(new.dat))]
+			
 			# output R object
 			if(isTRUE(items.only)){
 				results <- as.data.frame(new.dat, stringsAsFactors=FALSE)
@@ -189,21 +197,15 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 					answ <- paste(answ, collapse="")
 					return(answ)
 				})
-			old.digits <- as.numeric(gsub("^(corr|Corr)([[:digit:]]{1,3})$", "\\2", names(dat), perl=TRUE))
-			new.item.names <- if(num.items < 10){
-			paste("Item", old.digits, sep="")
-			} else if(num.items < 100){
-				paste("Item", sprintf("%02g", old.digits), sep="")
-			} else {
-				paste("Item", sprintf("%03g", old.digits), sep="")
-			}
+			old.digits <- as.numeric(gsub(paste("^(", spss.prefix[["corr"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", names(dat), perl=TRUE))
+			new.item.names <- gen.item.names(old.digits, prefix=klausuR.prefix[["corr"]])
 			names(new.answers) <- new.item.names
 			results <- new.answers
 		} else {
 			# extract items (itemXaY (X=Item, Y=Antwortalternative))
 			# get columns with items
 			if(is.null(items)){
-				items.idx <- grep("^(item|Item)([[:digit:]]{1,3}a([[:digit:]]{1,2}))$", names(dat))
+				items.idx <- grep(paste("^(", spss.prefix[["item"]], ")([[:digit:]]{1,3}a([[:digit:]]{1,2}))$", sep=""), names(dat))
 			} else {
 				items.idx <- items
 			}
@@ -211,7 +213,7 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 			items.idx <- items.idx[order(names(dat[, items.idx]))]
 
 			# this holds just the "itemXX" prefix
-			items.pre <- gsub("^((item|Item)[[:digit:]]{1,3})(a[[:digit:]]{1,2})$", "\\1", names(dat[, items.idx]), perl=TRUE)
+			items.pre <- gsub(paste("^((", spss.prefix[["item"]], ")[[:digit:]]{1,3})(a[[:digit:]]{1,2})$", sep=""), "\\1", names(dat[, items.idx]), perl=TRUE)
 			# unique item names
 			item.names <- unique(items.pre)
 
@@ -233,17 +235,12 @@ nret.translator <- function(dat, items=NULL, spss="out", corr=FALSE, num.alt=NUL
 				})
 
 			# rename the results (ItemXXX)
-			num.items <- length(item.names)
-			old.digits <- as.numeric(gsub("^(item|Item)([[:digit:]]{1,3})$", "\\2", item.names, perl=TRUE))
-			new.item.names <- if(num.items < 10){
-			paste("Item", old.digits, sep="")
-			} else if(num.items < 100){
-				paste("Item", sprintf("%02g", old.digits), sep="")
-			} else {
-				paste("Item", sprintf("%03g", old.digits), sep="")
-			}
+			old.digits <- as.numeric(gsub(paste("^(", spss.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", item.names, perl=TRUE))
+			new.item.names <- gen.item.names(old.digits, prefix=klausuR.prefix[["item"]])
 			dimnames(new.items) <- list(NULL,new.item.names)
 			new.items <- as.data.frame(new.items, stringsAsFactors=FALSE)
+			# re-order by new names
+			new.items <- new.items[,order(names(new.items))]
 
 			# output R object
 			if(isTRUE(items.only)){

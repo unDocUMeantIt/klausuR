@@ -5,7 +5,7 @@
 corr=FALSE, num.alt=NULL,
 klausuR.alt=c(is.true="+", is.false="-", missing="0", err="*"),
 spss.alt=c(is.true="2", is.false="1", missing="0", err="3"),
-rm.old.vars=TRUE, items.only=FALSE)}
+rm.old.vars=TRUE, items.only=FALSE, klausuR.prefix=c(), spss.prefix=c())}
 \description{This function should help to interchange answer data between R and other statistical software packages -- especially
 SPSS, but it's probably useful for other products as well.}
 \details{\code{\link[klausuR:klausur]{klausur}} expects data in a special format if it should be evaluated according to (Number Right) Elimination
@@ -39,6 +39,9 @@ have different numbers of options. If it is shorter than the number of items, it
 \item{spss.alt}{A named vector defining the codes for SPSS type of answers.}
 \item{rm.old.vars}{Logical. If \code{TRUE}, the converted columns will not be returned. Only relevant if \code{corr=FALSE}.}
 \item{items.only}{Logical. If \code{TRUE}, only the converted columns will be returned. Only relevant if \code{corr=FALSE}.}
+\item{klausuR.prefix}{A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
+used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.}
+\item{spss.prefix}{Like \code{klausuR.prefix}, but for the SPSS data. Defaults to \code{item="item"} and \code{corr="corr"}.}
 }
 \examples{\dontrun{
 # from SPSS to R

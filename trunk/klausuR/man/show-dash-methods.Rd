@@ -14,6 +14,7 @@ If object is of class klausuR.mult, the global results for tests with several te
 \seealso{\code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}}
 \keyword{methods}
 \arguments{\item{object}{An object of class \code{klausuR} or \code{klausuR.mult}}
+\item{sort.by}{An optional character string naming a variable to sort the results by. Defaults to \code{c()}, i.e. no re-ordering.}
 }
 \examples{\dontrun{
 klausur(answ=antworten, corr=richtig, marks=notenschluessel)

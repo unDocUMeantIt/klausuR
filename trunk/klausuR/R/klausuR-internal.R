@@ -2,14 +2,43 @@
 # they are not exported, hence not to be called by users themselves
 # and are therefore only documented by the comments in this file.
 
+## check.prefixes()
+# used to define variable prefixes for items in data and correct answers vector
+check.prefixes <- function(prefixes=c(), package="klausuR"){
+	if("item" %in% names(prefixes)){
+		item <- as.character(prefixes["item"])
+	} else {
+		if(identical(package, "SPSS")){
+			item <- "item"
+		} else {
+			item <- "Item"
+		}
+	}
+	if("corr" %in% names(prefixes)){
+		corr <- as.character(prefixes["corr"])
+	} else {
+		if(identical(package, "SPSS")){
+			corr <- "corr"
+		} else {
+			corr  <- "Item"
+		}
+	}
+	return(c(item=item, corr=corr))
+}
+## end check.prefixes()
+
+
 ## data.check.klausur()
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the given data
-data.check.klausur <- function(answ, corr, items, na.rm){
+data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
+
+		# check for var names to use
+		prefix <- check.prefixes(prefixes=prefixes, package="klausuR")
 
 		# in case no items were specified, take variables of names "Item##" as items
 		if(is.null(items)){
-			items <- grep("^(Item|item)([[:digit:]]{1,3})$", names(answ))
+			items <- grep(paste("^(", prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ))
 		} else{}
 
 		# are all needed variables present in the answers data?
@@ -97,23 +126,30 @@ scoring.check.klausur <- function(corr, marks, wght, score){
 ## gen.item.names()
 # an internal function to generate item names
 # takes the number of items to be generated
-gen.item.names <- function(num){
-    # NULL if no valid item number given
-    if(num < 1){
-      return(NULL)
-    } else{}
-    # currently, 999 items are the theoretical limit
-    if(num >= 1000){
-      return(NULL)
-    } else{}
+gen.item.names <- function(num, prefix="Item"){
+	if(length(num) == 1){
+		# NULL if no valid item number given
+		if(num < 1){
+			return(NULL)
+		} else{}
+		# currently, 999 items are the theoretical limit
+		if(num >= 1000){
+			return(NULL)
+		} else{}
+		item.num <- c(1:num)
+	} else {
+		# if num is a vector, create item names from that vector
+		item.num <- num
+		num <- length(item.num)
+	}
 
     items <- if(num < 10){
-		  paste("Item", c(1:num), sep="")
+		  paste(prefix, item.num, sep="")
 		} else {
 		  if(num < 100){
-		    paste("Item", sprintf("%02d", c(1:num)), sep="")
+		    paste(prefix, sprintf("%02d", item.num), sep="")
 		  } else {
-		    paste("Item", sprintf("%03d", c(1:num)), sep="")
+		    paste(prefix, sprintf("%03d", item.num), sep="")
 		  }
 		}
     return(items)
@@ -346,18 +382,29 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 			points <- sapply(1:length(corr.split), function(idx){
 					answ.given <- as.character(answ.split[idx])
 					answ.crrct <- as.character(corr.split[idx])
+					# score NR will only return TRUE or FALSE, let's take care of that first
+					if(identical(score, "NR") & isTRUE(true.false) & identical(answ.crrct, is.true)){
+						if(identical(answ.given, is.true)){
+							return(TRUE)
+						} else {
+							return(FALSE)
+						}
+					} else if(identical(score, "NR") & isTRUE(true.false) & !identical(answ.crrct, is.true)){
+						return()
+					} else {}
+					
 					if(identical(answ.given, answ.crrct)){
 						if(identical(answ.given, is.true)){
 							# this is a true positive
 							if(isTRUE(true.false)){
-								return("P")
+									return("P")
 							} else {
 								return(mtx["true.pos"])
 							}
 						} else if(identical(answ.given, is.false)){
 							# this is a true negative
 							if(isTRUE(true.false)){
-								return("N")
+									return("N")
 							} else {
 								return(mtx["true.neg"])
 							}
@@ -369,20 +416,20 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 						if(identical(answ.given, is.true)){
 							# this is a false positive
 							if(isTRUE(true.false)){
-								return("p")
+									return("p")
 							} else {
 								return(mtx["false.pos"])
 							}
 						} else if(identical(answ.given, is.false)){
 							# this is a false negative
 							if(isTRUE(true.false)){
-								return("n")
+									return("n")
 							} else {
 								return(mtx["false.neg"])
 							}
 						} else if(answ.given %in% c(missing, err)){
 							if(isTRUE(true.false)){
-								return(as.character(answ.given))
+									return(as.character(answ.given))
 							} else {
 								if(score %in% c("NR","ET","NRET")){
 									# the authors didn't discuss failed answers, so this is by the book
@@ -407,7 +454,11 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
 			if(isTRUE(true.false)){
 				# return true/false indicators, e.g. "PNNn0"
-				result <- paste(points, collapse="")
+				if(identical(score, "NR")){
+					result <- points
+				} else {
+					result <- paste(points, collapse="")
+				}
 			} else {
 				result <- sum(points)
 			}
