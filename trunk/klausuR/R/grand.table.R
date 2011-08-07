@@ -5,7 +5,8 @@
 #' @title Export results to a table
 #' @usage grand.table(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL,
 #'		rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...)
-#' @param {NR.res, NRET.res, NRETp.res, ET.res} One or several objects of class \code{klausuR}. Usual MC tests must be
+#' @param NR.res, \code{NRET.res}, \code{NRETp.res}, \code{ET.res} At least one and up to four objects of class \code{klausuR}. As the names
+#'		suggest, take the appropriate element for the scoring policy used to get the results. Usual MC tests must be
 #'		given as \code{NR.res}.
 #' @param rescale Logical, whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.
 #' @param file A character string giving a file name to save to. If \code{NULL}, no file will be written.

@@ -9,7 +9,8 @@ different valid scoring functions.}
 \value{A data.frame.}
 \author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
 \keyword{misc}
-\arguments{\item{{NR.res,}{NRET.res, NRETp.res, ET.res} One or several objects of class \code{klausuR}. Usual MC tests must be
+\arguments{\item{NR.res,}{\code{NRET.res}, \code{NRETp.res}, \code{ET.res} At least one and up to four objects of class \code{klausuR}. As the names
+suggest, take the appropriate element for the scoring policy used to get the results. Usual MC tests must be
 given as \code{NR.res}.}
 \item{rescale}{Logical, whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.}
 \item{file}{A character string giving a file name to save to. If \code{NULL}, no file will be written.}
