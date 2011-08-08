@@ -2,7 +2,6 @@
 #
 ## roxy.package() actions:
 #		"roxy":			roxygenize the docs
-#		"plugin": 		update rkward_klausuR
 #		"package": 		build & install klausuR package
 #		"doc",			update pdf documentation
 #		"win":			update the windows binary package
@@ -89,9 +88,6 @@ roxy.package <- function(
 	add.to.version="",
 	pck.date=Sys.Date(),
 	R.libs=R.libs.v,
-	plugin.version=plugin.version.v,
-	rkwd.plugins=rkwd.plugins.v,
-	repo.rkwd=repo.rkwd.v,
 	repo.root=repo.root.v,
 	actions=c("roxy", "package"),
 	local.r.dir=r.dir,
@@ -196,22 +192,6 @@ roxy.package <- function(
 		setwd(jmp.back)
 		stopifnot(file.copy(file.path(R.libs, pck.package, "DESCRIPTION"), file.path(repo.win, "PACKAGES"), overwrite=TRUE))
 		message("repo: bin/PACKAGES (windows) updated.")
-	} else {}
-
-	if("plugin" %in% actions){
-		jmp.back <- getwd()
-		setwd(rkwd.plugins)
-		RKWard.plugin.gz <- paste(pck.package, "_rkward-", plugin.version, ".tar.gz", sep="")
-		if(file.exists(RKWard.plugin.gz)){
-			stopifnot(file.remove(RKWard.plugin.gz))
-		} else {}
-		tar(RKWard.plugin.gz, files=paste(pck.package, "_rkward", sep=""),
-			tar="/bin/tar",
-			compression="gzip", extra_flags="-h --exclude=*~ --exclude-vcs")
-		message(paste("rkward: plugin updated to", RKWard.plugin.gz))
-		stopifnot(file.copy(RKWard.plugin.gz, repo.rkwd, overwrite=TRUE))
-		message("rkward: plugin copied to repo.")
-		setwd(jmp.back)
 	} else {}
 
 } ## end function roxy.package()
