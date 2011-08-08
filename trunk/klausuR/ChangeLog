@@ -26,7 +26,8 @@ ChangeLog for package klausuR
   - fixed 'if' statement error in show method for klausuR-class objects
   - added support for item analysis on ET/NRET data
   - added SD values to item analysis (show method)
-  - added 'sort.by' option to klausur.data(), klausur() ans show()
+  - added 'sort.by' option to klausur.data(), and klausur()
+  - added sort method for objects of class klausuR
   - added the full RKWard plugin as inst/rkward, so both get updated simultanously
 
 ## 0.11-3

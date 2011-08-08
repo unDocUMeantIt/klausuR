@@ -47,7 +47,8 @@ notenschluessel[25:26] <- 1.7
 notenschluessel[27:29] <- 1.3
 notenschluessel[30:32] <- 1.0
 
-klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
+data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
+klsr.obj <- klausur(data.obj)
 plot(klsr.obj, marks=TRUE)}
 \alias{plot,-method}
 \alias{plot}

@@ -16,6 +16,7 @@
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}, \code{\link[klausuR:klausur.report]{klausur.report}}
 #' @keywords methods plot
+#' @import methods
 #' @exportMethod plot
 #' @rdname plot-methods
 #' @examples
@@ -44,7 +45,8 @@
 #' notenschluessel[27:29] <- 1.3
 #' notenschluessel[30:32] <- 1.0
 #' 
-#' klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
+#' data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
+#' klsr.obj <- klausur(data.obj)
 #' plot(klsr.obj, marks=TRUE)
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 

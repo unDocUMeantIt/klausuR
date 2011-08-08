@@ -5,27 +5,25 @@
 #'
 #' @title Show methods for objects of class klausuR and klausuR.mult
 #' @param object An object of class \code{klausuR} or \code{klausuR.mult}
-#' @param sort.by An optional character string naming a variable to sort the results by. Defaults to \code{c()}, i.e. no re-ordering.
 #' @aliases show,-methods show,klausuR-method show,klausuR.mult-method
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}
 #' @keywords methods
 #' @examples
 #' \dontrun{
-#' klausur(answ=antworten, corr=richtig, marks=notenschluessel)
+#' klausur(data.obj)
 #'
 #' # multiple test forms
-#' klausur.mufo(answ=antworten, corr=richtig, corr.key=testformen,
-#' marks=notenschluessel)
+#' klausur.mufo(data.obj, marks=notenschluessel)
 #' }
 #' @exportMethod show
 #' @rdname show-methods
-setGeneric("show", function(object, ...) standardGeneric("show"))
+setGeneric("show")
 
 #' @rdname show-methods
-setMethod("show", signature(object="klausuR"), function(object, sort.by=c()){
+setMethod("show", signature(object="klausuR"), function(object){
 	if(length(object@results) == 0){
-		return()
+		return(invisible(NULL))
 	} else {}
 
 	if(nrow(object@item.analysis) > 0){
@@ -58,17 +56,6 @@ setMethod("show", signature(object="klausuR"), function(object, sort.by=c()){
 
 	global.results <- object@results
 	anon.results <- object@anon
-	# sort results
-	if(length(sort.by) > 0){
-		if(!sort.by %in% names(global.results)){
-			stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
-		} else {}
-		new.order <- order(global.results[[sort.by]])
-		global.results <- global.results[new.order,]
-		anon.results <- anon.results[new.order,]
-		dimnames(global.results)[[1]] <- 1:nrow(global.results)
-		dimnames(anon.results)[[1]] <- 1:nrow(anon.results)
-	} else {}
 
 	cat("\nKlausuR results:")
 	cat("\n\nMarks defined:\n")
@@ -98,7 +85,7 @@ setMethod("show", signature(object="klausuR"), function(object, sort.by=c()){
 #' @rdname show-methods
 setMethod("show", signature(object="klausuR.mult"), function(object){
 	if(is.null(object@forms)){
-		return()
+		return(invisible(NULL))
 	} else {}
 
 	show(object@results.glob)

@@ -39,6 +39,7 @@ roxy.description <- function(val, version, date=Sys.Date()){
 			"\nAuthor: m.eik michalke",
 			"\nMaintainer: m.eik michalke <meik.michalke@uni-duesseldorf.de>",
 			"\nDepends: ",pck.depds.v,
+			"\nEnhances: rkward",
 			"\nDescription: ",gsub("#'","\n",gsub("\n[[:space:]]*", " ", pck.descr.v)),
 			"\nLicense: GPL (>= 3)",
 			"\nEncoding: UTF-8",
@@ -55,6 +56,7 @@ roxy.description <- function(val, version, date=Sys.Date()){
 			"\n#' Version: \\tab ",version,"\\cr",
 			"\n#' Date: \\tab ",date,"\\cr",
 			"\n#' Depends: \\tab ",pck.depds.v,"\\cr",
+			"\n#' Enhances: \\tab rkward\\cr",
 			"\n#' Encoding: \\tab UTF-8\\cr",
 			"\n#' License: \\tab GPL (>= 3)\\cr",
 			"\n#' LazyLoad: \\tab yes\\cr",
@@ -194,4 +196,5 @@ roxy.package <- function(
 		message("repo: bin/PACKAGES (windows) updated.")
 	} else {}
 
+	return(invisible(NULL))
 } ## end function roxy.package()
