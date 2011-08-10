@@ -1,12 +1,11 @@
 local({
-## Prepare
+## Vorbereiten
 require(klausuR)
 
-## Compute
-klsr.obj <- klausur(answ=antworten, corr=klausuRtest.answers, marks=klausuRtest.marks)
-
-## Print result
-rk.header("Multiple Choice Evaluation")
+## Berechne
+klsr.obj <- klausur(data=klsr.data.obj)
+## Drucke Ergebnisse
+rk.header("klausuR: Test Evaluation")
 rk.print("<h3>Global Results</h3>")
 rk.print(klsr.obj@results)
 rk.print("<h3>Anonymous Feedback</h3>")
@@ -36,6 +35,5 @@ if(length(klsr.obj@item.analysis) > 1 && !is.na(klsr.obj@item.analysis)){
   item.analysis <- "Error: Item analysis is NA"
 }
 rk.print(item.analysis)
+assign("klsr.obj", klsr.obj, envir=globalenv())
 })
-.rk.rerun.plugin.link(plugin="rkward::klausuR", settings="antworten.available=antworten\nchk_anon.state=anon\nchk_cronbach.state=cronbach\nchk_distrib.state=distrib\nchk_globres.state=globres\nchk_itemanal.state=itemanal\nchk_mark_sugg.state=\nchk_marks_sum.state=marks.sum\nchk_matn_all.state=all\nchk_na_replace.state=\nchk_partial.state=\nchk_reports.state=\nchk_save.state=\nchk_weights.state=weight\nnoten.available=klausuRtest.marks\nrichtig.available=klausuRtest.answers", label="Run again")
-.rk.make.hr()

@@ -29,6 +29,7 @@ ChangeLog for package klausuR
   - added 'sort.by' option to klausur.data(), and klausur()
   - added sort method for objects of class klausuR
   - added the full RKWard plugin as inst/rkward, so both get updated simultanously
+  - adapted rkwardtests to current behaviour of klausuR
 
 ## 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring
