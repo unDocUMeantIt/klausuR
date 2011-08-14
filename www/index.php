@@ -51,14 +51,14 @@ echo $contents; } ?>
 
 	<h4>Core features</h4>
 	<ul>
-		<li>Global results (<a href="http://R.reaktanz.de/klausuR/klausuR-global.pdf" title="klausuR (global results)">example PDF</a>), including</li>
+		<li>Global results (<a href="http://R.reaktanz.de/pckg/klausuR/klausuR-global.pdf" title="klausuR (global results)">example PDF</a>), including</li>
 		<ul>
 			<li>Achieved number of points</li>
 			<li>Percentage of correct answers</li>
 			<li>Marks, according to a given key</li>
 		</ul>
-		<li>Anonymous feedback (e.g., to publish the results; <a href="http://R.reaktanz.de/klausuR/klausuR-anonym.pdf" title="klausuR (anonymous feedback)">example PDF</a>)</li>
-		<li>Detailed individual results (<a href="http://R.reaktanz.de/klausuR/klausuR-reports.pdf" title="klausuR (individual feedback)">example PDF</a>), including</li>
+		<li>Anonymous feedback (e.g., to publish the results; <a href="http://R.reaktanz.de/pckg/klausuR/klausuR-anonym.pdf" title="klausuR (anonymous feedback)">example PDF</a>)</li>
+		<li>Detailed individual results (<a href="http://R.reaktanz.de/pckg/klausuR/klausuR-reports.pdf" title="klausuR (individual feedback)">example PDF</a>), including</li>
 		<ul>
 			<li>A table listing given answers, correct answers, and points gained for each test item</li>
 			<li>Optionally as LaTeX report</li>
@@ -78,11 +78,14 @@ echo $contents; } ?>
 	</ul>
 
 	<h4>Graphical user interface</h4>
-	<p>There is also a GUI to work with the package, implemented as a <a href="http://reaktanz.de/?c=hacking&amp;s=klausuR#RKWard" title="RKWard-plugin">plugin for RKWard</a>.<p>
+	<p>There is also a GUI to work with the package, implemented as a plugin for <a href="http://RKWard.sourceforge.net" title="RKWard-plugin">RKWard</a>. After installation the pluginmap can be found as <code>$R_LIBS_USER/klausuR/rkward/klausuR.pluginmap</code><p>
 
-  <h4>Limitations</h4>
+	<h4>Development snapshots</h4>
+	<p>If you want to try the bleeding edge unstable development version (i.e. SVN snapshots), add <code>http://R.reaktanz.de</code> to your repository list. But be aware that "unstable" means unstable.</p>
 
-  <p>Some of the advanced features, especially in the development version, are not extensively tested in all possible combinations. If you should run into a bug, please don't hesitate to send a report! But even if everything runs smoothly, <strong>please do always check at least a sample of the results to make sure no errors occurred</strong>.</p>
+    <h4>Limitations</h4>
+
+    <p>Some of the advanced features, especially in the development version, are not extensively tested in all possible combinations. If you should run into a bug, please don't hesitate to send a report! But even if everything runs smoothly, <strong>please do always check at least a sample of the results to make sure no errors occurred</strong>.</p>
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
