@@ -9,7 +9,7 @@ pckg.dscrptn <- data.frame(
 		Package="klausuR",
 		Type="Package",
 		Title="Multiple Choice Test Evaluation",
-		Author="m.eik michalke",
+		Author="m.eik michalke <meik.michalke@hhu.de>",
 		Maintainer="m.eik michalke <meik.michalke@hhu.de>",
 		Depends="R (>= 2.9.0),xtable,psychometric,methods,graphics,tools",
 		Enhances="rkward",
