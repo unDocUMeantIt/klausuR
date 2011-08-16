@@ -12,7 +12,6 @@
 #' reports on each test form, call \code{klausur.report} with the single slots from that object accordingly.
 #'
 #' @title Generate individual reports on multipe choice test results
-#' @method klausur.report klausuR klausuR.mult
 #' @usage
 #' klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
 #'  file.name="matn", hist=list(points=FALSE, marks=FALSE), hist.merge=list(),

@@ -1,35 +1,38 @@
-#' Class klausuR.answ
-#'
-#' This class is used for objects needed by \code{\link[klausuR:klausur]{klausur}}.
-#' They contain all relevant data to calculate test results.
-#'
-#' @note The slots \code{}, \code{id}, \code{items} and \code{misc}, must have the same number of rows and contain copies of the colum \code{MatrNo}
-#' for identification.
-#'
-#' @title S4 class klausuR.answ
-#' @slot corr Contains two elements:
-#'		\itemize{
-#'			\item{\code{corr}} {The correct answers to each item.}
-#'			\item{\code{corr.key}} {An optional data.frame or matrix for test with multiple test forms, indicating the positions
-#'				of all items (columns) in all forms (rows). Must have a column called \code{Form} (like in \code{id}), and the
-#'				item columns must follow the usual name scheme \code{Item###}. \code{NULL} if not needed.}
-#'		}
-#' @slot id Contains the columns \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}.
-#' @slot items Contains a copy of \code{id$MatrNo} and all answers to the test items (one item per column).
-#' @slot score Contains two elements:
-#'		\itemize{
-#'			\item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
-#'			\item{\code{wght}} {Weights for each item (\code{NULL} if none)}
-#'		}
-#' @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
-#' @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
-#'		e.g. table data from/for other software products. Won't be used for anything.
-#' @name klausuR.answ,-class
+## temporarily turned off most of the roxygen comments
+## class docs will remain static until roxygen2 supports "@slot"
+
+# Class klausuR.answ
+#
+# This class is used for objects needed by \code{\link[klausuR:klausur]{klausur}}.
+# They contain all relevant data to calculate test results.
+#
+# @note The slots \code{}, \code{id}, \code{items} and \code{misc}, must have the same number of rows and contain copies of the colum \code{MatrNo}
+# for identification.
+#
+# @title S4 class klausuR.answ
+# @slot corr Contains two elements:
+#		\itemize{
+#			\item{\code{corr}} {The correct answers to each item.}
+#			\item{\code{corr.key}} {An optional data.frame or matrix for test with multiple test forms, indicating the positions
+#				of all items (columns) in all forms (rows). Must have a column called \code{Form} (like in \code{id}), and the
+#				item columns must follow the usual name scheme \code{Item###}. \code{NULL} if not needed.}
+#		}
+# @slot id Contains the columns \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}.
+# @slot items Contains a copy of \code{id$MatrNo} and all answers to the test items (one item per column).
+# @slot score Contains two elements:
+#		\itemize{
+#			\item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
+#			\item{\code{wght}} {Weights for each item (\code{NULL} if none)}
+#		}
+# @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
+# @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
+#		e.g. table data from/for other software products. Won't be used for anything.
+# @name klausuR.answ,-class
 #' @import methods
-#' @keywords classes
-#' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
+# @keywords classes
+# @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR.answ
-#' @rdname klausuR.answ-class
+# @rdname klausuR.answ-class
 
 setClass("klausuR.answ",
 	representation=representation(

@@ -30,6 +30,7 @@ ChangeLog for package klausuR
   - added sort method for objects of class klausuR
   - added the full RKWard plugin as inst/rkward, so both get updated simultanously
   - adapted rkwardtests to current behaviour of klausuR
+  - sources can now be roxygenized by roxygen2 (classes docs are static until '@slot' is supported again)
 
 ## 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring

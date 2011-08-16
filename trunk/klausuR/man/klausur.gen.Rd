@@ -1,0 +1,37 @@
+\name{klausur.gen}
+\alias{klausur.gen}
+\title{Generate data sets for the use with klausur}
+\usage{
+  klausur.gen(items = NULL, obs = 1, items.char = FALSE)
+}
+\arguments{
+  \item{items}{An integer declaring the number of items to
+  be created}
+
+  \item{obs}{Integer, numer ob observations}
+
+  \item{items.char}{Logical, will the answers be coded as
+  characters or integer numbers (default)?}
+}
+\value{
+  A data.frame containing the variables "No", "Name",
+  "FirstName", "MatrNo", "Pseudonym", "Form" and the number
+  of items as needed.
+}
+\description{
+  Generate empty data sets for the use with klausur
+}
+\examples{
+antworten2 <- klausur.gen(items=20,obs=40)
+}
+\author{
+  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
+\seealso{
+  \code{\link[klausuR:klausur]{klausur}},
+  \code{\link[klausuR:compare]{compare}},
+  \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
+  \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
+}
+\keyword{datagen}
+
