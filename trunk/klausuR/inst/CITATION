@@ -1,0 +1,14 @@
+bibentry("Manual",
+		title="klausuR: Multiple Choice Test Evaluation",
+		author="m.eik michalke <meik.michalke@hhu.de>",
+		year="2011",
+		note="(Version 0.12-0)",
+		url="http://r-forge.r-project.org/projects/klausur",
+
+		textVersion =
+		paste(""m.eik michalke <meik.michalke@hhu.de>" (2011). ",
+				"klausuR: Multiple Choice Test Evaluation (Version 0.12-0). ",
+				"Available from http://r-forge.r-project.org/projects/klausur",
+				sep=""),
+
+		mheader = "To cite klausuR in publications use:")
