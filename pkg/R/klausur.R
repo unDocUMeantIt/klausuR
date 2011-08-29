@@ -1,61 +1,90 @@
-#' The function \code{klausur} expects a \code{\link{data.frame}} containing some identification data on all subjects and their answers to the test items,
-#' a vector with the correct answers, and a vector with marks assigned to the points achieved. It will compute global test results as well as
-#' some item analysis (including Cronbach's alpha and discriminatory power of the test items), and anonymous feedback for the test subjects.
+#' The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}, containing some
+#' identification data on all subjects and their answers to the test items, a vector with the correct answers, and optionally a vector with
+#' marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha and
+#' discriminatory power of the test items), and anonymous feedback for the test subjects.
 #'
-#' \code{klausur} automatically parses the variable names to decide \strong{which variables are actual test items}, if they are named according to
-#' the given scheme \code{Item###}. To help in constructing a data set with correct variable names one can call the
-#' \code{\link[klausuR:klausur.gen]{klausur.gen}} utility to generate an empty data object of a given number of items and test subjects.
+#' For details on the ecpected data structure refer to \code{\link[klausuR:klausur.data]{klausur.data}},
 #'
-#' If you have \strong{items with multiple correct answers} you can easily code these as one single item: All alternatives a subject has marked should be combined
-#' to a single value without spaces. The vector with correct answers will have to be coded accordingly, of course. An example: If someone marked the first,
-#' third and fourth answer, you would code this as "134". See \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}} for a helpful function to create such an
-#' answer vector. Internally \code{klausur} checks for equality of given answers and correct values, that is,
-#' it will only give that person a point if the correct answer was coded as "134" as well.
+#' \strong{Scoring functions}
 #'
-#' In combination with multiple correct answers for certain items you can specify one of three scoring policies via the \code{score}-parameter. By default it is
-#' set to \code{"solved"}, which means that one will only get any points for an item if the answer was 100\% correct (that is, all or nothing). If you set it to
-#' \code{"partial"} or \code{"liberal"}, as the names may suggest you \strong{allow partially given answers} under the condition that the test subject didn't
-#' check more alternatives than there are correct ones (that is, if you checked four alternatives where three correct ones were possible, you're out).
-#' In the case of \code{"partial"}, an additional condition is that none of the distractors must be checked, which \code{"liberal"} gracefully allows. An example:
-#' If the correct answer is "134" and a subject checked "15", \code{"solved"} will give no point (because "15" is not equal to "134"), as will \code{"partial"}
-#' (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
+#' In combination with multiple (correct) answers for certain items you can specify one of six scoring policies via the \code{score}-parameter.
+#' If you set it to something othe than \code{"solved"}, as the names may suggest you \strong{allow partially given answers} under the condition that the test subject didn't
+#' check more alternatives than there are correct ones (that is, if you checked four alternatives where three correct ones were possible, you're out):
+#' \itemize{
+#'		\item{\code{"solved"}} {Multiple Choice: Check all correct alternatives. This is the default, which means that one will only get any points for an
+#'			item if the answer was 100\% correct (that is, all or nothing).}
+#'		\item{\code{"partial"}} {Multiple Choice: Check all correct alternatives, allow partially given answers, but none of the distractors must be checked.}
+#'		\item{\code{"liberal"}} {Multiple Choice: Check all correct alternatives, allow partially given answers, even distractors can be checked.}
+#'		\item{\code{"ET"}} {Elimination Testing: In contrast to the usual MC procedure, eliminate/strike all \emph{wrong} alternatives.}
+#'		\item{\code{"NRET"}} {Number Right Elimination Testing: Like ET+MC, eliminate/strike all \emph{wrong} alternatives \emph{and} check the correct one.}
+#'		\item{\code{"NRET+"}} {Number Right Elimination Testing, more strict: Like NRET, but if more alternatives are checked right than there are right anwers,
+#'			it will automatically yield to 0 points for that item.}
+#'		\item{\code{"NR"}} {Number Right: The usual MC scoring, but works with ET/NRET data. It was implemented for completeness, e.g. to compare results
+#'			of different scoring techniques.}
+#' }
+#'
+#' An example for \code{"solved"}, \code{"partial"} and \code{"liberal"}: If the correct answer is "134" and a subject checked "15", \code{"solved"}
+#' will give no point (because "15" is not equal to "134"), as will \code{"partial"} (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
+#'
+#' \strong{(Number Right) Elimination Testing}
+#'
+#' Note that \code{"ET"}, \code{"NRET"}/\code{"NRET+"} and \code{"NR"} will disable \code{wght} as of now,
+#' and \strong{need the data in different format} than the other scoring functions (see \code{\link[klausuR:klausur.data]{klausur.data}} for details).
+#' \code{klausur} will evaluate each answer individually and sum up the points for each item. The alternative-wise evaluations will be documented in the
+#' \code{trfls} slot of the results.
+#' Therefore, in these cases that matrix is not boolean, but more complex. For each item and each subject, a character string represents
+#' the evaluated answer alternatives, with the following elements:
+#' \itemize{
+#'		\item{\code{P}} {True positive: Alternative was checked as right and is right. \emph{Points: +1 (+ constant)}}
+#'		\item{\code{p}} {False positive: Alternative was checked as right but is wrong. \emph{Points: 0 (+ constant)}}
+#'		\item{\code{N}} {True negative: Alternative was checked as wrong and is wrong. \emph{Points: +1 (+ constant)}}
+#'		\item{\code{n}} {False negative: Alternative was checked as wrong but is right. \emph{Points: -(alternatives-1) (+ constant)}}
+#'		\item{\code{0}} {Missing: Alternative wasn't checked at all. \emph{Points: 0 (+ constant)}}
+#'		\item{\code{*}} {Error: Alternative was checked both wrong and right. \emph{Points NRET+: 0 (+ constant);
+#'			NR scores 1 point if this was the correct alternative, ET 1 point if it hit a wrong one,
+#'			and NRET sums up the points for both the positive and negative answer (all + constant)}}
+#' }
+#' An example: If we have an item with four alternatives, and the third one is right (i.e., "\code{--+-}"), and a test subject considered the first alternative
+#' to be correct and eliminated all others (i.e., "\code{+---}"), it would be evaluated as "\code{pNnN}", that is 0+1-3+1=-1 point, not considering the constant.
+#' As you can see, it would be possible to end up with a negative sum of points. If you consider how in the end a mark will be assigned to the achieved points,
+#' this would be a problem, because a vactor cannot have negative inices. To circumvent this issue, klausuR automatically adds a constant to all results, so
+#' that the worst possible result is not negative but 0. This constant is simply (alternatives-1), i.e. 3 for the example. In other words, if our test had 10
+#' such items, the results minus 30 would be equivalent to scoring without that constant. You can use \code{\link[klausuR:nret.rescale]{nret.rescale}} to remove
+#' the constant from the results afterwards.
 #' 
-#' The \strong{assigned marks} are expected to be in a certain format as well, as long as you don't want \code{klausur} to suggest them itself (see below).
-#' Just create an empty vector to start with (say \code{your.marks <- c()}) and fill it according to the scheme \code{your.marks[<points from>:<points to>] <- <mark>}.
-#' Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indices to the vector with
-#' \code{your.marks[27:30] <- "1.7"} (see example section below). It is crucial to assign marks to the whole range of points that can be achieved in the test.
-#' On the other hand, it's irrelevant wheter you assign decimal marks as in the example, only integer values, a 15 marks scheme or whatever. The convenience
-#' function \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} can assist you in creating such a valid vector.
+#' \strong{Marks}
 #'
-#' Another way to deal with marks is to let klausuR make a suggestion. That is, if \code{marks="suggest"}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
-#' kicks in and takes either the \code{mark.labels} you have defined here or will ask you step by step. See the documentation of that function for details. To see the
-#' suggested result in detail, have a look at the slot \code{marks} of the returned object.
+#' The \strong{assigned marks} are expected to be in a certain format as well (see \code{\link[klausuR:klausur.data]{klausur.data}} for details),
+#' as long as you don't want \code{klausur} to suggest them itself. If you want to let klausuR make a suggestion, set \code{marks="suggest"},
+#' and \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} kicks in and takes either the \code{mark.labels} you have defined here or will
+#' ask you step by step. See the documentation of that function for details. To see the suggested result in detail, have a look at the slot
+#' \code{marks} of the returned object.
 #'
 #' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.
 #'
-#' Note: \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
+#' @note \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
 #' necessarily yield more diagnostic information, allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
 #' give quite unfair test results! In addition, please do \strong{always check a sample of the results} to make sure no errors accurred.
 #' 
 #' @title A function to evaluate multiple choice tests
-#' @usage klausur(answ, corr, marks, mark.labels=NULL, items=NULL,
+#' @usage klausur(data, marks=NULL, mark.labels=NULL, items=NULL,
 #' wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
-#' cronbach=FALSE, item.analysis=FALSE)
-#' @param answ A \code{\link{data.frame}} which has to include at least these variables:
-#'	\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
-#'	and variables for the answered items (according to the scheme \code{Item###},
-#'	where ### is a number with leading zeros, if needed).
-#' @param corr A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).
+#' cronbach=FALSE, item.analysis=FALSE, sort.by="Name")
+#' @param data An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
-#'	\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
+#'		\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
+#'		If \code{NULL}, this value must be set in the \code{data} object.
 #' @param mark.labels If \code{marks="suggest"}, use these as the marks you want to give.
-#' @param items Indices of a subset of variables in \code{answ} to be taken as items.
-#' @param wght A vector with weights for each item (named also according to \code{Item###}).
-#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"} or \code{"liberal"}.
+#' @param items Indices of a subset of variables in \code{data} to be taken as items.
+#' @param wght A vector with weights for each item (named also according to \code{Item###}). If \code{NULL}, the value from the \code{data} object
+#'		will be used.
+#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"},
+#'		\code{"NR"}, \code{"ET"}, \code{"NRET"}, or \code{"NRET+"}.
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
-#' @param na.rm Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.
+#' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
+#' @param sort.by A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @return An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.
 #'	\item{results}{A data.frame with global results}
@@ -71,12 +100,14 @@
 #'	\item{sd}{Standard deviation of the test results}
 #'	\item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
 #'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power and discriminant factor of all items.}
+#'	\item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
 #'	Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{show}} and \code{\link[plot,klausuR]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @seealso \code{\link[klausuR:klausur.report]{klausur.report}}, \code{\link[klausuR:klausur.compare]{klausur.compare}},
-#'  \code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
-#'  \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
-#'  \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
+#' @seealso \code{\link[klausuR:klausur.data]{klausur.data}}, \code{\link[klausuR:klausur.report]{klausur.report}},
+#'		\code{\link[klausuR:compare]{compare}},
+#'		\code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
+#'		\code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
+#'		\code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
 #' @keywords misc
 #' @import psychometric
 #' @export
@@ -106,147 +137,242 @@
 #' notenschluessel[27:29] <- 1.3
 #' notenschluessel[30:32] <- 1.0
 #' 
-#' klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
+#' # now combine all test data into one object of class klausur.answ
+#' data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
+#'
+#' # if that went well, get the test results
+#' klsr.obj <- klausur(data.obj)
+#'
+#' ############################
+#'	# example for an NRET test
+#' ############################
+#' # load sampla data in SPSS format
+#' data(spss.data)
+#' # define correct answers
+#' spss.corr <- c(
+#'		item01=2, item02=3, item03=3, item04=3, item05=2,
+#'		item06=2, item07=3, item08=1, item09=1, item10=2)
+#'
+#' # convert into klausuR type coding
+#' klausuR.data <- nret.translator(spss.data, spss="in")
+#' klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE,
+#'   num.alt=3, spss.prefix=c(corr="item"))
+#' # now create the data object; "Nickname" must be renamed
+#' data.obj <- klausur.data(answ=klausuR.data, corr=klausuR.corr,
+#'   rename=c(Pseudonym="Nickname"))
+#' 
+#'	# finally, the test can be evaluated, using the scoring functions available
+#' NRET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET")
+#' NRETplus.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET+")
+#' NR.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR")
+#' ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
 
-klausur <- function(answ, corr, marks, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
-		  ## whenever these options/arguments should change, update klausur.mufo() accordingly!
+klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved",
+		matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name"){
+		## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
-		  ## firstly, check input data an quit if necessary
-                  # data.check.klausur() is an internal function, defined in klausuR-internal.R
-		  sane.data <- data.check.klausur(answ, corr, marks, items, wght, score, na.rm)
-		  answ <- sane.data$answ
-		  items <- sane.data$items
+		if(!inherits(data, "klausuR.answ")){
+			stop(simpleError("'data' must be of class 'klausuR.answ'!"))
+		} else {}
 
-		  ### results section
-		  # probably weight items, to calculate the maximum score
-		  if(!is.null(wght)){
-		    maxp <- sum(wght)
-		    wght.results <- wght
-		  }
-		  # in case no weights were given, count each item as one point
-		  else {
-		    maxp <- length(items)
-		    # for the results, create a vector of 1's by number of items
-		    wght.results <- rep(1, length(items))
-		  }
+		corr <- data@corr$corr
+		if(!is.null(data@corr$corr.key)){
+			warning("This test seems to have multiple test forms. Perhaps try klausur.mufo() instead?", call.=FALSE)
+		} else {}
 
-		  # create the TRUE/FALSE-matrix for solved items
-		  # this will become a point matrix instead if partial results are ok
-		  if(identical(score, "partial") || identical(score, "liberal")){
-		    # weights will be considered here as well
-		    # if partial answers should be considered
-		    if(identical(score, "partial")){
-		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")))
-		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")))
-		    }
-		    if(identical(score, "liberal")){
-		      wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")))
-		      ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")))
-		    }
-		    dimnames(wahr.falsch)[[2]] <- names(answ[items])
-		    dimnames(ergebnisse)[[2]]  <- names(answ[items])
-		  }
-		  else {
-		    wahr.falsch <- data.frame(t(t(answ[,items]) == corr))
-		    # in case weights were defined, e.g. for items with multiple correct answers, take them into account
-		    if(!is.null(wght))
-		      ergebnisse <- data.frame(t(t(wahr.falsch) * wght))
-		    else
+		if(is.null(wght)){
+			wght <- data@score$wght
+		} else {}
+
+		if(is.null(marks)){
+			if(is.null(data@score$marks)){
+				stop(simpleError("You must give some value for 'marks', either in 'data' or with the klausur() call!"))
+			} else {
+				marks <- data@score$marks
+			}
+		} else {}
+
+		## TODO: clean up checks, so cbind is not needed!
+		## firstly, check input data an quit if necessary
+		# data.check.klausur() is an internal function, defined in klausuR-internal.R
+		sane.data <- data.check.klausur(cbind(data@id, data@items), corr, items, na.rm)
+		stopifnot(scoring.check.klausur(corr, marks, wght, score))
+		answ <- sane.data$answ
+		items <- sane.data$items
+
+		# probably sort cases
+		if(length(sort.by) > 0){
+			if(!sort.by %in% names(answ)){
+				stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
+			} else {}
+			new.order <- order(answ[[sort.by]])
+			answ <- answ[new.order,]
+		} else {}
+
+		### results section
+		# set default min.score to zero
+		min.score <- 0
+		# probably weight items, to calculate the maximum score
+		# NRET et al. can't be weighted yet
+		if(is.null(wght) | score %in% c("NR", "ET", "NRET", "NRET+")){
+			nret.test.chars <- nret.minmax(corr=corr, score=score)
+			maxp <- nret.test.chars["maxp"]
+			min.score <- nret.test.chars["minp"]
+			baseline <- nret.test.chars["baseline"]
+			num.alt <- nret.test.chars["num.alt"]
+			# for the results, create a vector of 1's by number of items
+			wght.results <- rep(1, length(items))
+		} else {
+			maxp <- sum(wght)
+			wght.results <- wght
+		}
+
+		# create the TRUE/FALSE-matrix for solved items
+		# this will become a point matrix instead if partial results are ok
+		if(length(score) == 1 && score %in% c("partial", "liberal", "NR", "ET", "NRET", "NRET+")){
+			# weights will be considered here as well
+			# if partial answers should be considered
+			if(identical(score, "partial")){
+				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
+			} else {}
+			if(identical(score, "liberal")){
+				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
+			} else {}
+			if(score %in% c("NR", "ET", "NRET", "NRET+")){
+				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
+					num.alt=num.alt, true.false=TRUE)}), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
+					num.alt=num.alt, true.false=FALSE)}), stringsAsFactors=FALSE)
+			} else {}
+			dimnames(wahr.falsch)[[2]] <- names(answ[items])
+			dimnames(ergebnisse)[[2]]  <- names(answ[items])
+		}
+		else {
+			wahr.falsch <- data.frame(t(t(answ[,items]) == corr))
+			# in case weights were defined, e.g. for items with multiple correct answers, take them into account
+			if(!is.null(wght))
+				ergebnisse <- data.frame(t(t(wahr.falsch) * wght))
+			else
 				# we'll add 0 to forcibly convert logical values to numerics
-		      ergebnisse <- wahr.falsch + 0
-		  }
+				ergebnisse <- wahr.falsch + 0
+		}
 
-		  ## calculate points
-		  punkte <- rowSums(ergebnisse)
+		## calculate points
+		punkte <- rowSums(ergebnisse)
 
-		  ## descriptive statistics
-		  mittel.quart <- summary(punkte)
-		  stdabw <- sd(punkte, na.rm=TRUE)
+		## descriptive statistics
+		mittel.quart <- summary(punkte)
+		stdabw <- sd(punkte, na.rm=TRUE)
 
-		  # should marks be suggested or are they given?
-		  if(length(marks) == 1 && identical(marks, "suggest")){
-		    warning("Marks are a suggestion, not your definition!", call.=FALSE)
-		    marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw))
-		  }
+		# should marks be suggested or are they given?
+		if(length(marks) == 1 && identical(marks, "suggest")){
+			warning("Marks are a suggestion, not your definition!", call.=FALSE)
+			##
+			if(score %in% c("ET", "NRET", "NRET+")){
+				# a hack to force the right max. points here
+				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=baseline)
+				} else if(identical(score, "NR")){
+					marks <- klausur.gen.marks(mark.labels=mark.labels, answ=maxp, wght=NULL, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
+			} else {
+				marks <- klausur.gen.marks(mark.labels=mark.labels, answ=answ, wght=wght, suggest=list(mean=mean(punkte), sd=stdabw), minp=min.score)
+			}
+		}
 
-		  # check wheter maximum score matches the assigned marks
-		  if(length(marks) != maxp){
-		    warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)), call.=FALSE)
-		  }
+		# check wheter maximum score matches the assigned marks
+		if(length(marks) != maxp){
+			warning(paste("Achievable score and marks do not match!\n  Maximum score of test:",maxp,"\n  Maximum score assigned to marks:",length(marks)), call.=FALSE)
+		}
 
-		  # assign the marks. zero points will result in lowest mark, NA will stay NA
-		  note <- sapply(punkte, function(x){
-			    if(is.na(x))
-			      return(NA) else{}
-			    if(x > 0)
-			      note <- marks[x]
-			    else
-			      note <- marks[1]
-			    return(note)
-			  })
+		# assign the marks. zero points will result in lowest mark, NA will stay NA
+		note <- sapply(punkte, function(x){
+				if(is.na(x))
+					return(NA) else{}
+				if(x > 0)
+					note <- marks[x]
+				else
+					note <- marks[1]
+				return(note)
+			})
 
-		  # create data object with name, mat-nr and global results
-		  # calls the internal function global.results()
-		  ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note)
-		  # if pseudonyms were given, use them for anonymous feedback
-		  ergebnis.anonym <- anon.results(ergebnis.daten)
+		# create data object with name, mat-nr and global results
+		# calls the internal function global.results()
+		if(score %in% c("ET", "NRET", "NRET+")){
+			ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=baseline)
+		} else {
+			ergebnis.daten <- global.results(answ=answ, points=punkte, maxp=maxp, mark=note, minp=min.score)
+		}
+		# if pseudonyms were given, use them for anonymous feedback
+		ergebnis.anonym <- anon.results(ergebnis.daten)
 
-		  ## psychometic quality of the items
-		  if(isTRUE(cronbach)){
-			# calling an internal function which is
-			# using alpha() from package "psychometric"
-			cron.alpha.list <- calc.cronbach.alpha(na.omit(wahr.falsch))
-		  } else {
-		    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
-		  }
-		  if(isTRUE(item.analysis)){
-			# calling another internal function which is also
-			# using alpha() from package "psychometric"
-			item.analyse <- calc.item.analysis(wahr.falsch, cron.alpha.list)
-		  } else {
-		    item.analyse <- NULL
-		  }
-		  
-		  ## compose the resulting object
-		  # here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually
-		  wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo, wahr.falsch)
-		  # the same way make a copy of the matrix with resulting points, especially interesting if items were weighted
-		  ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
-		  # and we make a copy with given answers as well
-		  antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
-		  # use the internal marks.summary() function to create convenient information on the mark definitions
-		  marks.info <- marks.summary(marks)
-		  # here we finally take all the partial results an knit them together into one object
-		  alle.ergebnisse <- new("klausuR",
-					  results=ergebnis.daten,
-					  answ=antwort.daten,
-					  corr=corr,
-					  wght=wght.results,
-					  points=ergebnisse.daten,
-					  marks=marks,
-					  marks.sum=marks.info,
-					  trfls=wahrfalsch.daten,
-					  anon=ergebnis.anonym,
-					  mean=mittel.quart,
-					  sd=stdabw,
-					  cronbach=cron.alpha.list,
-					  item.analysis=item.analyse)
+		## psychometic quality of the items
+		if(score %in% c("ET", "NRET", "NRET+")){
+			# if ET/NRET type items are to be analyzed, try with points instead of true/false matrix
+			# this has implication for interpretation
+			item.values.to.anl <- ergebnisse
+			if(isTRUE(item.analysis)){
+				warning("Be careful with interpreting item analysis on ET/NRET data.\n  It's not dichotomously scaled, analysis was done with the achieved scores.", call.=FALSE)
+			} else {}
+		} else {
+			item.values.to.anl <- wahr.falsch
+		}
+			if(isTRUE(cronbach)){
+				# calling an internal function which is
+				# using alpha() from package "psychometric"
+				cron.alpha.list <- calc.cronbach.alpha(na.omit(item.values.to.anl))
+			} else {
+				cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
+			}
+			if(isTRUE(item.analysis)){
+				# calling another internal function which is also
+				# using alpha() from package "psychometric"
+				item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
+			} else {
+				item.analyse <- data.frame(NULL)
+			}
 
-		  ## output options
-		  # return all data or just for one matriculation number?
-		  if(!is.null(matn)){
+		## compose the resulting object
+		# here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually
+		wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo, wahr.falsch)
+		# the same way make a copy of the matrix with resulting points, especially interesting if items were weighted
+		ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
+		# and we make a copy with given answers as well
+		antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
+		# use the internal marks.summary() function to create convenient information on the mark definitions
+		marks.info <- marks.summary(marks, minp=min.score)
+		# here we finally take all the partial results an knit them together into one object
+		alle.ergebnisse <- new("klausuR",
+					results=ergebnis.daten,
+					answ=antwort.daten,
+					corr=corr,
+					wght=wght.results,
+					points=ergebnisse.daten,
+					marks=marks,
+					marks.sum=marks.info,
+					trfls=wahrfalsch.daten,
+					anon=ergebnis.anonym,
+					mean=mittel.quart,
+					sd=stdabw,
+					cronbach=cron.alpha.list,
+					item.analysis=item.analyse,
+					misc=data@misc)
+
+		## output options
+		# return all data or just for one matriculation number?
+		if(!is.null(matn)){
 			if(!sum(answ$MatrNo == matn) == 1){
-			  stop(simpleError("The given matriculation number is not defined!"), call.=FALSE)
-			  }
-			  pers.ergebnisse <- ergebnis.daten[ergebnis.daten$MatrNo == matn,]
-			  items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn, -1]
-			  rownames(items.solved) <- "Solved"
-			  ausgabe <- list(Results=pers.ergebnisse, SolvedItems=t(items.solved))
-		  }
-		  else
-		      # if matn is not set, return the default result object
-		      ausgabe <- alle.ergebnisse
+			stop(simpleError("The given matriculation number is not defined!"))
+			}
+			pers.ergebnisse <- ergebnis.daten[ergebnis.daten$MatrNo == matn,]
+			items.solved <- wahrfalsch.daten[wahrfalsch.daten$MatrNo == matn, -1]
+			rownames(items.solved) <- "Solved"
+			ausgabe <- list(Results=pers.ergebnisse, SolvedItems=t(items.solved))
+		}
+		else
+				# if matn is not set, return the default result object
+				ausgabe <- alle.ergebnisse
 
-		  ## ausgabe
-		  return(ausgabe)
-		  }
+		## ausgabe
+		return(ausgabe)
+		}

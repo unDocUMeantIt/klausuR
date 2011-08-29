@@ -1,28 +1,46 @@
-\name{plot-methods}
-\alias{plot-methods}
+\name{plot}
 \alias{plot}
+\alias{"plot,klausuR-method"}
+\alias{"plot,klausuR.mult-method"}
 \title{plot methods for klausuR and klausuR.mult}
-\usage{plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, \dots)}
-\description{Plot methods for S4 objects of class klausuR and klausuR.mult}
-\details{\code{plot-methods}: These plot methods are beeing called by \code{\link[klausuR:klausur.report]{klausur.report}}.
-If \code{x} is of class \code{klausuR.mult}, only the global results will be plotted.
-Should you rather like plots on each test form, call \code{plot} with the single slots from that object accordingly.
+\usage{
+  plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE,
+  \dots)
+}
+\arguments{
+  \item{x}{An S4 object of class \code{klausuR} or
+  \code{klausuR.mult}}
 
+  \item{marks}{Logical, whether the histogram should show
+  the distribution of points (default) or marks}
+
+  \item{sd.lines}{Logical, whether standard deviation lines
+  should be plotted}
+
+  \item{plot.normal}{Logical, whether normal distribution
+  should be plotted (according to mean and Sd of the
+  results)}
+
+  \item{na.rm}{Logical, whether NA values should be
+  ignored. Defaults to TRUE, because plotting would fail
+  otherwise}
+
+  \item{\dots}{Any other argument suitable for plot()}
 }
-\alias{plot,klausuR-method}
-\alias{plot,klausuR.mult-method}
-\author{m.eik michalke \email{meik.michalke@uni-duesseldorf.de}}
-\seealso{\code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}, \code{\link[klausuR:klausur.report]{klausur.report}}}
-\keyword{methods}
-\keyword{plot}
-\arguments{\item{x}{An S4 object of class \code{klausuR} or \code{klausuR.mult}}
-\item{marks}{Logical, whether the histogram should show the distribution of points (default) or marks}
-\item{sd.lines}{Logical, whether standard deviation lines should be plotted}
-\item{plot.normal}{Logical, whether normal distribution should be plotted (according to mean and Sd of the results)}
-\item{na.rm}{Logical, whether NA values should be ignored. Defaults to TRUE, because plotting would fail otherwise}
-\item{\dots}{Any other argument suitable for plot()}
+\description{
+  Plot methods for S4 objects of class klausuR and
+  klausuR.mult
 }
-\examples{data(antworten)
+\details{
+  These plot methods are beeing called by
+  \code{\link[klausuR:klausur.report]{klausur.report}}. If
+  \code{x} is of class \code{klausuR.mult}, only the global
+  results will be plotted. Should you rather like plots on
+  each test form, call \code{plot} with the single slots
+  from that object accordingly.
+}
+\examples{
+data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
@@ -47,10 +65,18 @@ notenschluessel[25:26] <- 1.7
 notenschluessel[27:29] <- 1.3
 notenschluessel[30:32] <- 1.0
 
-klsr.obj <- klausur(answ=antworten, corr=richtig, marks=notenschluessel)
-plot(klsr.obj, marks=TRUE)}
-\alias{plot,-method}
-\alias{plot}
-\alias{plot,-method}
-\alias{plot}
+data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
+klsr.obj <- klausur(data.obj)
+plot(klsr.obj, marks=TRUE)
+}
+\author{
+  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
+\seealso{
+  \code{\link[klausuR:klausur]{klausur}},
+  \code{\link[klausuR:klausur.mufo]{klausur.mufo}},
+  \code{\link[klausuR:klausur.report]{klausur.report}}
+}
+\keyword{methods}
+\keyword{plot}
 

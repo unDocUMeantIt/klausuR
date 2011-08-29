@@ -3,13 +3,14 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.10-2\cr
-#' Date: \tab 2011-04-11\cr
+#' Version: \tab 0.12-0\cr
+#' Date: \tab 2011-08-29\cr
 #' Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
+#' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
 #' License: \tab GPL (>= 3)\cr
 #' LazyLoad: \tab yes\cr
-#' URL: \tab https://r-forge.r-project.org/projects/klausur, http://www.reaktanz.de \cr
+#' URL: \tab http://r-forge.r-project.org/projects/klausur\cr
 #' }
 #'
 #' A set of functions designed to quickly generate results of
@@ -22,11 +23,7 @@
 #' @name klausuR-package
 #' @docType package
 #' @title Multiple Choice Test Evaluation.
-#' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
+#' @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords package
-#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}},
-#'  \code{\link[klausuR:klausur.report]{klausur.report}},
-#'  \code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.compare]{klausur.compare}},
-#'  \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}, \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
 roxygen <- function() NULL
 roxygen()
