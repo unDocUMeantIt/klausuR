@@ -1,0 +1,1 @@
+No weight vector (wght) given. Maximum score is determined from items and scoring method.

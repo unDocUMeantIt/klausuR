@@ -1,0 +1,80 @@
+<!DOCTYPE rkplugin>
+<document>
+	<code file="test_data.js" />
+	<!--  <help file="test_data.rkh" /> -->
+	<include file="../klausuR.pluginmap" />
+
+	<logic>
+		<convert id="logic_weight_items" mode="notequals" sources="chk_weights.state" standard="weight" />
+		<connect client="wght.enabled"  governor="logic_weight_items" />
+		<connect client="wght.required" governor="logic_weight_items" />
+		
+		<convert id="logic_mufo" mode="equals" sources="chk_mufo.state" standard="TRUE" />
+		<connect client="mufo_corr_key.enabled"  governor="logic_mufo" />
+		<connect client="mufo_corr_key.required" governor="logic_mufo" />
+	</logic>
+
+	<dialog label="klausuR: Prepare Test Data">
+		<tabbook>
+			<tab id="tab_data" label="Test data">
+				<row id="row_klausur">
+					<varselector id="vars" />
+					<column>
+						<frame id="frame_data" label="Given answers">
+							<varslot type="numeric" id="antworten" classes="data.frame matrix" source="vars" required="true" label="Valid data.frame or matrix"/>
+							<checkbox id="chk_na_remove" label="Remove missing values (NA)" value="TRUE" checked="true" />
+						</frame>
+						<frame id="frame_data_options" label="Correct answers">
+							<varslot type="numeric" id="richtig" source="vars" required="true" label="Correct answers"/>
+							<checkbox id="chk_mufo" label="Test has several parallel test forms" value="TRUE" checked="false" />
+							<varslot type="numeric" id="mufo_corr_key" source="vars" label="Index key for test forms"/>
+						</frame>
+						<frame id="frame_marks" label="Marks">
+							<varslot type="numeric" id="noten" source="vars" label="Mark assignments"/>
+						</frame>
+						<stretch />
+					</column>
+				</row>
+				<row id="row_save">
+					<saveobject id="saveKlsrData" label="Object name" initial="klsr.data.obj" checkable="false" />
+				</row>
+			</tab>
+			<tab id="tab_options" label="Advanced options">
+				<row id="row_options">
+					<varselector id="vars2" />
+					<column>
+						<frame id="frame_data_options">
+							<checkbox id="chk_weights" label="All items are weighted equally (1 point if solved)" value="weight" checked="true" />
+							<varslot type="numeric" id="wght" source="vars2" label="Item weights"/>
+						</frame>
+						<frame id="frame_rename" label="Rename input variables">
+							<varslot id="rename_no" label="No" source="vars2" />
+							<varslot id="rename_name" label="Name" source="vars2" />
+							<varslot id="rename_firstname" label="FirstName" source="vars2" />
+							<varslot id="rename_matrno" label="MatrNo" source="vars2" />
+							<varslot id="rename_pseudonym" label="Pseudonym" source="vars2" />
+						</frame>
+						<frame id="frame_dummies" label="Create dummy data">
+							<row>
+								<column>
+									<checkbox id="chk_dummy_no" label="No" value="No" checked="false" />
+									<checkbox id="chk_dummy_matrno" label="MatrNo" value="MatrNo" checked="false" />
+									<checkbox id="chk_dummy_pseudonym" label="Pseudonym" value="Pseudonym" checked="false" />
+								</column>
+								<column>
+									<checkbox id="chk_dummy_name" label="Name" value="Name" checked="false" />
+									<checkbox id="chk_dummy_firstname" label="FirstName" value="FirstName" checked="false" />
+									<text>
+									</text>
+								</column>
+							</row>
+						</frame>
+						<frame id="frame_data_misc">
+							<checkbox id="chk_disc_misc" label="Discard unused columns of input data" value="TRUE" checked="false" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>
