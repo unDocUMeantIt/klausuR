@@ -29,6 +29,7 @@
 #		e.g. table data from/for other software products. Won't be used for anything.
 # @name klausuR.answ,-class
 #' @import methods
+#' @include klausuR.test-class.R
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR.answ

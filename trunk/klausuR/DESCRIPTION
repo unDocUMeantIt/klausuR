@@ -21,12 +21,11 @@ Author@R: c(person(given="Meik", family="Michalke",
 Version: 0.12-0
 Date: 2011-08-29
 Collate:
-    '50_klausuR.test-class.R'
-    '60_klausuR-class.R'
-    '70_klausuR.answ-class.R'
-    '80_klausuR.mult-class.R'
     'compare.R'
     'grand.table.R'
+    'klausuR.test-class.R'
+    'klausuR.answ-class.R'
+    'klausuR-class.R'
     'klausur.data.R'
     'klausur.gen.corr.R'
     'klausur.gen.marks.R'
@@ -34,6 +33,7 @@ Collate:
     'klausuR-internal.R'
     'klausuR-internal.roxy.all.R'
     'klausur.mufo.R'
+    'klausuR.mult-class.R'
     'klausuR-package.R'
     'klausur.R'
     'klausur.report.R'

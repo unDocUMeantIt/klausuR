@@ -23,6 +23,7 @@
 # @slot misc Anything that was stored in the \code{misc} slot of the input data.
 # @name klausuR,-class
 #' @import methods
+#' @include klausuR.test-class.R
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR

@@ -15,9 +15,6 @@
 #' @exportClass klausuR.test
 # @rdname klausuR.test-class
 
-## note: this file is named starting with a number because roxygen has to
-## process it before other classes that inherit this class.
-
 setClass("klausuR.test",
 	representation=representation(
 		items="list"
