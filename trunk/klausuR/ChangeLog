@@ -25,6 +25,7 @@ ChangeLog for package klausuR
   - fixed some NRET/ET related bugs in the plot method and klausur.gen.marks()
   - fixed 'if' statement error in show method for klausuR-class objects
   - added support for item analysis on ET/NRET data
+  - added NRET sample data "spss.data"
   - added SD values to item analysis (show method)
   - added 'sort.by' option to klausur.data(), and klausur()
   - added sort method for objects of class klausuR

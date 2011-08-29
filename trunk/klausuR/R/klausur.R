@@ -142,6 +142,30 @@
 #'
 #' # if that went well, get the test results
 #' klsr.obj <- klausur(data.obj)
+#'
+#' ############################
+#'	# example for an NRET test
+#' ############################
+#' # load sampla data in SPSS format
+#' data(spss.data)
+#' # define correct answers
+#' spss.corr <- c(
+#'		item01=2, item02=3, item03=3, item04=3, item05=2,
+#'		item06=2, item07=3, item08=1, item09=1, item10=2)
+#'
+#' # convert into klausuR type coding
+#' klausuR.data <- nret.translator(spss.data, spss="in")
+#' klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE,
+#'   num.alt=3, spss.prefix=c(corr="item"))
+#' # now create the data object; "Nickname" must be renamed
+#' data.obj <- klausur.data(answ=klausuR.data, corr=klausuR.corr,
+#'   rename=c(Pseudonym="Nickname"))
+#' 
+#'	# finally, the test can be evaluated, using the scoring functions available
+#' NRET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET")
+#' NRETplus.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET+")
+#' NR.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR")
+#' ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
 
 klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved",
 		matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name"){

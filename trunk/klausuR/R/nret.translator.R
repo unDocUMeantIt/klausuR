@@ -47,12 +47,16 @@
 #' @examples
 #' \dontrun{
 #' # from SPSS to R
+#' data(spss.data)
 #' klausuR.data <- nret.translator(spss.data, spss="in")
-#' klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE, num.alt=4)
+#' spss.corr <- c(
+#'		item01=2, item02=3, item03=3, item04=3, item05=2,
+#'		item06=2, item07=3, item08=1, item09=1, item10=2)
+#' klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE, num.alt=3)
 #'
 #' # from R to SPSS
 #' spss.data <- nret.translator(klausuR.data)
-#' spss.corr <- nret.translator(klausuR.corr, corr=TRUE, num.alt=4)
+#' spss.corr <- nret.translator(klausuR.corr, corr=TRUE, num.alt=3)
 #' # if you find the syntax useful
 #' cat(spss.corr$syntax, file="~/somewhere/NRET.sps")
 #' }
