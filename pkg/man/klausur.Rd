@@ -1,10 +1,11 @@
 \name{klausur}
 \alias{klausur}
-\title{A function to evaluate multiple choice tests}
+\title{Evaluate multiple choice tests}
 \usage{
-  klausur(data, marks=NULL, mark.labels=NULL, items=NULL,
-  wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
-  cronbach=FALSE, item.analysis=FALSE, sort.by="Name")
+  klausur(data, marks = NULL, mark.labels = NULL, items =
+  NULL, wght = NULL, score = "solved", matn = NULL, na.rm =
+  TRUE, cronbach = TRUE, item.analysis = TRUE, sort.by =
+  "Name")
 }
 \arguments{
   \item{data}{An object of class
@@ -74,8 +75,8 @@
   all items.} \item{misc}{Anything that was stored in the
   \code{misc} slot of the input data.} Not all slots are
   shown by default (refer to
-  \code{\link[show,klausuR,-method]{show}} and
-  \code{\link[plot,klausuR]{plot}}).
+  \code{\link[klausuR:show]{show}} and
+  \code{\link[klausuR:plot]{plot}}).
 }
 \description{
   The function \code{klausur} expects an object of class

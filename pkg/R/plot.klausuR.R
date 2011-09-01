@@ -4,9 +4,7 @@
 #' If \code{x} is of class \code{klausuR.mult}, only the global results will be plotted.
 #' Should you rather like plots on each test form, call \code{plot} with the single slots from that object accordingly.
 #'
-#' @title plot methods for klausuR and klausuR.mult
-#' @aliases plot,klausuR-method plot,klausuR.mult-method
-#' @usage plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, \dots)
+#' @aliases plot,-methods plot,klausuR-method plot,klausuR,missing-method plot,klausuR.mult-method plot,klausuR.mult,missing-method
 #' @param x An S4 object of class \code{klausuR} or \code{klausuR.mult}
 #' @param marks Logical, whether the histogram should show the distribution of points (default) or marks
 #' @param sd.lines Logical, whether standard deviation lines should be plotted

@@ -6,7 +6,7 @@
 #' @param x An object of class \code{klausuR}
 #' @param decreasing Logical, whether sorting should be sone increasing or decreasing.
 #' @param sort.by An optional character string naming a variable to sort the results by. Defaults to \code{c()}, i.e. no re-ordering.
-#' @aliases sort,-methods sort,klausuR-method
+#' @aliases sort,-methods sort,klausuR-method sort.klausuR,klausuR-method
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}
 #' @keywords methods
@@ -17,9 +17,9 @@
 #' }
 #' @exportMethod sort.klausuR
 #' @rdname sort-methods
-setGeneric("sort.klausuR", function(x, decreasing=FALSE, sort.by=c()) standardGeneric("sort.klausuR"))
+setGeneric("sort.klausuR", function(x, decreasing=FALSE, ...) standardGeneric("sort.klausuR"))
 
-#' @rdname show-methods
+#' @rdname sort-methods
 setMethod("sort.klausuR", signature(x="klausuR"), function(x, decreasing=FALSE, sort.by=c()){
 	if(length(x@results) == 0){
 		return(invisible(NULL))

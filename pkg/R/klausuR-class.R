@@ -22,11 +22,13 @@
 # @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 # @slot misc Anything that was stored in the \code{misc} slot of the input data.
 # @name klausuR,-class
+# @aliases klausuR-class klausuR,-class
 #' @import methods
 #' @include klausuR.test-class.R
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR
+#' @noRd
 # @rdname klausuR-class
 
 setClass("klausuR",

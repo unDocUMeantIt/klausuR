@@ -2,6 +2,7 @@
 \name{antworten.mufo}
 \Rdversion{1.1}
 \alias{antworten.mufo}
+\alias{corr.key}
 \docType{data}
 \title{
 Sample dataset: antworten.mufo

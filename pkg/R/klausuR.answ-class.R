@@ -28,11 +28,13 @@
 # @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
 #		e.g. table data from/for other software products. Won't be used for anything.
 # @name klausuR.answ,-class
+# @aliases klausuR.answ-class klausuR.answ,-class
 #' @import methods
 #' @include klausuR.test-class.R
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR.answ
+#' @noRd
 # @rdname klausuR.answ-class
 
 setClass("klausuR.answ",

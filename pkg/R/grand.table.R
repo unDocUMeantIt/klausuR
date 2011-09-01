@@ -1,13 +1,17 @@
+#' Export results to a table
+#'
 #' Try this function to combine results from an evaluated test into a matrix and export it to a table, e.g. to import
 #' in other software products. It can be particularily helpful for ET/NRET coded tests, if you want to compare the results of
 #' different valid scoring functions.
 #'
-#' @title Export results to a table
-#' @usage grand.table(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL,
-#'		rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...)
-#' @param NR.res, \code{NRET.res}, \code{NRETp.res}, \code{ET.res} At least one and up to four objects of class \code{klausuR}. As the names
-#'		suggest, take the appropriate element for the scoring policy used to get the results. Usual MC tests must be
-#'		given as \code{NR.res}.
+#' @note For obvious reasons At least one of \code{NR.res}, \code{NRET.res}, \code{NRETp.res} or \code{ET.res},
+#'		or any combination of those, must be specified.
+#'
+#' @param NR.res An object of class \code{klausuR} which was evaluated according to the NR scoring policy.
+#'		Usual MC tests must be given as \code{NR.res}, too.
+#' @param NRET.res An object of class \code{klausuR} which was evaluated according to the NRET scoring policy.
+#' @param NRETp.res An object of class \code{klausuR} which was evaluated according to the NRET+ scoring policy.
+#' @param ET.res An object of class \code{klausuR} which was evaluated according to the ET scoring policy.
 #' @param rescale Logical, whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.
 #' @param file A character string giving a file name to save to. If \code{NULL}, no file will be written.
 #' @param csv2 Logical. If \code{FALSE}, \code{write.csv} will be used instead of \code{write.csv2}.

@@ -1,9 +1,9 @@
 \name{klausur.gen.marks}
 \alias{klausur.gen.marks}
-\title{A function to generate mark assignments}
+\title{Generate mark assignments}
 \usage{
-  klausur.gen.marks(mark.labels=NULL, answ=NULL, wght=NULL,
-  suggest=list(mean=NULL, sd=NULL))
+  klausur.gen.marks(mark.labels = NULL, answ = NULL, wght =
+  NULL, suggest = list(mean = NULL, sd = NULL), minp = 0)
 }
 \arguments{
   \item{mark.labels}{Either a vector with labels (names)

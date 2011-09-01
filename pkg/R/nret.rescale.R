@@ -1,9 +1,9 @@
+#' Rescale test evaluation results
+#'
 #' By default \code{klausur} adds a constant to results of ET/NRET type tests. This ensures that the minimum value of
 #' points can't fall below zero. If you'd rather like to see the results without this constant, i.e. results can be negative,
 #' you can rescale them with this function.
 #'
-#' @title Rescale test evaluation results
-#' @usage nret.rescale(res.obj, score="NRET", points=TRUE, percent=TRUE, marks=TRUE)
 #' @param res.obj An object of class \code{klausuR} with results of an ET/NRET coded test.
 #' @param score Either \code{"NR"}, \code{"ET"}, \code{"NRET"} or \code{"NRET+"}, defining the scoring function used.
 #' @param points Logical, whether point values should be rescaled.
@@ -14,6 +14,7 @@
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @keywords misc
 #' @export
+
 nret.rescale <- function(res.obj, score="NRET", points=TRUE, percent=TRUE, marks=TRUE){
 	if(!score %in% c("NR", "ET", "NRET", "NRET+")){
 		stop(simpleError("Invalid value for score, must be either \"NR\", \"ET\", \"NRET\", or \"NRET+\"!"))

@@ -1,3 +1,5 @@
+#' Evaluate multiple choice tests
+#'
 #' The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}, containing some
 #' identification data on all subjects and their answers to the test items, a vector with the correct answers, and optionally a vector with
 #' marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha and
@@ -66,10 +68,6 @@
 #' necessarily yield more diagnostic information, allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
 #' give quite unfair test results! In addition, please do \strong{always check a sample of the results} to make sure no errors accurred.
 #' 
-#' @title A function to evaluate multiple choice tests
-#' @usage klausur(data, marks=NULL, mark.labels=NULL, items=NULL,
-#' wght=NULL, score="solved", matn=NULL, na.rm=TRUE,
-#' cronbach=FALSE, item.analysis=FALSE, sort.by="Name")
 #' @param data An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
 #'		\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
@@ -101,7 +99,7 @@
 #'	\item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
 #'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power and discriminant factor of all items.}
 #'	\item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
-#'	Not all slots are shown by default (refer to \code{\link[show,klausuR,-method]{show}} and \code{\link[plot,klausuR]{plot}}).
+#'	Not all slots are shown by default (refer to \code{\link[klausuR:show]{show}} and \code{\link[klausuR:plot]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur.data]{klausur.data}}, \code{\link[klausuR:klausur.report]{klausur.report}},
 #'		\code{\link[klausuR:compare]{compare}},

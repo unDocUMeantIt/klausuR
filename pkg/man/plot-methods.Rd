@@ -1,11 +1,14 @@
 \name{plot}
 \alias{plot}
-\alias{"plot,klausuR-method"}
-\alias{"plot,klausuR.mult-method"}
+\alias{plot,klausuR-method}
+\alias{plot,klausuR,missing-method}
+\alias{plot,klausuR.mult-method}
+\alias{plot,klausuR.mult,missing-method}
+\alias{plot,-methods}
 \title{plot methods for klausuR and klausuR.mult}
 \usage{
   plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE,
-  \dots)
+  na.rm=TRUE, \dots)
 }
 \arguments{
   \item{x}{An S4 object of class \code{klausuR} or

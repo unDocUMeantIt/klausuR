@@ -1,3 +1,5 @@
+#' Generate mark assignments
+#'
 #' Create a vector of marks to be used by \code{\link[klausuR:klausur]{klausur}}.
 #'
 #' If \code{mark.labels} is set to one of the arguments 6, 11, 16, "DIHK", "UK", "USA" or "A", often used schemes for marks will be used as
@@ -25,10 +27,7 @@
 #' results, marks are automatically assigned to the achieved score under the assumption of normal distribution. Please understand that
 #' the naming "suggest" is not an accident! This is only a suggestion, please review it, tweak it, revise it, until it fits your needs.
 #' However, this feature can directly be called by \code{\link[klausuR:klausur]{klausur}}.
-#' 
-#' @title A function to generate mark assignments
-#' @usage klausur.gen.marks(mark.labels=NULL, answ=NULL, wght=NULL,
-#'	  suggest=list(mean=NULL, sd=NULL))
+#'
 #' @param mark.labels Either a vector with labels (names) for all marks that should be assigned to certain test scores,
 #'        or one of the arguments 6, 11, 16, "DIHK", "UK", "USA" or "A" (see Details). If NULL, you will be asked to type in labels.
 #' @param answ Either an object with item names in klausuR scheme (see \code{\link[klausuR:klausur]{klausur}}),

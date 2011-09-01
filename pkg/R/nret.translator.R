@@ -1,3 +1,5 @@
+#' Convert NRET/ET data between klausuR and other software
+#'
 #' This function should help to interchange answer data between R and other statistical software packages -- especially
 #' SPSS, but it's probably useful for other products as well.
 #'
@@ -15,12 +17,6 @@
 #' @note The conversion is done on an object basis, that is, \code{nret.translator} will not open or write files,
 #' but take and return R objects. The function should ignore any other columns/variables in the object.
 #'
-#' @title Convert NRET/ET data between klausuR and other software
-#' @usage nret.translator(dat, items=NULL, spss="out",
-#'		corr=FALSE, num.alt=NULL,
-#'		klausuR.alt=c(is.true="+", is.false="-", missing="0", err="*"),
-#'		spss.alt=c(is.true="2", is.false="1", missing="0", err="3"),
-#'		rm.old.vars=TRUE, items.only=FALSE, klausuR.prefix=c(), spss.prefix=c())
 #' @param dat A data.frame, the object to convert.
 #' @param items Optional vector defining the columns to convert. If \code{NULL}, the function will try to autodetect
 #'		Items: \code{klausuR} type items are expected to be named \code{"ItemXXX"}, with XXX indicating the item number,

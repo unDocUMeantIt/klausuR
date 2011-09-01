@@ -2,17 +2,23 @@
 \alias{grand.table}
 \title{Export results to a table}
 \usage{
-  grand.table(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL,
-  ET.res=NULL, rescale=TRUE, file=NULL, csv2=TRUE,
-  encoding="CP1252", ...)
+  grand.table(NR.res = NULL, NRET.res = NULL, NRETp.res =
+  NULL, ET.res = NULL, rescale = TRUE, file = NULL, csv2 =
+  TRUE, encoding = "CP1252", ...)
 }
 \arguments{
-  \item{NR.res,}{\code{NRET.res}, \code{NRETp.res},
-  \code{ET.res} At least one and up to four objects of
-  class \code{klausuR}. As the names suggest, take the
-  appropriate element for the scoring policy used to get
-  the results. Usual MC tests must be given as
-  \code{NR.res}.}
+  \item{NR.res}{An object of class \code{klausuR} which was
+  evaluated according to the NR scoring policy. Usual MC
+  tests must be given as \code{NR.res}, too.}
+
+  \item{NRET.res}{An object of class \code{klausuR} which
+  was evaluated according to the NRET scoring policy.}
+
+  \item{NRETp.res}{An object of class \code{klausuR} which
+  was evaluated according to the NRET+ scoring policy.}
+
+  \item{ET.res}{An object of class \code{klausuR} which was
+  evaluated according to the ET scoring policy.}
 
   \item{rescale}{Logical, whether ET/NRET scaled results
   should be rescaled by
@@ -39,6 +45,11 @@
   particularily helpful for ET/NRET coded tests, if you
   want to compare the results of different valid scoring
   functions.
+}
+\note{
+  For obvious reasons At least one of \code{NR.res},
+  \code{NRET.res}, \code{NRETp.res} or \code{ET.res}, or
+  any combination of those, must be specified.
 }
 \author{
   m.eik michalke \email{meik.michalke@uni-duesseldorf.de}

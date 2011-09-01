@@ -9,10 +9,12 @@
 # @title S4 class klausuR.test
 # @slot items Empty dummy.
 # @name klausuR.test,-class
+# @aliases klausuR.test-class klausuR.test,-class
 #' @import methods
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR.test
+#' @noRd
 # @rdname klausuR.test-class
 
 setClass("klausuR.test",
