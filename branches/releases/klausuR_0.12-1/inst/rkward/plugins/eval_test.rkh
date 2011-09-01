@@ -1,0 +1,93 @@
+<!DOCTYPE rkhelp>
+  <document>
+    <summary>
+      This plugin is designed to quickly generate results of a multiple choice test, using the <link href="rkward://rhelp/klausuR-package">klausuR</link> package. It can compute global test results as well as some item analysis (including Cronbach's alpha and discriminatory power of the test items), and anonymous feedback for the test subjects.
+    </summary>
+
+    <usage>
+       You must at least provide
+      <ul>
+	<li>a data.frame containing some identification data on all subjects and their answers to the test items (see <link href="rkward://rhelp/klausur.gen"/>), and</li>
+	<li>a vector with the correct answers (see <link href="rkward://rhelp/klausur.gen.corr"/>)</li>
+      </ul>
+    </usage>
+
+    <settings>
+      <caption id="tab_klausur"/>
+      <setting id="antworten" title="Answers given">
+        Provide a data.frame containing some identification data on all subjects and their answers to the test items (see <link href="rkward://rhelp/klausur.gen"/> for details). klausuR automatically parses the variable names to decide <b>which variables are actual test items</b>, if they are named according to the given scheme <code>Item###</code>. If you have <b>items with multiple correct answers</b> you can easily code these as one single item: All alternatives a subject has marked should be combined to a single value without spaces (that is, if someone marked the first, third and fourth answer, you would code this as "134". Internally klausuR checks for equality of given answers and correct values, that is, it will only give that person a point if the correct answer was coded as "134" as well). To help in constructing a data set with correct variable names one can call the <link href="rkward://rhelp/klausur.gen"/> utility to generate an empty data object of a given number of items and test subjects.
+      </setting>
+      <setting id="richtig" title="Correct answers">
+        Provide a vector with the correct answers. If you have <b>items with multiple correct answers</b>, this vector will have to be coded accordingly, of course. See <link href="rkward://rhelp/klausur.gen.corr"/> for a helpful function to create such an answer vector.
+      </setting>
+      <setting id="frame_marks" titel="Marks">
+	Specify if you want to provide your own mark assignments or let klausuR make a suggestion (normal distribution, see <link href="rkward://rhelp/klausur.gen.marks"/>).
+	The assigned marks are expected to be in a certain format as well. Just create an empty vector to start with (say <code>your.marks &lt;- c()</code>) and fill it according to the scheme <code>your.marks[&lt;points from&gt;:&lt;points to&gt;] &lt;- &lt;mark&gt;</code>. Another example: Should one get a 1.7 if in sum 27 to 30 points were achieved, you'd assign these points as indexes to the vector with <code>your.marks[27:30] &lt;- "1.7"</code>. It is crucial to assign marks to the whole range of points that can be achieved in the test. On the other hand, it's irrelevant wheter you assign decimal marks as in the example, only integer values, a 15 marks scheme or whatever. The convenience function <link href="rkward://rhelp/klausur.gen.marks"/> can assist you in creating such a valid vector.
+      </setting>
+      <setting id="chk_matn_all">
+	Should all test subjects be considered, or do you want an individual report?
+      </setting>
+
+      <caption id="tab_reports"/>
+      <setting id="chk_reports" title="Write individual reports">
+        Check this if you want LaTeX and/or PDF reports be created, either on each test individually, or on global results.
+      </setting>
+      <setting id="report_path" title="Path to save to">
+        A path where the reports should be saved to. If histograms should be included, they will be stored here as well.
+      </setting>
+      <setting id="frame_report_infos" title="Information on the test">
+        This information is used in the reports: Name of the test, name of the lecturer, date of the test.
+      </setting>
+      <setting id="chk_alt_comma">
+	Check this for some nicer looking tables if you have items with more than one valid answer alternative.
+      </setting>
+      <setting id="frame_report_hist">
+        You can toggle wheter histograms showing points and/or marks should be included in the reports. In addition, you can request a table to document which points/percent were the threshold for each mark.
+      </setting>
+      <setting id="drp_format">
+	Chose whether you want to receive the reports in either PDF or Latex format, or both.
+      </setting>
+      <setting id="drp_report_lang">
+        Currently, reports can be in English or German.
+      </setting>
+      <setting id="drp_filenames">
+        The resulting files will be named automatically, either by matriculation number or name of the test subject.
+      </setting>
+      <setting id="frame_rep_special">
+	You can have global and anonymous summaries if you want, e.g. to publish the results.
+      </setting>
+
+      <caption id="tab_options"/>
+      <setting id="chk_weights">
+        Usually all items are weigted equally, that is one point per item. If you want certain items to be scored differently, you can specify a vector with weights here. It should be similar to the vector holding the correct answers, having an entry for each item in the test, so you could use <link href="rkward://rhelp/klausur.gen.corr"/> to create this vector as well.
+      </setting>
+      <setting id="frame_partial">
+	In case you have items with more than one correct answer, you can specify how partially correct answers should be treated. The default is to give points only for answers that are completely correct (that is, identical to the correct answer). If you want to score also partially correct answers, they will in general only be considered if the total number of chosen alternatives doesn't exceed the number of right choices (otherwise one could just choose <em>all</em> alternatives to gain full points). In addition to that, if you set the scoring policy to "partial", an item will still be invalid (as in "no points") if any wrong alternative is checked. That is, if you only know one of two correct answers to a question, "partial" will give you half the points if you checked only the one you knew, but none if you guessed and picked also a distractor. If it is set to "liberal", even wrong answers will be ignored.
+	<em>Whether these partial scoring policies are an intelligent decision for your test is of course up to you!</em>
+      </setting>
+      <setting id="chk_na_remove">
+        If your data contains missing values, the calculation might abort with an error message. By default this box is checked to remove cases with missing values in the data set.
+      </setting>
+      <setting id="frame_show_results">
+        Use these checkboxes to toggle the results being calculated/shown in the end.
+      </setting>
+      <setting id="chk_save">
+	If you want to keep the results, you can save them into an object to your current workspace.
+      </setting>
+    </settings>
+
+   <related>
+       Please refer to the <code>klausuR</code> manuals for further information and detailed command line options:
+        <ul>
+                <li><link href="rkward://rhelp/klausuR-package"/></li>
+                <li><link href="rkward://rhelp/klausur"/></li>
+                <li><link href="rkward://rhelp/klausur.report"/></li>
+        </ul>
+   </related>
+
+   <technical>
+     Todo:
+       <ul>
+         <li>Tests with several forms are not yet implemented.</li>
+       </ul>
+   </technical>
