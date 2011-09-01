@@ -1,0 +1,1246 @@
+<h1>klausuR: Test Evaluation</h1>
+DATE<br>
+
+<p class='character'><h3>Global Results</h3></p>
+
+
+<p align= center >
+<table cellspacing=0 border=1>
+<caption align=bottom class=captiondataframe></caption>
+<tr><td>
+	<table border=0 class=dataframe>
+	<tbody> 
+	<tr class= firstline > 
+		<th>&nbsp;  </th>
+		<th>No  </th>
+		<th>Name  </th>
+		<th>FirstName  </th>
+		<th>MatrNo  </th>
+		<th>Points  </th>
+		<th>Percent  </th>
+		<th>Mark  </th>
+		<th>Pseudonym</th> 
+	</tr> 
+<tr> 
+<td class=firstcolumn>1
+</td>
+<td class=cellinside> 4
+</td>
+<td class=cellinside>Batic
+</td>
+<td class=cellinside>Ivo
+</td>
+<td class=cellinside>1799743
+</td>
+<td class=cellinside>27
+</td>
+<td class=cellinside>84
+</td>
+<td class=cellinside>1.3
+</td>
+<td class=cellinside>Schokofrosch
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>2
+</td>
+<td class=cellinside> 1
+</td>
+<td class=cellinside>Blum
+</td>
+<td class=cellinside>Klara
+</td>
+<td class=cellinside>1800063
+</td>
+<td class=cellinside>30
+</td>
+<td class=cellinside>94
+</td>
+<td class=cellinside>1.0
+</td>
+<td class=cellinside>Bäckchen
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>3
+</td>
+<td class=cellinside> 6
+</td>
+<td class=cellinside>Borowski
+</td>
+<td class=cellinside>Klaus
+</td>
+<td class=cellinside>1799192
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td>
+<td class=cellinside>Freud
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>4
+</td>
+<td class=cellinside> 3
+</td>
+<td class=cellinside>Buchmüller
+</td>
+<td class=cellinside>Marianne
+</td>
+<td class=cellinside>1799662
+</td>
+<td class=cellinside>26
+</td>
+<td class=cellinside>81
+</td>
+<td class=cellinside>1.7
+</td>
+<td class=cellinside>Jarre
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>5
+</td>
+<td class=cellinside> 8
+</td>
+<td class=cellinside>Dellwo
+</td>
+<td class=cellinside>Fritz
+</td>
+<td class=cellinside>1800339
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td>
+<td class=cellinside>Rock'n'Roll
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>6
+</td>
+<td class=cellinside>10
+</td>
+<td class=cellinside>Eisner
+</td>
+<td class=cellinside>Moritz
+</td>
+<td class=cellinside>1800790
+</td>
+<td class=cellinside>22
+</td>
+<td class=cellinside>69
+</td>
+<td class=cellinside>2.7
+</td>
+<td class=cellinside>Bienenstich
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>7
+</td>
+<td class=cellinside>14
+</td>
+<td class=cellinside>Holicek
+</td>
+<td class=cellinside>Eduard
+</td>
+<td class=cellinside>1798847
+</td>
+<td class=cellinside>21
+</td>
+<td class=cellinside>66
+</td>
+<td class=cellinside>3.0
+</td>
+<td class=cellinside>Schattenspiel
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>8
+</td>
+<td class=cellinside> 7
+</td>
+<td class=cellinside>Koch
+</td>
+<td class=cellinside>Miriam
+</td>
+<td class=cellinside>1800076
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td>
+<td class=cellinside>Och Menno
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>9
+</td>
+<td class=cellinside> 9
+</td>
+<td class=cellinside>Lindholm
+</td>
+<td class=cellinside>Charlotte
+</td>
+<td class=cellinside>1800023
+</td>
+<td class=cellinside>23
+</td>
+<td class=cellinside>72
+</td>
+<td class=cellinside>2.3
+</td>
+<td class=cellinside>Gartenzwerg
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>10
+</td>
+<td class=cellinside>11
+</td>
+<td class=cellinside>Lürsen
+</td>
+<td class=cellinside>Inga
+</td>
+<td class=cellinside>1801104
+</td>
+<td class=cellinside>23
+</td>
+<td class=cellinside>72
+</td>
+<td class=cellinside>2.3
+</td>
+<td class=cellinside>Scheherazade
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>11
+</td>
+<td class=cellinside>13
+</td>
+<td class=cellinside>Odenthal
+</td>
+<td class=cellinside>Lena
+</td>
+<td class=cellinside>1800899
+</td>
+<td class=cellinside>22
+</td>
+<td class=cellinside>69
+</td>
+<td class=cellinside>2.7
+</td>
+<td class=cellinside>Alien
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>12
+</td>
+<td class=cellinside>16
+</td>
+<td class=cellinside>Ritter
+</td>
+<td class=cellinside>Till
+</td>
+<td class=cellinside>1798769
+</td>
+<td class=cellinside>20
+</td>
+<td class=cellinside>62
+</td>
+<td class=cellinside>3.3
+</td>
+<td class=cellinside>Riss im Film
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>13
+</td>
+<td class=cellinside>15
+</td>
+<td class=cellinside>Saalfeld
+</td>
+<td class=cellinside>Eva
+</td>
+<td class=cellinside>1801394
+</td>
+<td class=cellinside>20
+</td>
+<td class=cellinside>62
+</td>
+<td class=cellinside>3.3
+</td>
+<td class=cellinside>Grummel
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>14
+</td>
+<td class=cellinside> 5
+</td>
+<td class=cellinside>Sänger
+</td>
+<td class=cellinside>Charlotte
+</td>
+<td class=cellinside>1799986
+</td>
+<td class=cellinside>27
+</td>
+<td class=cellinside>84
+</td>
+<td class=cellinside>1.3
+</td>
+<td class=cellinside>Herbsttyp
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>15
+</td>
+<td class=cellinside> 2
+</td>
+<td class=cellinside>Schenk
+</td>
+<td class=cellinside>Freddy
+</td>
+<td class=cellinside>1798250
+</td>
+<td class=cellinside>29
+</td>
+<td class=cellinside>91
+</td>
+<td class=cellinside>1.3
+</td>
+<td class=cellinside>Stiefel
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>16
+</td>
+<td class=cellinside>19
+</td>
+<td class=cellinside>Sommer
+</td>
+<td class=cellinside>Lea
+</td>
+<td class=cellinside>1803748
+</td>
+<td class=cellinside>15
+</td>
+<td class=cellinside>47
+</td>
+<td class=cellinside>4.0
+</td>
+<td class=cellinside>1234567
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>17
+</td>
+<td class=cellinside>18
+</td>
+<td class=cellinside>Stoever
+</td>
+<td class=cellinside>Paul
+</td>
+<td class=cellinside>1799974
+</td>
+<td class=cellinside>19
+</td>
+<td class=cellinside>59
+</td>
+<td class=cellinside>3.3
+</td>
+<td class=cellinside>Traumhaus
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>18
+</td>
+<td class=cellinside>12
+</td>
+<td class=cellinside>Thanner
+</td>
+<td class=cellinside>Christian
+</td>
+<td class=cellinside>1800286
+</td>
+<td class=cellinside>21
+</td>
+<td class=cellinside>66
+</td>
+<td class=cellinside>3.0
+</td>
+<td class=cellinside>Horstlos
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>19
+</td>
+<td class=cellinside>20
+</td>
+<td class=cellinside>Veigl
+</td>
+<td class=cellinside>Melchior
+</td>
+<td class=cellinside>1800497
+</td>
+<td class=cellinside>13
+</td>
+<td class=cellinside>41
+</td>
+<td class=cellinside>4.0
+</td>
+<td class=cellinside>Blauer Turnschuh
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>20
+</td>
+<td class=cellinside>17
+</td>
+<td class=cellinside>Wiegand
+</td>
+<td class=cellinside>Hanne
+</td>
+<td class=cellinside>1800086
+</td>
+<td class=cellinside>19
+</td>
+<td class=cellinside>59
+</td>
+<td class=cellinside>3.3
+</td>
+<td class=cellinside>Peggy
+</td></tr>
+ 
+	</tbody>
+</table>
+ </td></table>
+ <br>
+
+<p class='character'><h3>Anonymous Feedback</h3></p>
+
+
+<p align= center >
+<table cellspacing=0 border=1>
+<caption align=bottom class=captiondataframe></caption>
+<tr><td>
+	<table border=0 class=dataframe>
+	<tbody> 
+	<tr class= firstline > 
+		<th>&nbsp;  </th>
+		<th>Pseudonym  </th>
+		<th>Points  </th>
+		<th>Percent  </th>
+		<th>Mark</th> 
+	</tr> 
+<tr> 
+<td class=firstcolumn>1
+</td>
+<td class=cellinside>Schokofrosch
+</td>
+<td class=cellinside>27
+</td>
+<td class=cellinside>84
+</td>
+<td class=cellinside>1.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>2
+</td>
+<td class=cellinside>Bäckchen
+</td>
+<td class=cellinside>30
+</td>
+<td class=cellinside>94
+</td>
+<td class=cellinside>1.0
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>3
+</td>
+<td class=cellinside>Freud
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>4
+</td>
+<td class=cellinside>Jarre
+</td>
+<td class=cellinside>26
+</td>
+<td class=cellinside>81
+</td>
+<td class=cellinside>1.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>5
+</td>
+<td class=cellinside>Rock'n'Roll
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>6
+</td>
+<td class=cellinside>Bienenstich
+</td>
+<td class=cellinside>22
+</td>
+<td class=cellinside>69
+</td>
+<td class=cellinside>2.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>7
+</td>
+<td class=cellinside>Schattenspiel
+</td>
+<td class=cellinside>21
+</td>
+<td class=cellinside>66
+</td>
+<td class=cellinside>3.0
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>8
+</td>
+<td class=cellinside>Och Menno
+</td>
+<td class=cellinside>25
+</td>
+<td class=cellinside>78
+</td>
+<td class=cellinside>1.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>9
+</td>
+<td class=cellinside>Gartenzwerg
+</td>
+<td class=cellinside>23
+</td>
+<td class=cellinside>72
+</td>
+<td class=cellinside>2.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>10
+</td>
+<td class=cellinside>Scheherazade
+</td>
+<td class=cellinside>23
+</td>
+<td class=cellinside>72
+</td>
+<td class=cellinside>2.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>11
+</td>
+<td class=cellinside>Alien
+</td>
+<td class=cellinside>22
+</td>
+<td class=cellinside>69
+</td>
+<td class=cellinside>2.7
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>12
+</td>
+<td class=cellinside>Riss im Film
+</td>
+<td class=cellinside>20
+</td>
+<td class=cellinside>62
+</td>
+<td class=cellinside>3.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>13
+</td>
+<td class=cellinside>Grummel
+</td>
+<td class=cellinside>20
+</td>
+<td class=cellinside>62
+</td>
+<td class=cellinside>3.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>14
+</td>
+<td class=cellinside>Herbsttyp
+</td>
+<td class=cellinside>27
+</td>
+<td class=cellinside>84
+</td>
+<td class=cellinside>1.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>15
+</td>
+<td class=cellinside>Stiefel
+</td>
+<td class=cellinside>29
+</td>
+<td class=cellinside>91
+</td>
+<td class=cellinside>1.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>16
+</td>
+<td class=cellinside>1234567
+</td>
+<td class=cellinside>15
+</td>
+<td class=cellinside>47
+</td>
+<td class=cellinside>4.0
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>17
+</td>
+<td class=cellinside>Traumhaus
+</td>
+<td class=cellinside>19
+</td>
+<td class=cellinside>59
+</td>
+<td class=cellinside>3.3
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>18
+</td>
+<td class=cellinside>Horstlos
+</td>
+<td class=cellinside>21
+</td>
+<td class=cellinside>66
+</td>
+<td class=cellinside>3.0
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>19
+</td>
+<td class=cellinside>Blauer Turnschuh
+</td>
+<td class=cellinside>13
+</td>
+<td class=cellinside>41
+</td>
+<td class=cellinside>4.0
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>20
+</td>
+<td class=cellinside>Peggy
+</td>
+<td class=cellinside>19
+</td>
+<td class=cellinside>59
+</td>
+<td class=cellinside>3.3
+</td></tr>
+ 
+	</tbody>
+</table>
+ </td></table>
+ <br>
+
+<p class='character'><h3>Mark definitions (effectively)</h3></p>
+
+
+<p align= center >
+<table cellspacing=0 border=1><caption align=bottom class=captiondataframe></caption>
+<tr><td>
+	<table border=0 class=dataframe>
+	<tbody> <tr class= firstline > <th></th><th>Points</th><th>Percent</th> </tr>
+ 
+<tr><td class=firstcolumn>1</td>
+<td class=cellinside> 30 --  32</td>
+<td class=cellinside> 94 < 100 </td></tr>
+ 
+<tr><td class=firstcolumn>1.3</td>
+<td class=cellinside> 27 --  29</td>
+<td class=cellinside> 85 <  91 </td></tr>
+ 
+<tr><td class=firstcolumn>1.7</td>
+<td class=cellinside> 25 --  26</td>
+<td class=cellinside> 79 <  82 </td></tr>
+ 
+<tr><td class=firstcolumn>2</td>
+<td class=cellinside> 24       </td>
+<td class=cellinside> 75       </td></tr>
+ 
+<tr><td class=firstcolumn>2.3</td>
+<td class=cellinside> 23       </td>
+<td class=cellinside> 72       </td></tr>
+ 
+<tr><td class=firstcolumn>2.7</td>
+<td class=cellinside> 22       </td>
+<td class=cellinside> 69       </td></tr>
+ 
+<tr><td class=firstcolumn>3</td>
+<td class=cellinside> 21       </td>
+<td class=cellinside> 66       </td></tr>
+ 
+<tr><td class=firstcolumn>3.3</td>
+<td class=cellinside> 19 --  20</td>
+<td class=cellinside> 60 <  63 </td></tr>
+ 
+<tr><td class=firstcolumn>3.7</td>
+<td class=cellinside> 16 --  18</td>
+<td class=cellinside> 50 <  57 </td></tr>
+ 
+<tr><td class=firstcolumn>4</td>
+<td class=cellinside> 13 --  15</td>
+<td class=cellinside> 41 <  47 </td></tr>
+ 
+<tr><td class=firstcolumn>5</td>
+<td class=cellinside>  1 --  12</td>
+<td class=cellinside>    <  38 </td></tr>
+ 
+	</tbody>
+</table>
+ </td></table>
+ <br>
+
+<p class='character'><h3>Mean</h3></p>
+
+
+
+<p align= center >
+<table cellspacing=0 border=1><caption align=bottom class=captiondataframe></caption>
+<tr><td>
+	<table border=0 class=dataframe>
+	<tbody> <tr class= firstline > <th>Min.</th><th>1st Qu.</th><th>Median</th><th>Mean</th><th>3rd Qu.</th><th>Max.</th> </tr>
+ 
+<td class=cellinside>13.0</td>
+<td class=cellinside>20.0</td>
+<td class=cellinside>22.5</td>
+<td class=cellinside>22.6</td>
+<td class=cellinside>25.2</td>
+<td class=cellinside>30.0</td></tr>
+ 
+	</tbody>
+</table>
+ </td></table>
+ <br>
+
+<p class='character'><h3>Standard Deviation</h3></p>
+
+<p class='character'>sd: 4.35</p>
+
+<p class='character'><h3>Cronbach&apos;s alpha</h3></p>
+
+<p class='character'>alpha: 0.74<br />Confidence interval: 0.54-0.88 (95%)</p>
+
+<p class='character'><h3>Item Anlysis</h3></p>
+
+
+<p align= center >
+<table cellspacing=0 border=1>
+<caption align=bottom class=captiondataframe></caption>
+<tr><td>
+	<table border=0 class=dataframe>
+	<tbody> 
+	<tr class= firstline > 
+		<th>&nbsp;  </th>
+		<th>Diffc  </th>
+		<th>DiscrPwr  </th>
+		<th>PartWhole  </th>
+		<th>Discrim  </th>
+		<th>alphaIfDeleted</th> 
+	</tr> 
+<tr> 
+<td class=firstcolumn>Item01
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside> 0.412
+</td>
+<td class=cellinside> 0.3676
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item02
+</td>
+<td class=cellinside>0.75
+</td>
+<td class=cellinside> 0.491
+</td>
+<td class=cellinside> 0.4072
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.72
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item03
+</td>
+<td class=cellinside>0.65
+</td>
+<td class=cellinside> 0.351
+</td>
+<td class=cellinside> 0.2472
+</td>
+<td class=cellinside> 0.50
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item04
+</td>
+<td class=cellinside>0.55
+</td>
+<td class=cellinside> 0.389
+</td>
+<td class=cellinside> 0.2829
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item05
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside>-0.184
+</td>
+<td class=cellinside>-0.2331
+</td>
+<td class=cellinside>-0.17
+</td>
+<td class=cellinside>0.75
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item06
+</td>
+<td class=cellinside>0.80
+</td>
+<td class=cellinside> 0.100
+</td>
+<td class=cellinside> 0.0059
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.75
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item07
+</td>
+<td class=cellinside>0.55
+</td>
+<td class=cellinside>-0.157
+</td>
+<td class=cellinside>-0.2674
+</td>
+<td class=cellinside>-0.33
+</td>
+<td class=cellinside>0.77
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item08
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside> 0.195
+</td>
+<td class=cellinside> 0.1448
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item09
+</td>
+<td class=cellinside>0.85
+</td>
+<td class=cellinside>-0.040
+</td>
+<td class=cellinside>-0.1231
+</td>
+<td class=cellinside> 0.00
+</td>
+<td class=cellinside>0.75
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item10
+</td>
+<td class=cellinside>0.75
+</td>
+<td class=cellinside> 0.218
+</td>
+<td class=cellinside> 0.1179
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item11
+</td>
+<td class=cellinside>0.85
+</td>
+<td class=cellinside> 0.489
+</td>
+<td class=cellinside> 0.4212
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.72
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item12
+</td>
+<td class=cellinside>0.70
+</td>
+<td class=cellinside> 0.634
+</td>
+<td class=cellinside> 0.5619
+</td>
+<td class=cellinside> 0.67
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item13
+</td>
+<td class=cellinside>0.90
+</td>
+<td class=cellinside> 0.362
+</td>
+<td class=cellinside> 0.2982
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item14
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside>-0.130
+</td>
+<td class=cellinside>-0.1800
+</td>
+<td class=cellinside> 0.00
+</td>
+<td class=cellinside>0.75
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item15
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside> 0.195
+</td>
+<td class=cellinside> 0.1448
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item16
+</td>
+<td class=cellinside>0.95
+</td>
+<td class=cellinside> 0.195
+</td>
+<td class=cellinside> 0.1448
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item17
+</td>
+<td class=cellinside>0.80
+</td>
+<td class=cellinside> 0.248
+</td>
+<td class=cellinside> 0.1565
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item18
+</td>
+<td class=cellinside>0.75
+</td>
+<td class=cellinside> 0.682
+</td>
+<td class=cellinside> 0.6207
+</td>
+<td class=cellinside> 0.67
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item19
+</td>
+<td class=cellinside>0.65
+</td>
+<td class=cellinside> 0.450
+</td>
+<td class=cellinside> 0.3539
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item20
+</td>
+<td class=cellinside>0.90
+</td>
+<td class=cellinside> 0.087
+</td>
+<td class=cellinside> 0.0158
+</td>
+<td class=cellinside> 0.00
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item21
+</td>
+<td class=cellinside>0.75
+</td>
+<td class=cellinside> 0.273
+</td>
+<td class=cellinside> 0.1744
+</td>
+<td class=cellinside> 0.00
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item22
+</td>
+<td class=cellinside>0.25
+</td>
+<td class=cellinside> 0.191
+</td>
+<td class=cellinside> 0.0899
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item23
+</td>
+<td class=cellinside>0.25
+</td>
+<td class=cellinside> 0.273
+</td>
+<td class=cellinside> 0.1744
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item24
+</td>
+<td class=cellinside>0.80
+</td>
+<td class=cellinside> 0.336
+</td>
+<td class=cellinside> 0.2489
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item25
+</td>
+<td class=cellinside>0.35
+</td>
+<td class=cellinside> 0.614
+</td>
+<td class=cellinside> 0.5360
+</td>
+<td class=cellinside> 0.83
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item26
+</td>
+<td class=cellinside>0.70
+</td>
+<td class=cellinside> 0.376
+</td>
+<td class=cellinside> 0.2778
+</td>
+<td class=cellinside> 0.50
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item27
+</td>
+<td class=cellinside>0.80
+</td>
+<td class=cellinside> 0.277
+</td>
+<td class=cellinside> 0.1871
+</td>
+<td class=cellinside> 0.33
+</td>
+<td class=cellinside>0.74
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item28
+</td>
+<td class=cellinside>0.30
+</td>
+<td class=cellinside> 0.397
+</td>
+<td class=cellinside> 0.2998
+</td>
+<td class=cellinside> 0.17
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item29
+</td>
+<td class=cellinside>0.25
+</td>
+<td class=cellinside> 0.600
+</td>
+<td class=cellinside> 0.5280
+</td>
+<td class=cellinside> 0.83
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item30
+</td>
+<td class=cellinside>0.80
+</td>
+<td class=cellinside> 0.720
+</td>
+<td class=cellinside> 0.6697
+</td>
+<td class=cellinside> 0.67
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item31
+</td>
+<td class=cellinside>0.70
+</td>
+<td class=cellinside> 0.608
+</td>
+<td class=cellinside> 0.5327
+</td>
+<td class=cellinside> 0.67
+</td>
+<td class=cellinside>0.71
+</td></tr>
+ 
+<tr> 
+<td class=firstcolumn>Item32
+</td>
+<td class=cellinside>0.50
+</td>
+<td class=cellinside> 0.449
+</td>
+<td class=cellinside> 0.3469
+</td>
+<td class=cellinside> 0.50
+</td>
+<td class=cellinside>0.73
+</td></tr>
+ 
+	</tbody>
+</table>
+ </td></table>
+ <br>
