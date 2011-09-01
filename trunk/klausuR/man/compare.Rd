@@ -2,9 +2,9 @@
 \alias{compare}
 \title{Comparison of data sets}
 \usage{
-  compare(set1, set2, select=NULL, new.set=FALSE,
-  trim=FALSE rename=c(), id=list(No="No",
-  Name=c("FirstName", "Name")))
+  compare(set1, set2, select = NULL, ignore = NULL, new.set
+  = FALSE, rename = c(), trim = FALSE, id = list(No = "No",
+  Name = c("FirstName", "Name")))
 }
 \arguments{
   \item{set1,set2}{The data sets to be compared. Can be two
@@ -48,9 +48,6 @@
   returns a combined data.frame (see details).
 }
 \description{
-  Compare two data sets
-}
-\details{
   The function \code{compare} will take two data.frames (or
   objects of class
   \code{\link[klausuR]{klausuR.answ-class}}) and compare
@@ -62,7 +59,8 @@
   (perhaps by different persons) and check for differences
   with this function, which can then be corrected by
   looking up the original answer in the test.
-
+}
+\details{
   If you don't want to compare all variables but only a
   subset, you can use the \code{select} option (see
   examples below). But be careful with this, at least all

@@ -2,11 +2,12 @@
 \alias{nret.translator}
 \title{Convert NRET/ET data between klausuR and other software}
 \usage{
-  nret.translator(dat, items=NULL, spss="out", corr=FALSE,
-  num.alt=NULL, klausuR.alt=c(is.true="+", is.false="-",
-  missing="0", err="*"), spss.alt=c(is.true="2",
-  is.false="1", missing="0", err="3"), rm.old.vars=TRUE,
-  items.only=FALSE, klausuR.prefix=c(), spss.prefix=c())
+  nret.translator(dat, items = NULL, spss = "out", corr =
+  FALSE, num.alt = NULL, klausuR.alt = c(is.true = "+",
+  is.false = "-", missing = "0", err = "*"), spss.alt =
+  c(is.true = "2", is.false = "1", missing = "0", err =
+  "3"), rm.old.vars = TRUE, items.only = FALSE,
+  klausuR.prefix = c(), spss.prefix = c())
 }
 \arguments{
   \item{dat}{A data.frame, the object to convert.}

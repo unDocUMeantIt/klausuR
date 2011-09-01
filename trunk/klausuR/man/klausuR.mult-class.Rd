@@ -1,4 +1,5 @@
 \name{klausuR.mult-class}
+\alias{klausuR.mult-class}
 \alias{klausuR.mult,-class
 -class}
 \alias{klausuR.mult,-class}

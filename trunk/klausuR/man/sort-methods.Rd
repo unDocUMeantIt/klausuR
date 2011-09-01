@@ -1,7 +1,8 @@
 \name{sort.klausuR}
 \alias{sort.klausuR}
-\alias{"sort,klausuR-method"}
-\alias{"sort,-methods"}
+\alias{sort.klausuR,klausuR-method}
+\alias{sort,klausuR-method}
+\alias{sort,-methods}
 \title{Sort method for objects of class klausuR}
 \arguments{
   \item{x}{An object of class \code{klausuR}}

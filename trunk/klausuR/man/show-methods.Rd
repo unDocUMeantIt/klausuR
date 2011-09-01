@@ -1,9 +1,8 @@
 \name{show}
 \alias{show}
-\alias{"show,klausuR-method"}
-\alias{"show,klausuR.mult-method"}
-\alias{"show,-methods"}
-\alias{sort.klausuR}
+\alias{show,klausuR-method}
+\alias{show,klausuR.mult-method}
+\alias{show,-methods}
 \title{Show methods for objects of class klausuR and klausuR.mult}
 \arguments{
   \item{object}{An object of class \code{klausuR} or

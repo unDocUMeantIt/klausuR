@@ -1,4 +1,4 @@
-#' Compare two data sets
+#' Comparison of data sets
 #'
 #' The function \code{compare} will take two data.frames (or objects of class \code{\link[klausuR]{klausuR.answ-class}})
 #' and compare them for equality. This is useful to check for typos before you calculate the results with
@@ -12,10 +12,6 @@
 #' If \code{new.set=TRUE}, a new data.frame will be returned, that is identical in both sets compared, but all dubious values
 #' will be replaced by \code{NA}.
 #' 
-#' @title Comparison of data sets
-#' @usage compare(set1, set2, select=NULL, new.set=FALSE, trim=FALSE
-#'		rename=c(), id=list(No="No", Name=c("FirstName", "Name")))
-#' @aliases compare
 #' @param set1,set2 The data sets to be compared. Can be two data.frames or objects of class \code{\link[klausuR]{klausuR.answ-class}}.
 #'		If the latter, their slots \code{id} and \code{items} will be compared.
 #' @param select A vector with variables that should be compared, all others are omitted. At least all the values given in \code{id} are needed for the output!

@@ -1,4 +1,5 @@
 \name{klausuR.test-class}
+\alias{klausuR.test-class}
 \alias{klausuR.test,-class
 -class}
 \alias{klausuR.test,-class}

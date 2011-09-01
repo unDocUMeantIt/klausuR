@@ -1,3 +1,5 @@
+#' Evaluate multiple choice tests with several test forms
+#'
 #' This function can be used to evaluate tests that have several test forms. Please be aware that its results only make sense
 #' if each test form uses the same items, only in a different order.
 #'
@@ -17,10 +19,6 @@
 #' simply ascending numbers from 1 to how many questions you asked, but for row "B" each number indicates at which position an item
 #' of "A" is to be found. See the example below.
 #' 
-#' @title A function to evaluate multiple choice tests
-#' @usage klausur.mufo(data, marks=NULL, mark.labels=NULL,
-#'		items=NULL, wght=NULL, score="solved", matn=NULL,
-#'		na.rm=TRUE, cronbach=FALSE, item.analysis=FALSE)
 #' @param data An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @param marks A vector assigning marks to points achieved (see details). Alternatively, set it to \code{"suggest"} to let
 #'		\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} calculate suggestions under the assumption of normal distribution.
@@ -36,11 +34,11 @@
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
-#' @return An object of class \code{\link[klausuR.mult]{klausuR.mult-class}} with the following slots.
+#' @return An object of class \code{\link[klausuR]{klausuR.mult-class}} with the following slots.
 #'	\item{forms}{A character vector naming all test forms}
 #'	\item{results.part}{A list of objects of class \code{klausuR}, holding all partial results}
 #'	\item{results.glob}{An object of class \code{klausuR} with the global results}
-#'	Not all slots are shown by default (refer to \code{\link[show,klausuR.mult-method]{show}}).
+#'	Not all slots are shown by default (refer to \code{\link[klausuR:show]{show}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.data]{klausur.data}}
 #' @keywords misc

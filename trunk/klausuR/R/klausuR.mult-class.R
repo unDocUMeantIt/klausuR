@@ -9,11 +9,13 @@
 # @slot forms A vector with the names of all test forms.
 # @slot results.part A list with the partial results of each test form
 # @slot results.glob An object of class klausuR-class with overall results
-# @name klausuR.mult,-class
+# @name klausuR.mult-class
+# @aliases klausuR.mult-class klausuR.mult,-class
 #' @import methods
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR.mult
+#' @noRd
 # @rdname klausuR.mult-class
 
 setClass("klausuR.mult",

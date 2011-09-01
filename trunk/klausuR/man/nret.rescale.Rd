@@ -2,8 +2,8 @@
 \alias{nret.rescale}
 \title{Rescale test evaluation results}
 \usage{
-  nret.rescale(res.obj, score="NRET", points=TRUE,
-  percent=TRUE, marks=TRUE)
+  nret.rescale(res.obj, score = "NRET", points = TRUE,
+  percent = TRUE, marks = TRUE)
 }
 \arguments{
   \item{res.obj}{An object of class \code{klausuR} with

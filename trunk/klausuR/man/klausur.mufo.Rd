@@ -1,10 +1,10 @@
 \name{klausur.mufo}
 \alias{klausur.mufo}
-\title{A function to evaluate multiple choice tests}
+\title{Evaluate multiple choice tests with several test forms}
 \usage{
-  klausur.mufo(data, marks=NULL, mark.labels=NULL,
-  items=NULL, wght=NULL, score="solved", matn=NULL,
-  na.rm=TRUE, cronbach=FALSE, item.analysis=FALSE)
+  klausur.mufo(data, marks = NULL, mark.labels = NULL,
+  items = NULL, wght = NULL, score = "solved", matn = NULL,
+  na.rm = TRUE, cronbach = TRUE, item.analysis = TRUE)
 }
 \arguments{
   \item{data}{An object of class
@@ -49,14 +49,13 @@
 }
 \value{
   An object of class
-  \code{\link[klausuR.mult]{klausuR.mult-class}} with the
+  \code{\link[klausuR]{klausuR.mult-class}} with the
   following slots. \item{forms}{A character vector naming
   all test forms} \item{results.part}{A list of objects of
   class \code{klausuR}, holding all partial results}
   \item{results.glob}{An object of class \code{klausuR}
   with the global results} Not all slots are shown by
-  default (refer to
-  \code{\link[show,klausuR.mult-method]{show}}).
+  default (refer to \code{\link[klausuR:show]{show}}).
 }
 \description{
   This function can be used to evaluate tests that have

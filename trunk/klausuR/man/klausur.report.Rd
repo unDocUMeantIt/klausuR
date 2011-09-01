@@ -2,14 +2,14 @@
 \alias{klausur.report}
 \title{Generate individual reports on multipe choice test results}
 \usage{
-  klausur.report(klsr, matn, save=FALSE, pdf=FALSE,
-  path=NULL, file.name="matn", hist=list(points=FALSE,
-  marks=FALSE), hist.merge=list(),
-  hist.points="hist_points.pdf",
-  hist.marks="hist_marks.pdf",
-  marks.info=list(points=FALSE, percent=FALSE),
-  descr=list(title=NULL, name=NULL, date=NULL), lang="en",
-  alt.candy=TRUE, anon.glob.file="anon.tex")
+  klausur.report(klsr, matn, save = FALSE, pdf = FALSE,
+  path = NULL, file.name = "matn", hist = list(points =
+  FALSE, marks = FALSE), hist.merge = list(), hist.points =
+  "hist_points.pdf", hist.marks = "hist_marks.pdf", descr =
+  list(title = NULL, name = NULL, date = NULL), marks.info
+  = list(points = FALSE, percent = FALSE), lang = "en",
+  alt.candy = TRUE, anon.glob.file = "anon.tex",
+  NRET.legend = FALSE, table.size = "auto")
 }
 \arguments{
   \item{klsr}{An object of class klausuR or klausuR.mult.
@@ -28,9 +28,9 @@
 
   \item{pdf}{Logical: If TRUE, LaTeX reports will be
   converted to PDF automatically, using
-  \code{\link[texi2dvi]{texi2dvi}}. If \code{save} is
-  FALSE, a temporary directory is used, that is only the
-  PDF files will be saved.}
+  \code{\link[tools]{texi2dvi}}. If \code{save} is FALSE, a
+  temporary directory is used, that is only the PDF files
+  will be saved.}
 
   \item{path}{Path for \code{save} and \code{hist} files.}
 
@@ -42,7 +42,7 @@
   \code{points} and \code{marks}: If TRUE, the reports will
   include histograms of the distribution of points and/or
   marks. The needed PDF files will be created by
-  \code{\link[plot,klausuR]{plot}} and saved as well. (see
+  \code{\link[klausuR:plot]{plot}} and saved as well. (see
   \code{path}, \code{hist.points} and \code{hist.marks}).}
 
   \item{hist.merge}{If you need/want to combine results
@@ -111,7 +111,7 @@
   to disk in LaTeX format a "save" parameter is provided.
   Alternatively, the reports can be converted to PDF format
   as well. \code{klausur.report} is calling
-  \code{\link[texi2dvi]{texi2dvi}} from the \code{tools}
+  \code{\link[tools]{texi2dvi}} from the \code{tools}
   package for that.
 
   If the object is of class klausuR.mult, only the global
@@ -149,8 +149,10 @@ notenschluessel[30:32] <- 1.0
 data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 klsr.obj <- klausur(data.obj)
 
+\dontrun{
 klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
 name="Dr. T. Aeter", date="24.09.2010"))
+}
 }
 \author{
   m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
@@ -158,7 +160,7 @@ name="Dr. T. Aeter", date="24.09.2010"))
 \seealso{
   \code{\link[klausuR:klausur]{klausur}},
   \code{\link[xtable]{xtable}},
-  \code{\link[texi2dvi]{texi2dvi}}
+  \code{\link[tools]{texi2dvi}}
 }
 \keyword{file}
 \keyword{IO}

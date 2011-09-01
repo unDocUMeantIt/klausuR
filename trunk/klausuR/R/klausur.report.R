@@ -1,3 +1,5 @@
+#' Generate individual reports on multipe choice test results
+#'
 #' \code{klausur.report} takes (at least) an object of class klausuR (or klausuR.mult) and a matriculation number to generate personal test results
 #' in LaTeX and/or PDF format.
 #'
@@ -6,30 +8,22 @@
 #' is set to "all", reports for all subjects are produced. Setting it to "anon" will get you a printable version of the anonymized results.
 #' 
 #' By default output is sent to standard out. To save them to disk in LaTeX format a "save" parameter is provided. Alternatively, the reports
-#' can be converted to PDF format as well. \code{klausur.report} is calling \code{\link[texi2dvi]{texi2dvi}} from the \code{tools} package for that.
+#' can be converted to PDF format as well. \code{klausur.report} is calling \code{\link[tools]{texi2dvi}} from the \code{tools} package for that.
 #'
 #' If the object is of class klausuR.mult, only the global results for tests with several test forms are evaluated. In case you'd rather like
 #' reports on each test form, call \code{klausur.report} with the single slots from that object accordingly.
 #'
-#' @title Generate individual reports on multipe choice test results
-#' @usage
-#' klausur.report(klsr, matn, save=FALSE, pdf=FALSE, path=NULL,
-#'  file.name="matn", hist=list(points=FALSE, marks=FALSE), hist.merge=list(),
-#'  hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
-#'  marks.info=list(points=FALSE, percent=FALSE),
-#'  descr=list(title=NULL, name=NULL, date=NULL),
-#'  lang="en", alt.candy=TRUE, anon.glob.file="anon.tex")
 #' @param klsr An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration, you can
 #'		also give them in one list here, which will cause the function to call itself recursively.
 #' @param matn Matriculation number, "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 #'	or "glob" (produces a global results document).
 #' @param save Logical: If TRUE, files are saved to disk (scheme: "\code{path}/\code{matn}.tex").
-#' @param pdf Logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[texi2dvi]{texi2dvi}}.
+#' @param pdf Logical: If TRUE, LaTeX reports will be converted to PDF automatically, using \code{\link[tools]{texi2dvi}}.
 #'	If \code{save} is FALSE, a temporary directory is used, that is only the PDF files will be saved.
 #' @param path Path for \code{save} and \code{hist} files.
 #' @param file.name File name scheme for the reports, either "matn" (matriculation number) or "name" (name and firstname).
 #' @param hist A list with the logical elements \code{points} and \code{marks}: If TRUE, the reports will include histograms
-#'	of the distribution of points and/or marks. The needed PDF files will be created by \code{\link[plot,klausuR]{plot}} and saved as well.
+#'	of the distribution of points and/or marks. The needed PDF files will be created by \code{\link[klausuR:plot]{plot}} and saved as well.
 #'	(see \code{path}, \code{hist.points} and \code{hist.marks}).
 #' @param hist.merge If you need/want to combine results from several \code{klausuR} class objects for the histograms, provide them all in a list here.
 #' @param hist.points File name for the histogram of points.
@@ -48,7 +42,7 @@
 #' @keywords IO file
 #' @return One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[texi2dvi]{texi2dvi}}
+#' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[tools]{texi2dvi}}
 #' @import xtable graphics tools
 #' @export
 #' @examples
@@ -80,8 +74,10 @@
 #' data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 #' klsr.obj <- klausur(data.obj)
 #'
+#' \dontrun{
 #' klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
 #' 	name="Dr. T. Aeter", date="24.09.2010"))
+#' }
 
 klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
 			    hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
@@ -94,7 +90,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		for(this.klsr in klsr){
 			klausur.report(klsr=this.klsr, matn=matn, save=save, pdf=pdf, path=path, file.name=file.name,
 				hist=hist, hist.points=hist.points, hist.marks=hist.marks,
-				descr=descr, marks.info=marks.info, lang=lang, alt.candy=alt.candy, anon.glob.file=anon.glob.fil,
+				descr=descr, marks.info=marks.info, lang=lang, alt.candy=alt.candy, anon.glob.file=anon.glob.file,
 				NRET.legend=NRET.legend, table.size=table.size)
 		}
 		return("done")
@@ -165,7 +161,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				GMatNr="MatrNr.",
 				Name="Name",
 				Vorname="Vorname",
-				Notenschluessel="Notenschlüssel",
+				Notenschluessel="Notenschl\"ussel",
  				NRET.expl=". \\emph{Erl\"auterung:} >>+<< -- richtig; >>-<< -- falsch; >>0<< -- keine Angabe; >>*<< -- fehlerhafte Angabe."
 		)
 		# ... and that of the plots

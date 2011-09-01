@@ -1,4 +1,5 @@
 \name{klausuR.answ-class}
+\alias{klausuR.answ-class}
 \alias{klausuR.answ,-class
 -class}
 \alias{klausuR.answ,-class}
@@ -20,6 +21,6 @@ item columns must follow the usual name scheme \code{Item###}. \code{NULL} if no
 \itemize{
 \item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
 \item{\code{wght}} {Weights for each item (\code{NULL} if none)}
-}}\item{\code{test}:}{(\code{\link{klausuR.test}}) Currently an empty placeholder. Planned to hold the actual test items in future releases.}\item{\code{misc}:}{(\code{\link{data.frame}}) Any additional data you'd like to be stored along with \code{id} and \code{items},
+}}\item{\code{test}:}{(\code{\link[klausuR]{klausuR.test,-class}}) Currently an empty placeholder. Planned to hold the actual test items in future releases.}\item{\code{misc}:}{(\code{\link{data.frame}}) Any additional data you'd like to be stored along with \code{id} and \code{items},
 e.g. table data from/for other software products. Won't be used for anything.}}}
 
