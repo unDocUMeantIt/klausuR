@@ -5,11 +5,7 @@
 \alias{plot,klausuR.mult-method}
 \alias{plot,klausuR.mult,missing-method}
 \alias{plot,-methods}
-\title{plot methods for klausuR and klausuR.mult}
-\usage{
-  plot(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE,
-  na.rm=TRUE, \dots)
-}
+\title{Plot methods for S4 objects of class klausuR and klausuR.mult}
 \arguments{
   \item{x}{An S4 object of class \code{klausuR} or
   \code{klausuR.mult}}
@@ -31,10 +27,6 @@
   \item{\dots}{Any other argument suitable for plot()}
 }
 \description{
-  Plot methods for S4 objects of class klausuR and
-  klausuR.mult
-}
-\details{
   These plot methods are beeing called by
   \code{\link[klausuR:klausur.report]{klausur.report}}. If
   \code{x} is of class \code{klausuR.mult}, only the global
