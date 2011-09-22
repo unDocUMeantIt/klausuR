@@ -1,0 +1,10 @@
+Plugin: klausuR
+Title: Evaluate multiple choice tests.
+Version: 0.12-0
+Date: 2011-08-10
+Author: m.eik michalke
+Maintainer: m.eik michalke <meik.michalke@uni-duesseldorf.de>
+Depends: R (>= 2.10), RKWard (>= 0.5.3)
+Category: Multiple Choice
+License: GPL (>= 3)
+URL: http://reaktanz.de/?c=hacking&amp;s=klausuR
