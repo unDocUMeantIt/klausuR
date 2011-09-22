@@ -24,7 +24,12 @@ nret.rescale <- function(res.obj, score="NRET", points=TRUE, percent=TRUE, marks
 	# baseline <- nret.test.chars["baseline"]
 	old.sum <- res.obj@results$Points
 	answ.alt <- nret.test.chars["num.alt"]
-	item.const <- answ.alt - 1
+	# it can happen that e.g. NR data doesn't provide this value
+	if(is.na(answ.alt)){
+		item.const <- 0
+	} else {
+		item.const <- answ.alt - 1
+	}
 	num.items  <- dim(res.obj@answ)[[2]] - 1
 	test.const <- item.const * num.items
 

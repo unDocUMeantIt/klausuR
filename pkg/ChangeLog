@@ -1,5 +1,9 @@
 ChangeLog for package klausuR
 
+## 0.12-2 (2011-09-11)
+  - fixed bug in nret.rescale() regarding NR data
+  - fixed author definition for R 2.14
+
 ## 0.12-1 (2011-09-01)
   - cleaned the docs so package check runs fine
   - fixed typo in klausur.report()
