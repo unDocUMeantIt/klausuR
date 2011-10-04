@@ -9,7 +9,8 @@
   list(title = NULL, name = NULL, date = NULL), marks.info
   = list(points = FALSE, percent = FALSE), lang = "en",
   alt.candy = TRUE, anon.glob.file = "anon.tex",
-  NRET.legend = FALSE, table.size = "auto")
+  NRET.legend = FALSE, table.size = "auto", merge = FALSE,
+  quiet = FALSE)
 }
 \arguments{
   \item{klsr}{An object of class klausuR or klausuR.mult.
@@ -86,6 +87,14 @@
   \code{"normalsize"} and \code{"footnotesize"} to avoid
   pages with only one or two rows. If that fails, try to
   manually set the size.}
+
+  \item{merge}{Logical, if \code{TRUE} no individual PDFs
+  will be saved, but one large file with all reports. Uses
+  the "pdfpages" package, and only useful if
+  \code{pdf=TRUE} as well.}
+
+  \item{quiet}{Logical, if \code{TRUE} no feedback messages
+  on the current status are given.}
 }
 \value{
   One or several LaTeX and/or PDF documents. If defined two

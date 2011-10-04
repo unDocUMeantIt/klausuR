@@ -1,13 +1,13 @@
 bibentry("Manual",
 		title="klausuR: Multiple Choice Test Evaluation",
-		author=c(person(given="Meik", family="Michalke", email="meik.michalke@hhu.de", role=c("aut", "cre"))),
+		author="Meik Michalke",
 		year="2011",
-		note="(Version 0.12-2)",
+		note="(Version 0.12-3)",
 		url="http://r-forge.r-project.org/projects/klausur",
 
 		textVersion =
 		paste("Michalke, M. (2011). ",
-				"klausuR: Multiple Choice Test Evaluation (Version 0.12-2). ",
+				"klausuR: Multiple Choice Test Evaluation (Version 0.12-3). ",
 				"Available from http://r-forge.r-project.org/projects/klausur",
 				sep=""),
 

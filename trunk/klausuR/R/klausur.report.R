@@ -38,6 +38,9 @@
 #' @param table.size Character string to shrink the tables, must be one of \code{"auto"}, \code{"normalsize"}, \code{"small"},
 #'		\code{"footnotesize"}, \code{"scriptsize"} or \code{"tiny"}. The default \code{table.size="auto"} tries to decide between
 #'		\code{"normalsize"} and \code{"footnotesize"} to avoid pages with only one or two rows. If that fails, try to manually set the size.
+#' @param merge Logical, if \code{TRUE} no individual PDFs will be saved, but one large file with all reports. Uses the "pdfpages" package,
+#'		and only useful if \code{pdf=TRUE} as well.
+#' @param quiet Logical, if \code{TRUE} no feedback messages on the current status are given.
 #' @aliases klausur.report
 #' @keywords IO file
 #' @return One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.
@@ -82,7 +85,7 @@
 klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
 			    hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 			    descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
-			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto"){
+			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto", merge=FALSE, quiet=FALSE){
 
 	# before we start let's look at klsr
 	# if klsr is a list, iterate through it recusively
@@ -239,6 +242,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		print.digits <- 2
 	}
 
+	## function latex.umlaute()
 	# this function will replace German umlauts with LaTeX equivalents
 	# some sanitizing is also done
 	# it's used in tabellenbau() below
@@ -254,8 +258,9 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		output <- gsub("_",'\\\\_',as.character(output))
 		output <- gsub("#",'\\\\#',as.character(output))
 		return(output)
-	}
+	} ## end function latex.umlaute()
 
+	## function file.umlaute()
 	# this function will replace German umlauts for filenames
 	# it's used in tabellenbau() below
 	file.umlaute <- function(input){
@@ -267,25 +272,91 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		output <- gsub("Ü","Ue",as.character(output))
 		output <- gsub("Ä","Ae",as.character(output))
 		return(output)
-	}
+	} ## end function file.umlaute()
 
+	## function latex.head()
+	latex.head <- function(one.file=FALSE, individual=TRUE, hist.and.marks=FALSE, marks.hist.stuff=NULL, person=list()){
+		# use paste to create the LaTeX head, that is up to the table
+		full.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}\n",
+			ifelse(isTRUE(hist.and.marks), "			\\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}\n", ""),
+			"			\\usepackage{longtable}
+			\\usepackage{mathptmx}
+			\\usepackage{helvet}
+			\\usepackage{courier}
+			\\usepackage[T1]{fontenc}
+			\\usepackage[latin9]{inputenc}
+				\\setlength{\\parskip}{\\medskipamount}
+				\\setlength{\\parindent}{0pt}
+			\\usepackage{amsmath}
+			\\usepackage{graphicx}\n",
+			ifelse(isTRUE(one.file), "			\\usepackage{pdfpages}\n", ""),
+			"			\\usepackage{amssymb}
+			\\usepackage{thumbpdf}
+			\\usepackage{color}
+				\\definecolor{dunkelgrau}{gray}{.5}
+				\\definecolor{hellgrau}{gray}{.7}
+				\\definecolor{dunkelblau}{rgb}{.1,.1,.6}
+			\\usepackage[
+				a4paper,
+				pdftex,
+				bookmarksopen,
+				bookmarksopenlevel=1,
+				colorlinks,
+				anchorcolor=dunkelgrau,
+				linkcolor=dunkelgrau,
+				urlcolor=hellgrau,
+				citecolor=dunkelblau]{hyperref}
+			\\usepackage{babel}
+			\\title{",latex.umlaute(descr$title),"}\n",
+			if(isTRUE(individual)){
+				# this is for individual reports, so each subject's name is printed
+				paste("			\\date{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"\\\\",text$Datum,": ",descr$date,"}
+			\\author{",person$vorname," ",person$name,",\\\\",text$MatrikelNr," ",person$matn,"}\n", sep="")
+			} else {
+				# anonymous or global results
+				paste("			\\date{",text$Datum,": ",descr$date,"}
+			\\author{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"}\n", sep="")
+			},
+			if(isTRUE(individual)){
+				# this is for individual reports
+				paste("\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
+				text$Erreicht,": \\textbf{",person$punkte,"} (\\textbf{",person$prozent,"\\%}",text$Prozent,").
+				\\\\",text$Note,": ",format(person$note, nsmall=1),"}
+				",
+				marks.hist.stuff,"
+					\\newpage\n", sep="")
+			} else if(isTRUE(one.file)){
+				# combine all individual reports into one file
+				paste("\\begin{document}\n\\maketitle\n", sep="")
+			} else {
+				# anonymous or global results
+				paste("\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n", sep="")
+			},
+		sep="")
+		return(full.head)
+	} ## end function latex.head()
+
+	## function create.pdf()
 	# this function will convert LaTeX to PDF
 	# it is called in global.report() and tabellenbau()
-	create.pdf <- function(file, path, path.orig=path){
+	# the suppress option is for mergeing files to skip copying the individual reports
+	create.pdf <- function(file, path, path.orig=path, suppress=FALSE){
 		# save current working directory; unfortuneately, texi2dvi() doesn't seem to be able
 		# to create PDF files anywhere but in the WD, so we'll have to cd there and back, afterwards
 		current.wd <- getwd()
 		# change to destined directory
 		setwd(file.path(path))
 		texi2dvi(file.path(file), pdf=TRUE, clean=TRUE)
-		# in case save was FALSE, move the PDFs to the actual destination
-		if(!isTRUE(save) && isTRUE(file.info(path.orig)$isdir)){
+		# in case save and merge were FALSE, move the PDFs to the actual destination
+		if(!isTRUE(save) && !isTRUE(suppress) && isTRUE(file.info(path.orig)$isdir)){
 			file.copy(gsub(".tex", ".pdf", file), path.orig, overwrite=TRUE)
 		} else {}
 		# get back to where we came from
 		setwd(file.path(current.wd))
 	} ## end function create.pdf()
 
+	## function tabellenbau()
+	# this is the main function for individual reports
 	tabellenbau <- function(matn){
 		points.mtrx <- res.points[res.points$MatrNo==matn,]
 		einzelergebnis <- results[results$MatrNo==matn,]
@@ -322,6 +393,12 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		punkte <- einzelergebnis$Points
 		prozent <- einzelergebnis$Percent
 		note <- einzelergebnis$Mark
+
+		if (!isTRUE(quiet)){
+			# give some feedback on current status
+			message(paste("Processing: ", einzelergebnis$FirstName, " ", einzelergebnis$Name, " (", matn, ")", sep=""))
+		} else {}
+
 		# check for file name scheme
 		if(identical(file.name, "name")){
 			name.scheme <- file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep=""))
@@ -335,7 +412,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			dateiname <- ""
 		}
 
-		## prepare histograms and/or marks info
+		# prepare histograms and/or marks info
 		if(any(unlist(marks.info))){
 			# if informatin on marks is wanted, only grab the intended stuff
 			marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
@@ -428,56 +505,17 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			marks.hist.stuff <- ""
 		}
 
-		# use paste to create the LaTeX head, that is up to the table
-		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}",
-			if(isTRUE(hist.and.marks)){
-				paste("			\\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}")
-			} else {},
-			"			\\usepackage{longtable}
-			\\usepackage{mathptmx}
-			\\usepackage{helvet}
-			\\usepackage{courier}
-			\\usepackage[T1]{fontenc}
-			\\usepackage[latin9]{inputenc}
-				\\setlength{\\parskip}{\\medskipamount}
-				\\setlength{\\parindent}{0pt}
-			\\usepackage{amsmath}
-			\\usepackage{graphicx}
-			\\usepackage{amssymb}
-			\\usepackage{thumbpdf}
-			\\usepackage{color}
-				\\definecolor{dunkelgrau}{gray}{.5}
-				\\definecolor{hellgrau}{gray}{.7}
-				\\definecolor{dunkelblau}{rgb}{.1,.1,.6}
-			\\usepackage[
-				a4paper,
-				pdftex,
-				bookmarksopen,
-				bookmarksopenlevel=1,
-				colorlinks,
-				anchorcolor=dunkelgrau,
-				linkcolor=dunkelgrau,
-				urlcolor=hellgrau,
-				citecolor=dunkelblau]{hyperref}
-			\\usepackage{babel}
-			\\title{",latex.umlaute(descr$title),"}
-			\\date{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"\\\\",text$Datum,": ",descr$date,"}
-			\\author{",vorname," ",name,",\\\\",text$MatrikelNr," ",matn,"}
-			\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
-			text$Erreicht,": \\textbf{",punkte,"} (\\textbf{",prozent,"\\%}",text$Prozent,").
-			\\\\",text$Note,": ",format(note, nsmall=1),"}
-			",
-			marks.hist.stuff,"
-				\\newpage",
-		sep="")
-
 		# here comes the foot, that is after the table
 		latex.foot <- paste("
 			\\end{document}\n",
 		sep="")
 
 		# combine parts to a document
-		write(paste(latex.head, table.size), file=dateiname)
+		write(paste(
+			latex.head(one.file=FALSE, individual=TRUE, hist.and.marks=hist.and.marks,
+			person=list(vorname=vorname, name=name, matn=matn, punkte=punkte, prozent=prozent, note=note),
+			marks.hist.stuff=marks.hist.stuff),
+			table.size), file=dateiname)
 		# create table
 		pre.erg.tabelle <- rbind(geg.antw1,loesungen,geg.points)
 		rownames(pre.erg.tabelle) <- c(text$Antwort,text$Korrekt,text$Punkte)
@@ -494,10 +532,16 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
 		# check if PDF creation is demanded
 		if(isTRUE(pdf) && is.character(name.scheme)){
-			create.pdf(file=name.scheme, path=path, path.orig=path.orig)
+			if(isTRUE(merge)){
+				suppress=TRUE
+			} else {
+				suppress=FALSE
+			}
+			create.pdf(file=name.scheme, path=path, path.orig=path.orig, suppress=suppress)
 		} else {}
 	} ## end function tabellenbau()
 
+	## function global.report()
 	global.report <- function(form){
 		# set the file name
 		if((isTRUE(save) || isTRUE(pdf)) && is.character(anon.glob.file)){
@@ -511,10 +555,18 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			anon.glob.table <- klsr@anon
 			colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
 			anon.glob.digits <- c(0,0,0,1,1)
+			if (!isTRUE(quiet)){
+				# give some feedback on current status
+				message(paste("Processing: Anonymous feedback...", sep=""))
+			} else {}
       } else {
 			anon.glob.table <- klsr@results
 			colnames(anon.glob.table) <- c((if(!is.null(anon.glob.table$No)) text$LfdNr),text$Name,text$Vorname,text$GMatNr,text$Punkte,text$AProzent,text$ANote,(if(!is.null(anon.glob.table$Pseudonym)) text$Pseudonym))
 			anon.glob.digits <- c(0,(if(!is.null(anon.glob.table$No)) 0),0,0,0,0,1,1,(if(!is.null(anon.glob.table$Pseudonym)) 0))
+			if (!isTRUE(quiet)){
+				# give some feedback on current status
+				message(paste("Processing: Global results...", sep=""))
+			} else {}
       }
 
 		# define table size
@@ -529,41 +581,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		} else {
 			table.size <- paste("\\",table.size,"\n")
 		}
-
-		# prepare the LaTeX code
-		latex.head <- paste("\\documentclass[a4paper,ngerman]{scrartcl}
-		\\usepackage{longtable}
-		\\usepackage{mathptmx}
-		\\usepackage{helvet}
-		\\usepackage{courier}
-		\\usepackage[T1]{fontenc}
-		\\usepackage[latin9]{inputenc}
-			\\setlength{\\parskip}{\\medskipamount}
-			\\setlength{\\parindent}{0pt}
-		\\usepackage{amsmath}
-		\\usepackage{graphicx}
-		\\usepackage{amssymb}
-		\\usepackage{thumbpdf}
-		\\usepackage{color}
-			\\definecolor{dunkelgrau}{gray}{.5}
-			\\definecolor{hellgrau}{gray}{.7}
-			\\definecolor{dunkelblau}{rgb}{.1,.1,.6}
-		\\usepackage[
-			a4paper,
-			pdftex,
-			bookmarksopen,
-			bookmarksopenlevel=1,
-			colorlinks,
-			anchorcolor=dunkelgrau,
-			linkcolor=dunkelgrau,
-			urlcolor=hellgrau,
-			citecolor=dunkelblau]{hyperref}
-		\\usepackage{babel}
-		\\title{",latex.umlaute(descr$title),"}
-		\\date{",text$Datum,": ",descr$date,"}
-		\\author{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"}
-		\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
-		sep="")
 
 		latex.foot <- paste(
 		if(hist$points | hist$marks){
@@ -583,7 +600,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		\\end{document}\n",
 		sep="")
 		# combine parts to a document
-		write(paste(latex.head, table.size), file=dateiname)
+		write(paste(latex.head(one.file=FALSE, individual=FALSE), table.size), file=dateiname)
 		# create table with anonymous feedback
 		print(xtable(anon.glob.table, digits=anon.glob.digits,
 		caption=paste(text$Ergebnisse,": ",latex.umlaute(descr$title)," (",latex.umlaute(descr$name),", ",descr$date,")", sep="")),
@@ -601,8 +618,50 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		} else {}
 	} ## end function global.report()
 
+	## function merge.reports()
+	# creates one PDF file from the individual reports
+	merge.reports <- function(){
+		merge.file <-  file.path(path, "individual_reports.tex")
+		if(identical(file.name, "name")){
+			name.scheme <- sapply(results$MatrNo, function(matn){
+					einzelergebnis <- results[results$MatrNo==matn,]
+					file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".pdf", sep=""))
+				})
+		} else {
+			name.scheme <- paste(results$MatrNo,".pdf", sep="")
+		}
+		# create filename from name scheme
+		all.pdf.files <- file.path(path, name.scheme)
+
+		# here comes the foot
+		latex.foot <- paste("
+			\\end{document}\n",
+		sep="")
+
+		# combine parts to a document
+		write(paste(
+			latex.head(one.file=TRUE, individual=FALSE),
+			paste("			\\includepdf[pages=-]{", all.pdf.files, "}", sep="", collapse="\n"),
+			"\n",
+			latex.foot, sep=""),
+			file=merge.file)
+
+		if (!isTRUE(quiet)){
+			# give some feedback on current status
+			message(paste("Merging individual reports into one file...", sep=""))
+		} else {}
+
+		# check if PDF creation is demanded
+		if(isTRUE(pdf)){
+			create.pdf(file="individual_reports.tex", path=path, path.orig=path.orig)
+		} else {}
+	} ## end function merge.reports()
+
 	if(identical(matn, "all")){
 		for(i in results$MatrNo) tabellenbau(matn=i)
+		if(isTRUE(merge) & isTRUE(pdf)){
+			merge.reports()
+		} else {}
 	} else if(identical(matn, "anon")){
 		global.report(form="anon")
 	} else if(identical(matn, "glob")){
