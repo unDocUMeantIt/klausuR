@@ -99,8 +99,10 @@
 						</frame>
 						<stretch />
 						<dropdown id="drp_format" label="Output format:">
-							<option label="PDF only" value="pdf" checked="true" />
-							<option label="PDF + LaTeX" value="pdflatex" />
+							<option label="PDF (merged file)" value="pdfmerge" checked="true" />
+							<option label="PDF (indiv. files)" value="pdf" />
+							<option label="PDF (merged file) + LaTeX" value="pdfmergelatex" />
+							<option label="PDF (indiv. files) + LaTeX" value="pdflatex" />
 							<option label="LaTeX only" value="latex" />
 						</dropdown>
 						<dropdown id="drp_report_lang" label="Choose a language:">
@@ -167,8 +169,7 @@
 							<checkbox id="chk_na_remove" label="Remove missing values (NA)" value="TRUE" checked="true" />
 						</frame>
 						<frame id="frame_save">
-							<checkbox id="chk_save" label="Keep results in current workspace" value="save" checked="false"/>
-							<saveobject id="save_results" initial="klsr.obj"/>
+							<saveobject id="save_results" label="Keep results in current workspace" initial="klsr.obj" checkable="true" checked="false" />
 						</frame>
 					</column>
 				</row>

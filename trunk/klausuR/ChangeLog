@@ -3,6 +3,7 @@ ChangeLog for package klausuR
 ## 0.12-3 (2011-10-04)
   - added option "merge" to klausur.report(), to merge all individual reports into one file
   - added status feedback to  klausur.report(), can be turned of with new option "quiet=TRUE"
+  - updated the RKWard GUI to the new options
 
 ## 0.12-2 (2011-09-11)
   - fixed bug in nret.rescale() regarding NR data

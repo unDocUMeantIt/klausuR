@@ -1,3 +1,10 @@
+// global vars
+var chk_mufo;
+var cronbach;
+var itemanal;
+var chk_matn_all; // all
+var rep_matn;
+
 function preprocess () {
 	// we'll need some functions...
 	echo("require(klausuR)\n\n");
@@ -11,11 +18,15 @@ function calculate () {
 	var drp_mark_sugg      = getValue("drp_mark_sugg");
 	var drp_mark_schm      = getValue("drp_mark_schm");
 	var noten              = getValue("noten");
-	var chk_mufo           = getValue("chk_mufo");
 	var chk_na_remove      = getValue("chk_na_remove");
+	// all tests or one test subject?
+	chk_matn_all           = getValue("chk_matn_all"); // all
+	rep_matn               = getValue("rep_matn");
+	// multiple test forms?
+	chk_mufo               = getValue("chk_mufo");
 	// toggle cronbach's alpha and item analysis
-	var cronbach           = getValue("chk_cronbach");
-	var itemanal           = getValue("chk_itemanal");
+	cronbach               = getValue("chk_cronbach");
+	itemanal               = getValue("chk_itemanal");
 
 	// individual reports
 	var chk_reports        = getValue("chk_reports"); // TRUE
@@ -29,8 +40,6 @@ function calculate () {
 	var report_title       = getValue("report_title");
 	var report_name        = getValue("report_name");
 	var report_date        = getValue("report_date");
-	var chk_matn_all       = getValue("chk_matn_all"); // all
-	var rep_matn           = getValue("rep_matn");
 	var chk_hist_points    = getValue("chk_hist_points"); // TRUE
 	var chk_hist_marks     = getValue("chk_hist_marks"); // TRUE
 	var chk_marks_info_pts = getValue("chk_marks_info_pts"); // FALSE
@@ -73,9 +82,12 @@ function calculate () {
 		echo("## Write reports\n"+
 		"klausur.report(klsr=klsr.obj");
 			if(chk_matn_all) echo(", matn=\"all\"");
-			else if(rep_matn) echo(", matn="+rep_matn);
-			if(drp_format != "pdf") echo(", save=TRUE");
-			if(drp_format != "latex") echo(", pdf=TRUE");
+				else if(rep_matn) echo(", matn="+rep_matn);
+			if(drp_format == "pdfmerge") echo(", pdf=TRUE, merge=TRUE");
+				else if(drp_format == "pdf") echo(", pdf=TRUE");
+				else if(drp_format == "pdfmergelatex") echo(", save=TRUE, pdf=TRUE, merge=TRUE");
+				else if(drp_format == "pdflatex") echo(", save=TRUE, pdf=TRUE");
+				else echo(", save=TRUE");
 			if(report_path) echo(", path=\""+report_path+"\"");
 			if(drp_filenames != "matn") echo(", file.name=\""+drp_filenames+"\"");
 			if(chk_hist_points == "TRUE" || chk_hist_marks == "TRUE") echo(", hist=list(points="+chk_hist_points+", marks="+chk_hist_marks+")");
@@ -83,57 +95,49 @@ function calculate () {
 			if(rep_description) echo(", descr=list("+rep_description.join(", ")+")");
 			if(drp_report_lang != "en") echo(", lang=\""+drp_report_lang+"\"");
 			if(chk_alt_comma != "TRUE") echo(", alt.candy=FALSE");
-		echo(")\n\n");
+		echo(", quiet=TRUE)\n\n");
 
 		// should anonymous feedback be generated?
 		if(chk_rep_anonym){
 			echo("## Write anonymous feedback report\n"+
 			"klausur.report(klsr=klsr.obj, matn=\"anon\"");
-			if(drp_format != "pdf") echo(", save=TRUE");
-			if(drp_format != "latex") echo(", pdf=TRUE");
+			if(drp_format == "latex" || drp_format == "pdfmergelatex" || drp_format == "pdflatex") echo(", save=TRUE");
+			if(drp_format == "pdf" || drp_format == "pdfmergelatex" || drp_format == "pdflatex" || drp_format == "pdfmerge") echo(", pdf=TRUE");
 			if(report_path) echo(", path=\""+report_path+"\"");
 			if(chk_marks_info_pts == "TRUE" || chk_marks_info_pct == "TRUE") echo(", marks.info=list(points="+chk_marks_info_pts+", percent="+chk_marks_info_pct+")");
 			if(rep_description) echo(", descr=list("+rep_description.join(", ")+")");
 			if(drp_report_lang != "en") echo(", lang=\""+drp_report_lang+"\"");
 			if(rep_anonym_file != "anon.tex") echo(", anon.glob.file=\""+rep_anonym_file+"\"");
-			echo(")\n\n");
+			echo(", quiet=TRUE)\n\n");
 		}
 
 		// should a global report be generated?
 		if(chk_rep_global){
 			echo("## Write global results report\n"+
 			"klausur.report(klsr=klsr.obj, matn=\"glob\"");
-			if(drp_format != "pdf") echo(", save=TRUE");
-			if(drp_format != "latex") echo(", pdf=TRUE");
+			if(drp_format == "latex" || drp_format == "pdfmergelatex" || drp_format == "pdflatex") echo(", save=TRUE");
+			if(drp_format == "pdf" || drp_format == "pdfmergelatex" || drp_format == "pdflatex" || drp_format == "pdfmerge") echo(", pdf=TRUE");
 			if(report_path) echo(", path=\""+report_path+"\"");
 			if(chk_marks_info_pts == "TRUE" || chk_marks_info_pct == "TRUE") echo(", marks.info=list(points="+chk_marks_info_pts+", percent="+chk_marks_info_pct+")");
 			if(rep_description) echo(", descr=list("+rep_description.join(", ")+")");
 			if(drp_report_lang != "en") echo(", lang=\""+drp_report_lang+"\"");
 			if(rep_global_file) echo(", anon.glob.file=\""+rep_global_file+"\"");
-			echo(")\n\n");
+			echo(", quiet=TRUE)\n\n");
 		}
 	}
 }
 
 function printout () {
-	// multiple test forms?
-	var chk_mufo           = getValue("chk_mufo");
-
 	// printing options
 	var globres        = getValue("chk_globres");
 	var anon           = getValue("chk_anon");
 	var marks_sum      = getValue("chk_marks_sum");
 	var distrib        = getValue("chk_distrib");
-	var cronbach       = getValue("chk_cronbach");
-	var itemanal       = getValue("chk_itemanal");
-
-	// all tests or one test subject?
-	var chk_matn_all   = getValue("chk_matn_all"); // all
-	var rep_matn       = getValue("rep_matn");
 
 	// save options
-	var save           = getValue("chk_save");
+	var save           = getValue("save_results.active");
 	var save_name      = getValue("save_results");
+	var save_env       = getValue("save_results.parent");
 
 	echo("rk.header(\"klausuR: Test Evaluation\")\n");
 
@@ -199,11 +203,11 @@ function printout () {
 	} // end else
 
 	// check if results are to be saved:
-	if (save && save_name) {
+	if(save) {
 		if(chk_mufo){
-			echo("assign(\""+save_name+"\", klsr.mufo.obj, envir=globalenv())\n");
+			echo("assign(\""+save_name+"\", klsr.mufo.obj, envir="+save_env+")\n");
 		} else {
-			echo("assign(\""+save_name+"\", klsr.obj, envir=globalenv())\n");
+			echo("assign(\""+save_name+"\", klsr.obj, envir="+save_env+")\n");
 		}
 	}
 }
