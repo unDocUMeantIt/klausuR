@@ -1,5 +1,8 @@
 ChangeLog for package klausuR
 
+## 0.12-4 (2012-01-30)
+  - fixed bug in compare(): "new.set" didn't work if exactly one or none differences were found
+
 ## 0.12-3 (2011-10-04)
   - added option "merge" to klausur.report(), to merge all individual reports into one file
   - added status feedback to  klausur.report(), can be turned of with new option "quiet=TRUE"

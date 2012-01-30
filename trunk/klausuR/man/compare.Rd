@@ -2,19 +2,20 @@
 \alias{compare}
 \title{Comparison of data sets}
 \usage{
-  compare(set1, set2, select = NULL, ignore = NULL, new.set
-  = FALSE, rename = c(), trim = FALSE, id = list(No = "No",
-  Name = c("FirstName", "Name")))
+  compare(set1, set2, select = NULL, ignore = NULL,
+    new.set = FALSE, rename = c(), trim = FALSE,
+    id = list(No = "No", Name = c("FirstName", "Name")))
 }
 \arguments{
   \item{set1,set2}{The data sets to be compared. Can be two
   data.frames or objects of class
-  \code{\link[klausuR]{klausuR.answ-class}}. If the latter,
-  their slots \code{id} and \code{items} will be compared.}
+  \code{\link[klausuR]{klausuR.answ-class}}.  If the
+  latter, their slots \code{id} and \code{items} will be
+  compared.}
 
   \item{select}{A vector with variables that should be
   compared, all others are omitted. At least all the values
-  given in \code{id} are needed for the output! If
+  given in \code{id} are needed for the output!  If
   \code{NULL}, all variables are examined.}
 
   \item{ignore}{A vector with variables that should be

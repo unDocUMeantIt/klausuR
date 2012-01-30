@@ -3,14 +3,15 @@
 \title{Generate individual reports on multipe choice test results}
 \usage{
   klausur.report(klsr, matn, save = FALSE, pdf = FALSE,
-  path = NULL, file.name = "matn", hist = list(points =
-  FALSE, marks = FALSE), hist.merge = list(), hist.points =
-  "hist_points.pdf", hist.marks = "hist_marks.pdf", descr =
-  list(title = NULL, name = NULL, date = NULL), marks.info
-  = list(points = FALSE, percent = FALSE), lang = "en",
-  alt.candy = TRUE, anon.glob.file = "anon.tex",
-  NRET.legend = FALSE, table.size = "auto", merge = FALSE,
-  quiet = FALSE)
+    path = NULL, file.name = "matn",
+    hist = list(points = FALSE, marks = FALSE),
+    hist.merge = list(), hist.points = "hist_points.pdf",
+    hist.marks = "hist_marks.pdf",
+    descr = list(title = NULL, name = NULL, date = NULL),
+    marks.info = list(points = FALSE, percent = FALSE),
+    lang = "en", alt.candy = TRUE,
+    anon.glob.file = "anon.tex", NRET.legend = FALSE,
+    table.size = "auto", merge = FALSE, quiet = FALSE)
 }
 \arguments{
   \item{klsr}{An object of class klausuR or klausuR.mult.
@@ -29,8 +30,8 @@
 
   \item{pdf}{Logical: If TRUE, LaTeX reports will be
   converted to PDF automatically, using
-  \code{\link[tools]{texi2dvi}}. If \code{save} is FALSE, a
-  temporary directory is used, that is only the PDF files
+  \code{\link[tools]{texi2dvi}}.  If \code{save} is FALSE,
+  a temporary directory is used, that is only the PDF files
   will be saved.}
 
   \item{path}{Path for \code{save} and \code{hist} files.}
@@ -43,7 +44,7 @@
   \code{points} and \code{marks}: If TRUE, the reports will
   include histograms of the distribution of points and/or
   marks. The needed PDF files will be created by
-  \code{\link[klausuR:plot]{plot}} and saved as well. (see
+  \code{\link[klausuR:plot]{plot}} and saved as well.  (see
   \code{path}, \code{hist.points} and \code{hist.marks}).}
 
   \item{hist.merge}{If you need/want to combine results
@@ -134,11 +135,11 @@ data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-Item30=4, Item31=13, Item32=234)
+	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+	Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()
@@ -160,7 +161,7 @@ klsr.obj <- klausur(data.obj)
 
 \dontrun{
 klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
-name="Dr. T. Aeter", date="24.09.2010"))
+	name="Dr. T. Aeter", date="24.09.2010"))
 }
 }
 \author{

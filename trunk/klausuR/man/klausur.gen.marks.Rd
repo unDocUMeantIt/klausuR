@@ -2,8 +2,9 @@
 \alias{klausur.gen.marks}
 \title{Generate mark assignments}
 \usage{
-  klausur.gen.marks(mark.labels = NULL, answ = NULL, wght =
-  NULL, suggest = list(mean = NULL, sd = NULL), minp = 0)
+  klausur.gen.marks(mark.labels = NULL, answ = NULL,
+    wght = NULL, suggest = list(mean = NULL, sd = NULL),
+    minp = 0)
 }
 \arguments{
   \item{mark.labels}{Either a vector with labels (names)

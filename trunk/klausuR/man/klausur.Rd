@@ -2,10 +2,10 @@
 \alias{klausur}
 \title{Evaluate multiple choice tests}
 \usage{
-  klausur(data, marks = NULL, mark.labels = NULL, items =
-  NULL, wght = NULL, score = "solved", matn = NULL, na.rm =
-  TRUE, cronbach = TRUE, item.analysis = TRUE, sort.by =
-  "Name")
+  klausur(data, marks = NULL, mark.labels = NULL,
+    items = NULL, wght = NULL, score = "solved",
+    matn = NULL, na.rm = TRUE, cronbach = TRUE,
+    item.analysis = TRUE, sort.by = "Name")
 }
 \arguments{
   \item{data}{An object of class
@@ -16,7 +16,7 @@
   to let
   \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
   calculate suggestions under the assumption of normal
-  distribution. If \code{NULL}, this value must be set in
+  distribution.  If \code{NULL}, this value must be set in
   the \code{data} object.}
 
   \item{mark.labels}{If \code{marks="suggest"}, use these
@@ -49,12 +49,12 @@
 
   \item{sort.by}{A character string naming the variable to
   sort the results by. Set to \code{c()} to skip any
-  re-ordering. If \code{cronbach} is TRUE, too, it will
+  re-ordering.  If \code{cronbach} is TRUE, too, it will
   include the alpha values if each item was deleted.}
 }
 \value{
   An object of class \code{\link[klausuR]{klausuR-class}}
-  with the following slots. \item{results}{A data.frame
+  with the following slots.  \item{results}{A data.frame
   with global results} \item{answ}{A data.frame with all
   given answers} \item{corr}{A vector with the correct
   answers} \item{wght}{A vector with the weights of items}
@@ -217,11 +217,11 @@ data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-Item30=4, Item31=13, Item32=234)
+	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+	Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()
@@ -245,24 +245,24 @@ data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 klsr.obj <- klausur(data.obj)
 
 ############################
-# example for an NRET test
+	# example for an NRET test
 ############################
 # load sampla data in SPSS format
 data(spss.data)
 # define correct answers
 spss.corr <- c(
-item01=2, item02=3, item03=3, item04=3, item05=2,
-item06=2, item07=3, item08=1, item09=1, item10=2)
+		item01=2, item02=3, item03=3, item04=3, item05=2,
+		item06=2, item07=3, item08=1, item09=1, item10=2)
 
 # convert into klausuR type coding
 klausuR.data <- nret.translator(spss.data, spss="in")
 klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE,
-num.alt=3, spss.prefix=c(corr="item"))
+  num.alt=3, spss.prefix=c(corr="item"))
 # now create the data object; "Nickname" must be renamed
 data.obj <- klausur.data(answ=klausuR.data, corr=klausuR.corr,
-rename=c(Pseudonym="Nickname"))
+  rename=c(Pseudonym="Nickname"))
 
-# finally, the test can be evaluated, using the scoring functions available
+	# finally, the test can be evaluated, using the scoring functions available
 NRET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET")
 NRETplus.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NRET+")
 NR.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR")

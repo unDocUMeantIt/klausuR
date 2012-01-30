@@ -260,8 +260,16 @@ compare <- function(set1, set2, select=NULL, ignore=NULL, new.set=FALSE, rename=
 		# check if a new set should be created, with dubious values replaced by NA
 		if(isTRUE(new.set)){
 			new.df <- set1
-			for (this.val in 1:nrow(set.diff.array)){
-				new.df[set.diff.array[this.val, 1], set.diff.array[this.val, 2]] <- NA
+			# there's only rows if there's also more than one found difference
+			if(uneq > 1){
+				for (this.val in 1:nrow(set.diff.array)){
+					new.df[set.diff.array[this.val, 1], set.diff.array[this.val, 2]] <- NA
+				}
+			} else if(uneq == 1){
+				new.df[set.diff.array[1, 1], set.diff.array[1, 2]] <- NA
+			} else {
+				# no differences, return the set
+				return(new.df)
 			}
 			cat("\nThe objects differ.\n\n")
 			print(differences)

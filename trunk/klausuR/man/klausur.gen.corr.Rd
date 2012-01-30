@@ -3,7 +3,7 @@
 \title{A function to generate a vector with correct answers}
 \usage{
   klausur.gen.corr(answ=NULL, items.char=FALSE,
-  test.forms=1)
+    test.forms=1)
 }
 \arguments{
   \item{answ}{Either an object with item names in klausuR

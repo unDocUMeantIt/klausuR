@@ -2,12 +2,12 @@
 \alias{nret.translator}
 \title{Convert NRET/ET data between klausuR and other software}
 \usage{
-  nret.translator(dat, items = NULL, spss = "out", corr =
-  FALSE, num.alt = NULL, klausuR.alt = c(is.true = "+",
-  is.false = "-", missing = "0", err = "*"), spss.alt =
-  c(is.true = "2", is.false = "1", missing = "0", err =
-  "3"), rm.old.vars = TRUE, items.only = FALSE,
-  klausuR.prefix = c(), spss.prefix = c())
+  nret.translator(dat, items = NULL, spss = "out",
+    corr = FALSE, num.alt = NULL,
+    klausuR.alt = c(is.true = "+", is.false = "-", missing = "0", err = "*"),
+    spss.alt = c(is.true = "2", is.false = "1", missing = "0", err = "3"),
+    rm.old.vars = TRUE, items.only = FALSE,
+    klausuR.prefix = c(), spss.prefix = c())
 }
 \arguments{
   \item{dat}{A data.frame, the object to convert.}
@@ -61,7 +61,7 @@
 \value{
   If \code{corr=FALSE}, a data.frame with more or less
   columns (depending on \code{rm.old.vars} and
-  \code{items.only}). If \code{corr=TRUE}, returns a named
+  \code{items.only}).  If \code{corr=TRUE}, returns a named
   vector if \code{spss="in"} and a list if
   \code{spss="out"} (containing SPSS syntax in the element
   \code{syntax} and also a named vector, called
@@ -106,8 +106,8 @@
 data(spss.data)
 klausuR.data <- nret.translator(spss.data, spss="in")
 spss.corr <- c(
-item01=2, item02=3, item03=3, item04=3, item05=2,
-item06=2, item07=3, item08=1, item09=1, item10=2)
+		item01=2, item02=3, item03=3, item04=3, item05=2,
+		item06=2, item07=3, item08=1, item09=1, item10=2)
 klausuR.corr <- nret.translator(spss.corr, spss="in", corr=TRUE, num.alt=3)
 
 # from R to SPSS

@@ -2,10 +2,10 @@
 \alias{klausur.data}
 \title{A function to create data objects with given and correct answers to a test.}
 \usage{
-  klausur.data(answ, corr, items = NULL, marks = NULL, wght
-  = NULL, corr.key = NULL, rename = c(), dummies = c(),
-  disc.misc = FALSE, na.rm = TRUE, item.prefix = c(),
-  sort.by = "Name")
+  klausur.data(answ, corr, items = NULL, marks = NULL,
+    wght = NULL, corr.key = NULL, rename = c(),
+    dummies = c(), disc.misc = FALSE, na.rm = TRUE,
+    item.prefix = c(), sort.by = "Name")
 }
 \arguments{
   \item{answ}{A \code{\link{data.frame}} which has to
@@ -45,7 +45,7 @@
 
   \item{dummies}{A vector of dummy variables to be created,
   e.g. if you don't need/want actual data in the \code{id}
-  slot. Can include \code{"No"}, \code{"Name"},
+  slot.  Can include \code{"No"}, \code{"Name"},
   \code{"FirstName"}, \code{"MatrNo"} and
   \code{"Pseudonym"}. Columns will just be filled with
   increasing integers.}
@@ -148,11 +148,11 @@ data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-Item30=4, Item31=13, Item32=234)
+	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+	Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()
