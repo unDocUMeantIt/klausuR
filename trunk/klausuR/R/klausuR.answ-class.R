@@ -19,10 +19,11 @@
 #		}
 # @slot id Contains the columns \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}.
 # @slot items Contains a copy of \code{id$MatrNo} and all answers to the test items (one item per column).
-# @slot score Contains two elements:
+# @slot score Contains three elements:
 #		\itemize{
 #			\item{\code{marks}} {The assigned marks for achieved points (\code{NULL} if none)}
 #			\item{\code{wght}} {Weights for each item (\code{NULL} if none)}
+#			\item{\code{maxp}} {Optional, to force a certain maximum points value (\code{NULL} if none)}
 #		}
 # @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 # @slot misc Any additional data you'd like to be stored along with \code{id} and \code{items},
@@ -50,7 +51,7 @@ setClass("klausuR.answ",
 		corr=list(corr=c(Item1=NA), corr.key=NULL),
 		id=data.frame(No=NA, Name=NA, FirstName=NA, MatrNo=NA, Pseudonym=NA, Form=NA),
 		items=data.frame(MatrNo=NA, Item1=NA),
-		score=list(marks=NULL, wght=NULL),
+		score=list(marks=NULL, wght=NULL, maxp=NULL),
 		test=new("klausuR.test"),
 		misc=data.frame(MatrNo=NA)
   )
@@ -123,7 +124,7 @@ setValidity("klausuR.answ", function(object){
 
 	# check score elements
 	score.names <- names(obj.score)
-	invalid.score.names <- score.names[!score.names %in% c("marks","wght")]
+	invalid.score.names <- score.names[!score.names %in% c("marks","wght","maxp")]
 	missing.score.names <- score.names[!c("marks","wght") %in% score.names]
 	if(length(invalid.score.names) > 0){
 		stop(simpleError(paste("Invalid elements in slot 'score':\n ",

@@ -90,7 +90,7 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
 ## scoring.check.klausur()
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the desired scoring
-scoring.check.klausur <- function(corr, marks, wght, score){
+scoring.check.klausur <- function(corr, marks, wght, score, maxp=NULL){
 
 		# are there missing values?
 		if(!is.null(marks)){
@@ -119,6 +119,10 @@ scoring.check.klausur <- function(corr, marks, wght, score){
 			warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
 			} else{}
 		} else{}
+
+		if(!is.null(maxp) && !is.numeric(maxp)){
+			stop(simpleError("'maxp' must either be numeric or NULL!"))
+		} else {}
 
 	return(TRUE)
 } ## end scoring.check.klausur()

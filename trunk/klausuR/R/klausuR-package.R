@@ -4,7 +4,7 @@
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
 #' Version: \tab 0.12-4\cr
-#' Date: \tab 2012-01-30\cr
+#' Date: \tab 2012-02-10\cr
 #' Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
@@ -25,5 +25,4 @@
 #' @title Multiple Choice Test Evaluation.
 #' @author m.eik michalke \email{meik.michalke@@hhu.de}
 #' @keywords package
-roxygen <- function() NULL
-roxygen()
+NULL

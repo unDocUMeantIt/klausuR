@@ -5,7 +5,7 @@
   klausur(data, marks = NULL, mark.labels = NULL,
     items = NULL, wght = NULL, score = "solved",
     matn = NULL, na.rm = TRUE, cronbach = TRUE,
-    item.analysis = TRUE, sort.by = "Name")
+    item.analysis = TRUE, sort.by = "Name", maxp = NULL)
 }
 \arguments{
   \item{data}{An object of class
@@ -51,6 +51,14 @@
   sort the results by. Set to \code{c()} to skip any
   re-ordering.  If \code{cronbach} is TRUE, too, it will
   include the alpha values if each item was deleted.}
+
+  \item{maxp}{Optional numeric value, if set will be forced
+  as the maximum number of points achievable. This should
+  actually not be needed, if your test has no strange
+  errors. But if for example it later turns out you need to
+  adjust one item because it has two instead of one correct
+  answers, this option can become handy in combination with
+  "partial" scoring and item weights.}
 }
 \value{
   An object of class \code{\link[klausuR]{klausuR-class}}

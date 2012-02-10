@@ -84,6 +84,9 @@
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #' @param sort.by A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
+#' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
+#'		if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
+#'		one correct answers, this option can become handy in combination with "partial" scoring and item weights.
 #' @return An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.
 #'	\item{results}{A data.frame with global results}
 #'	\item{answ}{A data.frame with all given answers}
@@ -166,7 +169,7 @@
 #' ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
 
 klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved",
-		matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name"){
+		matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name", maxp=NULL){
 		## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
 		if(!inherits(data, "klausuR.answ")){
@@ -194,7 +197,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		## firstly, check input data an quit if necessary
 		# data.check.klausur() is an internal function, defined in klausuR-internal.R
 		sane.data <- data.check.klausur(cbind(data@id, data@items), corr, items, na.rm)
-		stopifnot(scoring.check.klausur(corr, marks, wght, score))
+		stopifnot(scoring.check.klausur(corr, marks, wght, score, maxp))
 		answ <- sane.data$answ
 		items <- sane.data$items
 
@@ -214,14 +217,32 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		# NRET et al. can't be weighted yet
 		if(is.null(wght) | score %in% c("NR", "ET", "NRET", "NRET+")){
 			nret.test.chars <- nret.minmax(corr=corr, score=score)
-			maxp <- nret.test.chars["maxp"]
+			if(is.null(maxp)){
+				if(is.null(data@score$maxp)){
+					maxp <- nret.test.chars["maxp"]
+				} else {
+					maxp <- data@score$maxp
+					warning(paste("Forced maximum number of points to ", maxp, " (as set in data object)!", sep=""), call.=FALSE)
+				}
+			} else {
+				warning(paste("Manually forced maximum number of points to ", maxp, "!", sep=""), call.=FALSE)
+			}
 			min.score <- nret.test.chars["minp"]
 			baseline <- nret.test.chars["baseline"]
 			num.alt <- nret.test.chars["num.alt"]
 			# for the results, create a vector of 1's by number of items
 			wght.results <- rep(1, length(items))
 		} else {
-			maxp <- sum(wght)
+			if(is.null(maxp)){
+				if(is.null(data@score$maxp)){
+					maxp <- sum(wght)
+				} else {
+					maxp <- data@score$maxp
+					warning(paste("Forced maximum number of points to ", maxp, " (as set in data object)!", sep=""), call.=FALSE)
+				}
+			} else {
+				warning(paste("Manually forced maximum number of points to ", maxp, "!", sep=""), call.=FALSE)
+			}
 			wght.results <- wght
 		}
 

@@ -54,6 +54,9 @@
 #' @param item.prefix A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
 #'		used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.
 #' @param sort.by A character string naming the variable to sort the \code{answ} data by. Set to \code{c()} to skip any re-ordering.
+#' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
+#'		if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
+#'		one correct answers, this option can become handy in combination with "partial" scoring and item weights.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -89,7 +92,7 @@
 #' klsr.obj <- klausur(data.obj)
 
 klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
-	disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name"){
+	disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL){
 
 	# check for var names to use
 	item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
@@ -136,7 +139,7 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 	}
 
 	sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix)
-	stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved"))
+	stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved", maxp=maxp))
 	answ <- sane.data$answ
 	items <- sane.data$items
 
@@ -196,7 +199,7 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 			Pseudonym=id.pseudonym,
 			Form=id.form, stringsAsFactors=FALSE),
 		items=data.frame(MatrNo=answ[["MatrNo"]], answ[, items], stringsAsFactors=FALSE),
-		score=list(marks=marks, wght=wght),
+		score=list(marks=marks, wght=wght, maxp=maxp),
 		misc=misc.data)
 
 	return(results)

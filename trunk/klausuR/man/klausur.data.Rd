@@ -5,7 +5,7 @@
   klausur.data(answ, corr, items = NULL, marks = NULL,
     wght = NULL, corr.key = NULL, rename = c(),
     dummies = c(), disc.misc = FALSE, na.rm = TRUE,
-    item.prefix = c(), sort.by = "Name")
+    item.prefix = c(), sort.by = "Name", maxp = NULL)
 }
 \arguments{
   \item{answ}{A \code{\link{data.frame}} which has to
@@ -66,6 +66,14 @@
   \item{sort.by}{A character string naming the variable to
   sort the \code{answ} data by. Set to \code{c()} to skip
   any re-ordering.}
+
+  \item{maxp}{Optional numeric value, if set will be forced
+  as the maximum number of points achievable. This should
+  actually not be needed, if your test has no strange
+  errors. But if for example it later turns out you need to
+  adjust one item because it has two instead of one correct
+  answers, this option can become handy in combination with
+  "partial" scoring and item weights.}
 }
 \value{
   An object of class
