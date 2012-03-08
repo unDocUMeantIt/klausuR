@@ -582,15 +582,18 @@ marks.summary <- function(marks, minp=0, add.const=0){
 ## klausur.reorderItems()
 # put items in correct order (multiple test forms)
 klausur.reorderItems <- function(slot, order){
-  part.slot <- subset(slot, select=-MatrNo)
-  slot.names <- names(part.slot)
-  matn.slot <- subset(slot, select=MatrNo)
-  # now let's reorder the stuff
-  part.slot.reordered <- part.slot[,order]
-  names(part.slot.reordered) <- slot.names
-  # finally glue MatrNo back
-  reordered.items <- cbind(matn.slot, part.slot.reordered)
-  return(reordered.items)
+	# to avoid NOTEs from R CMD check:
+	MatrNo <- NULL
+
+	part.slot <- subset(slot, select=-MatrNo)
+	slot.names <- names(part.slot)
+	matn.slot <- subset(slot, select=MatrNo)
+	# now let's reorder the stuff
+	part.slot.reordered <- part.slot[,order]
+	names(part.slot.reordered) <- slot.names
+	# finally glue MatrNo back
+	reordered.items <- cbind(matn.slot, part.slot.reordered)
+	return(reordered.items)
 } ## end klausur.reorderItems()
 
 ## function plot.merger()

@@ -23,6 +23,8 @@
 #' @export
 
 grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL, rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...){
+	# to avoid NOTEs from R CMD check:
+	MatrNo <- NULL
 
 	if(is.null(c(NR.res, NRET.res, NRETp.res, ET.res))){
 		stop(simpleError("At least one of 'NR.res', 'NRET.res', 'NRETp.res' or 'ET.res' must be specified!"))

@@ -1,5 +1,11 @@
 ChangeLog for package klausuR
 
+## 0.12-5 (2012-03-08) # not yet released
+  - replaced custom function to clean up LaTeX code with encoded_text_to_latex() from tools package in klausur.report()
+  - replaced UTF-8 characters with \uxxxx escapes in klausur.report()
+  - set some internal variables NULL in compare(), grand.table(), klausur.gen(), klausur.mufo(), klausur.report() and
+    the internal function klausur.reorderItems(), to avoid needless NOTEs from "R CMD check"
+
 ## 0.12-4 (2012-02-09)
   - fixed bug in compare(): "new.set" didn't work if exactly one or none differences were found
   - added 'maxp' option to klausur.answ-class and klausur.date(), to be able to compensate for really buggy tests...

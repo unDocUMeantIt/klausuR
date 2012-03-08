@@ -86,6 +86,8 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			    hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
 			    descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
 			    lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto", merge=FALSE, quiet=FALSE){
+	# to avoid NOTEs from R CMD check:
+	marks.information <- NULL
 
 	# before we start let's look at klsr
 	# if klsr is a list, iterate through it recusively
@@ -150,7 +152,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 				MatrikelNr="Matrikel-Nr.",
 				Datum="Datum der Klausur",
 				Antwort="Antwort",
-				Korrekt="Lösung",
+				Korrekt="L\u00f6sung",
 				Punkte="Punkte",
 				Ergebnisse="Ergebnisse",
 				Erreicht="Erreichte Punktzahl",
@@ -168,8 +170,8 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
  				NRET.expl=". \\emph{Erl\"auterung:} >>+<< -- richtig; >>-<< -- falsch; >>0<< -- keine Angabe; >>*<< -- fehlerhafte Angabe."
 		)
 		# ... and that of the plots
-		hist.text <- list(P.xlab="Punkte",P.ylab="Häufigkeit",P.main="Verteilung nach Punkten",
-				N.xlab="Note",N.ylab="Häufigkeit",N.main="Verteilung nach Noten"
+		hist.text <- list(P.xlab="Punkte",P.ylab="H\u00e4ufigkeit",P.main="Verteilung nach Punkten",
+				N.xlab="Note",N.ylab="H\u00e4ufigkeit",N.main="Verteilung nach Noten"
 		)
 	} ## end of german l10n
 	else {
@@ -247,16 +249,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 	# some sanitizing is also done
 	# it's used in tabellenbau() below
 	latex.umlaute <- function(input){
-		output <- gsub("ß","\\\\ss{}",as.character(input))
-		output <- gsub("ö","\\\\\"o",as.character(output))
-		output <- gsub("ü","\\\\\"u",as.character(output))
-		output <- gsub("ä",'\\\\\"a',as.character(output))
-		output <- gsub("Ö","\\\\\"O",as.character(output))
-		output <- gsub("Ü","\\\\\"U",as.character(output))
-		output <- gsub("Ä",'\\\\\"A',as.character(output))
-		output <- gsub("&",'\\\\&',as.character(output))
-		output <- gsub("_",'\\\\_',as.character(output))
-		output <- gsub("#",'\\\\#',as.character(output))
+		output <- encoded_text_to_latex(enc2utf8(input), "utf8")
 		return(output)
 	} ## end function latex.umlaute()
 
@@ -264,13 +257,13 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 	# this function will replace German umlauts for filenames
 	# it's used in tabellenbau() below
 	file.umlaute <- function(input){
-		output <- gsub("ß","ss",as.character(input))
-		output <- gsub("ö","oe",as.character(output))
-		output <- gsub("ü","ue",as.character(output))
-		output <- gsub("ä","ae",as.character(output))
-		output <- gsub("Ö","Oe",as.character(output))
-		output <- gsub("Ü","Ue",as.character(output))
-		output <- gsub("Ä","Ae",as.character(output))
+		output <- gsub("\u00df","ss",as.character(input))  # ß
+		output <- gsub("\u00f6","oe",as.character(output)) # ö
+		output <- gsub("\u00fc","ue",as.character(output)) # ü
+		output <- gsub("\u00e4","ae",as.character(output)) # ä
+		output <- gsub("\u00d6","Oe",as.character(output)) # Ö
+		output <- gsub("\u00dc","Ue",as.character(output)) # Ü
+		output <- gsub("\u00c4","Ae",as.character(output)) # Ä
 		return(output)
 	} ## end function file.umlaute()
 

@@ -51,6 +51,8 @@
 #' }
 
 compare <- function(set1, set2, select=NULL, ignore=NULL, new.set=FALSE, rename=c(), trim=FALSE, id=list(No="No", Name=c("FirstName", "Name"))){
+	# to avoid NOTEs from R CMD check:
+	MatrNo <- NULL
 
 	# function to rename columns
 	rename.vars <- function(rename=rename, set){

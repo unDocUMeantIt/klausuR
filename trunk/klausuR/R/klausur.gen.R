@@ -15,6 +15,8 @@
 #' @export
 
 klausur.gen <- function(items=NULL, obs=1, items.char=FALSE){
+	# to avoid NOTEs from R CMD check:
+	daten <- NULL
 
 	if(!is.numeric(items) || (floor(items) != items) || !(items < 1000))
 		stop(simpleError("'items' must be an integer < 1000"))

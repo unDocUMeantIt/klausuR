@@ -79,6 +79,8 @@
 #' klsr.mufo.obj <- klausur.mufo(mufo.data.obj)
 
 klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
+	# to avoid NOTEs from R CMD check:
+	MatrNo <- NULL
 
 	if(!inherits(data, "klausuR.answ")){
 		stop(simpleError("'data' must be of class 'klausuR.answ'!"))
