@@ -1,30 +1,31 @@
 ChangeLog for package klausuR
 
-## 0.12-5 (2012-03-08) # not yet released
+changes in version 0.12-5 (2012-03-10)
   - replaced custom function to clean up LaTeX code with encoded_text_to_latex() from tools package in klausur.report()
   - replaced UTF-8 characters with \uxxxx escapes in klausur.report()
   - set some internal variables NULL in compare(), grand.table(), klausur.gen(), klausur.mufo(), klausur.report() and
     the internal function klausur.reorderItems(), to avoid needless NOTEs from "R CMD check"
+  - re-formatted the ChangeLog to have the roxyPackage translate it into a NEWS.Rd file
 
-## 0.12-4 (2012-02-09)
+changes in version 0.12-4 (2012-02-09)
   - fixed bug in compare(): "new.set" didn't work if exactly one or none differences were found
   - added 'maxp' option to klausur.answ-class and klausur.date(), to be able to compensate for really buggy tests...
   - adjusted klausur() to check for maxp
 
-## 0.12-3 (2011-10-04)
+changes in version 0.12-3 (2011-10-04)
   - added option "merge" to klausur.report(), to merge all individual reports into one file
   - added status feedback to  klausur.report(), can be turned of with new option "quiet=TRUE"
   - updated the RKWard GUI to the new options
 
-## 0.12-2 (2011-09-11)
+changes in version 0.12-2 (2011-09-11)
   - fixed bug in nret.rescale() regarding NR data
   - fixed author definition for R 2.14
 
-## 0.12-1 (2011-09-01)
+changes in version 0.12-1 (2011-09-01)
   - cleaned the docs so package check runs fine
   - fixed typo in klausur.report()
 
-## 0.12-0
+changes in version 0.12-0
   - 0.12 is not fully downward compatible with earlier versions of the klausuR package!
   - drastic changes: klausur() and klausur.mufo() from now on only take objects of the new class
     klausur.answ, which replaces the 'answ' and 'corr' arguments completely. Most of the time
@@ -57,20 +58,20 @@ ChangeLog for package klausuR
   - adapted rkwardtests to current behaviour of klausuR
   - sources can now be roxygenized by roxygen2 (classes docs are static until '@slot' is supported again)
 
-## 0.11-3
+changes in version 0.11-3
   - aligned penalty for false negatives to number of correct alternatives in NRET/ET scoring
   - for NRET/ET, moved determination of max. points etc. to new internal function nret.minmax()
 
-## 0.11-2
+changes in version 0.11-2
   - added internal function roxy.package() to ease development
   - added initial support for elimination testing (ET) and number right elimination testing (NRET)
   - fixed "Form" addition in klausur.gen()
 
-## 0.11-1
+changes in version 0.11-1
   - fixed bug in points (were logical instead of numeric, which caused trouble for PDF generation)
   - fixed annoying "show" warning
 
-## 0.10-1
+changes in version 0.10-1
   - complete rewrite of klausur.compare(): less and more efficient code
   - replaced "na.replace" option with a plain "na.rm", i.e., NA cases are dropped completely by default
   - added new "na.rm" option to plot method, TRUE by default
@@ -81,7 +82,7 @@ ChangeLog for package klausuR
   - fixed: klausur.report() didn't show partial results correctly, added check for needed digits
   - added slots "wght" and "points" to class klausuR
 
-## 0.10-0
+changes in version 0.10-0
   - added klausur.mufo() and new S4 class klausuR.mult: initial support for parallel test forms
   - added show() and plot() methods for objects of class klausuR.mult
   - added support for objects of class klausuR.mult in klausur.report()
@@ -89,53 +90,53 @@ ChangeLog for package klausuR
   - dropped roxygen dependency (still using roxygen, though)
   - some code cleanup for better readability
 
-## 0.9-7
+changes in version 0.9-7
   - added direct PDF creation to klausur.report(), using texi2dvi() from package tools
   - consequently added the tools package as a dependency
 
-## 0.9-6
+changes in version 0.9-6
   - added schemes "DIHK", "USA" and "UK" to klausuR.gen.marks()
   - added informative slot "marks.sum" to objects of class klausuR
   - updated the show method for klausuR objects accordingly
   - added "marks.info" option to klausur.report(), to include all or parts of "marks.sum" if wanted
 
-## 0.9-5
+changes in version 0.9-5
   - fixed another bug in klausur.compare(): objects with NAs meant trouble.
   - added "select" option to klausur.compare() to be able to focus on certain variables
 
-## 0.9-4
+changes in version 0.9-4
   - added support for different file name scheme to klausur.report() (matr. no. or name_firstname)
 
-## 0.9-3
+changes in version 0.9-3
   - added "alt.comma" parameter to klausur.report()
   - minor corrections in the documentation (some missing params in usage)
 
-## 0.9-2
+changes in version 0.9-2
   - restructured the LaTeX output
   - fixed some bugs in klausur.compare()
   - added parameters to skip cronbach's alpha and item analysis in klausur()
   - cronbach's alpha and item analysis now run in a safe tryCatch() environment
   - modified the show() method accordingly
 
-## 0.9-1
+changes in version 0.9-1
   - added "alpha if removed" calculation for each item
   - added longtable support for klausur.report()
   - fixed some bugs in klausur(), klausur.report() and plot() regarding character vectors
 
-## 0.9-0
+changes in version 0.9-0
   - added support for partially correct answers (if multiple correct answers possible)
     via the new "score" parameter
   - more cleaning up: moved some subroutines to internal functions
 
-## 0.8-1
+changes in version 0.8-1
   - added marks A to F as an option in klausur.gen.marks()
   - adjusted the plot method to treat marks as characters
   - beautyfied the output of individual results in klausur()
   - cleaned up a bit (removed unused relicts from klausur.R)
   - translated hopefully all comments in the code into english
 
-## 0.8-0
+changes in version 0.8-0
   - added feature to suggest marks by normal distribution
 
-## 0.7-0
+changes in version 0.7-0
   - initial public release (via reaktanz.de)
