@@ -244,29 +244,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		print.digits <- 2
 	}
 
-	## function latex.umlaute()
-	# this function will replace German umlauts with LaTeX equivalents
-	# some sanitizing is also done
-	# it's used in tabellenbau() below
-	latex.umlaute <- function(input){
-		output <- encoded_text_to_latex(enc2utf8(input), "utf8")
-		return(output)
-	} ## end function latex.umlaute()
-
-	## function file.umlaute()
-	# this function will replace German umlauts for filenames
-	# it's used in tabellenbau() below
-	file.umlaute <- function(input){
-		output <- gsub("\u00df","ss",as.character(input))  # ß
-		output <- gsub("\u00f6","oe",as.character(output)) # ö
-		output <- gsub("\u00fc","ue",as.character(output)) # ü
-		output <- gsub("\u00e4","ae",as.character(output)) # ä
-		output <- gsub("\u00d6","Oe",as.character(output)) # Ö
-		output <- gsub("\u00dc","Ue",as.character(output)) # Ü
-		output <- gsub("\u00c4","Ae",as.character(output)) # Ä
-		return(output)
-	} ## end function file.umlaute()
-
 	## function latex.head()
 	latex.head <- function(one.file=FALSE, individual=TRUE, hist.and.marks=FALSE, marks.hist.stuff=NULL, person=list()){
 		# use paste to create the LaTeX head, that is up to the table

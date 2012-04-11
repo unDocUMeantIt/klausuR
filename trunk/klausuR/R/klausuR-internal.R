@@ -38,7 +38,7 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
 
 		# in case no items were specified, take variables of names "Item##" as items
 		if(is.null(items)){
-			items <- grep(paste("^(", prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ))
+			items <- grep(paste("^(item)([[:digit:]]{1,3})$", sep=""), names(answ), ignore.case=TRUE)
 		} else{}
 
 		# are all needed variables present in the answers data?
@@ -75,9 +75,11 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
 		} else{}
 
 		# now let's check wheter all defined correct answers match the variables in answers data
-		if(!setequal(names(answ[, items]),names(corr))){
-			fehl.items.corr <- names(corr[!is.element(names(corr),names(answ[,items]))])
-			fehl.items.answ <- names(answ[!is.element(names(answ[, items]),names(corr))])
+		missing.items <- !names(corr) %in% names(answ[, items])
+		missing.corr <- !names(answ[, items]) %in% names(corr)
+		if(any(c(missing.items, missing.corr))){
+			fehl.items.corr <- names(corr)[missing.corr]
+			fehl.items.answ <- names(answ)[missing.items]
 			stop(simpleError(paste("Please check:\n  ", paste(fehl.items.corr, fehl.items.answ, collapse=", "),
 			"\n  The number of items differs between observed and correct answers!", sep="")))
 		}
@@ -608,3 +610,49 @@ plot.merger <- function(klsr=list()){
 	}
 	return(k.merged.results)
 } ## end function plot.merger()
+
+
+## function latex.umlaute()
+# this function will replace German umlauts with LaTeX equivalents
+# some sanitizing is also done
+# it's used in tabellenbau() of klausur.report()
+latex.umlaute <- function(input){
+	output <- gsub("([^\\\\])&", '\\1\\\\&', as.character(input), perl=TRUE)
+	output <- gsub("([^\\\\])_", '\\1\\\\_', as.character(output), perl=TRUE)
+	output <- gsub("([^\\\\])#", '\\1\\\\#', as.character(output), perl=TRUE)
+	output <- encoded_text_to_latex(enc2utf8(output), "utf8")
+	return(output)
+} ## end function latex.umlaute()
+
+
+## function file.umlaute()
+# this function will replace German umlauts and other special chars
+# for filenames it's used in tabellenbau() of klausur.report()
+file.umlaute <- function(input){
+	output <- gsub("\u00C0|\u00C1|\u00C2|\u00C3|\u00C5","A",as.character(input)) # À Á Â Ã Å
+	output <- gsub("\u00C4|\u00C6","Ae",as.character(output)) # Ä Æ
+	output <- gsub("\u00C7","C",as.character(output)) # Ç	c3 87	LATIN CAPITAL LETTER C WITH CEDILLA
+	output <- gsub("\u00C8|\u00C9|\u00CA|\u00CB|\u00D0","E",as.character(output)) # È É Ê Ë Ð (Eth)
+	output <- gsub("\u00CC|\u00CD|\u00CE|\u00CF","I",as.character(output)) # Ì Í Î Ï
+	output <- gsub("\u00D1","N",as.character(output)) # Ñ
+	output <- gsub("\u00D2|\u00D3|\u00D4|\u00D5","",as.character(output)) # Ò Ó Ô Õ
+	output <- gsub("\u00D6|\u00D8","Oe",as.character(output)) # Ö Ø
+	output <- gsub("\u00D9|\u00DA|\u00DB","U",as.character(output)) # Ù Ú Û
+	output <- gsub("\u00DC","Ue",as.character(output)) # Ü
+	output <- gsub("\u00DD","Y",as.character(output)) # Ý
+	output <- gsub("\u00DE","Th",as.character(output)) # Þ
+	output <- gsub("\u00DF","ss",as.character(output)) # ß
+	output <- gsub("\u00E0|\u00E1|\u00E2|\u00E3|\u00E5","a",as.character(output)) # à á â ã å
+	output <- gsub("\u00E4|\u00E6","ae",as.character(output)) # ä æ
+	output <- gsub("\u00E7","c",as.character(output)) # ç
+	output <- gsub("\u00E8|\u00E9|\u00EA|\u00EB|\u00F0","e",as.character(output)) # è é ê ë ð (eth)
+	output <- gsub("\u00EC|\u00ED|\u00EE|\u00EF","i",as.character(output)) # ì í î ï
+	output <- gsub("\u00F1","n",as.character(output)) # ñ	c3 b1	LATIN SMALL LETTER N WITH TILDE
+	output <- gsub("\u00F2|\u00F3|\u00F4|\u00F5","o",as.character(output)) # ò ó ô õ
+	output <- gsub("\u00F6|\u00F8","oe",as.character(output)) # ö ø
+	output <- gsub("\u00F9|\u00FA|\u00FB","u",as.character(output)) # ù ú û
+	output <- gsub("\u00FC","ue",as.character(output)) # ü
+	output <- gsub("\u00FD|\u00FF","y",as.character(output)) # ý ÿ
+	output <- gsub("\u00FE","th",as.character(output)) # þ
+	return(output)
+} ## end function file.umlaute()

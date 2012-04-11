@@ -1,5 +1,11 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-6 (2012-04-11)
+fixed:
+  - check for missing items in data and/or correct answers
+  - force item names into expected letter case
+  - corrected LaTeX output (filtering of problematic characters)
+
 changes in version 0.12-5 (2012-03-10)
   - replaced custom function to clean up LaTeX code with encoded_text_to_latex() from tools package in klausur.report()
   - replaced UTF-8 characters with \uxxxx escapes in klausur.report()

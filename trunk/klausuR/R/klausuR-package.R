@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.12-5\cr
-#' Date: \tab 2012-03-10\cr
+#' Version: \tab 0.12-6\cr
+#' Date: \tab 2012-04-11\cr
 #' Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr

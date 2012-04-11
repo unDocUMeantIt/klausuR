@@ -176,27 +176,27 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 			stop(simpleError("'data' must be of class 'klausuR.answ'!"))
 		} else {}
 
-		corr <- data@corr$corr
-		if(!is.null(data@corr$corr.key)){
+		corr <- slot(data, "corr")[["corr"]]
+		if(!is.null(slot(data, "corr")[["corr.key"]])){
 			warning("This test seems to have multiple test forms. Perhaps try klausur.mufo() instead?", call.=FALSE)
 		} else {}
 
 		if(is.null(wght)){
-			wght <- data@score$wght
+			wght <- slot(data, "score")[["wght"]]
 		} else {}
 
 		if(is.null(marks)){
-			if(is.null(data@score$marks)){
+			if(is.null(slot(data, "score")[["marks"]])){
 				stop(simpleError("You must give some value for 'marks', either in 'data' or with the klausur() call!"))
 			} else {
-				marks <- data@score$marks
+				marks <- slot(data, "score")[["marks"]]
 			}
 		} else {}
 
 		## TODO: clean up checks, so cbind is not needed!
 		## firstly, check input data an quit if necessary
 		# data.check.klausur() is an internal function, defined in klausuR-internal.R
-		sane.data <- data.check.klausur(cbind(data@id, data@items), corr, items, na.rm)
+		sane.data <- data.check.klausur(cbind(slot(data, "id"), slot(data, "items")), corr, items, na.rm)
 		stopifnot(scoring.check.klausur(corr, marks, wght, score, maxp))
 		answ <- sane.data$answ
 		items <- sane.data$items
