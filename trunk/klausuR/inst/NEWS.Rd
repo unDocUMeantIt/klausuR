@@ -1,6 +1,15 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-6 (2012-04-12)}{
+  \subsection{fixed}{
+    \itemize{
+      \item check for missing items in data and/or correct answers
+      \item force item names into expected letter case
+      \item corrected LaTeX output (filtering of problematic characters)
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-5 (2012-03-10)}{
   \itemize{
     \item replaced custom function to clean up LaTeX code with \code{encoded_text_to_latex()} from tools package in \code{klausur.report()}

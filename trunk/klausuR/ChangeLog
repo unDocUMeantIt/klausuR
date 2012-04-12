@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-6 (2012-04-11)
+changes in version 0.12-6 (2012-04-12)
 fixed:
   - check for missing items in data and/or correct answers
   - force item names into expected letter case
