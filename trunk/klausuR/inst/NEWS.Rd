@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-6 (2012-04-12)}{
+\section{Changes in klausuR version 0.12-6 (2012-04-14)}{
   \subsection{fixed}{
     \itemize{
       \item check for missing items in data and/or correct answers

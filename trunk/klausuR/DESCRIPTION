@@ -18,7 +18,7 @@ URL: http://r-forge.r-project.org/projects/klausur
 Authors@R: c(person(given="Meik", family="Michalke",
     email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-6
-Date: 2012-04-12
+Date: 2012-04-14
 Collate:
     'compare.R'
     'grand.table.R'
