@@ -221,7 +221,7 @@ compare <- function(set1, set2, select=NULL, ignore=NULL, new.set=FALSE, rename=
 			if(!is.null(ignore)){
 				set1 <- subset(set1, select=names(set1)[!names(set1) %in% ignore])
 				set2 <- subset(set2, select=names(set2)[!names(set2) %in% ignore])
-				warning(paste("Only a subset was compared. Dopped columns:\n  ", paste(ignore, collapse=", "), sep=""), call.=FALSE)
+				warning(paste("Only a subset was compared. Dropped columns:\n  ", paste(ignore, collapse=", "), sep=""), call.=FALSE)
 			} else{
 				ignore.varname <- ""
 			}
