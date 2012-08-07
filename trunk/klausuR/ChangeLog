@@ -1,5 +1,9 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-7 (2012-08-07)
+fixed:
+  - corrected LaTeX output (carets)
+
 changes in version 0.12-6 (2012-04-14)
 fixed:
   - check for missing items in data and/or correct answers

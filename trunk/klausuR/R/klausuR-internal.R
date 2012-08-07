@@ -618,8 +618,9 @@ plot.merger <- function(klsr=list()){
 # it's used in tabellenbau() of klausur.report()
 latex.umlaute <- function(input){
 	output <- gsub("([^\\\\])&", '\\1\\\\&', as.character(input), perl=TRUE)
-	output <- gsub("([^\\\\])_", '\\1\\\\_', as.character(output), perl=TRUE)
+	output <- gsub("([^\\\\])_", '\\1\\\\_{}', as.character(output), perl=TRUE)
 	output <- gsub("([^\\\\])#", '\\1\\\\#', as.character(output), perl=TRUE)
+	output <- gsub("([^\\\\])\\^", '\\1\\\\^{}', as.character(output), perl=TRUE)
 	output <- encoded_text_to_latex(enc2utf8(output), "utf8")
 	return(output)
 } ## end function latex.umlaute()
