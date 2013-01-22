@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.12-6\cr
-#' Date: \tab 2012-04-14\cr
+#' Version: \tab 0.12-7\cr
+#' Date: \tab 2013-01-22\cr
 #' Depends: \tab R (>= 2.9.0),xtable,psychometric,methods,graphics,tools\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
@@ -22,7 +22,7 @@
 #' @aliases klausuR-package klausuR
 #' @name klausuR-package
 #' @docType package
-#' @title Multiple Choice Test Evaluation.
-#' @author m.eik michalke \email{meik.michalke@@hhu.de}
+#' @title The klausuR Package
+#' @author Meik Michalke \email{meik.michalke@@hhu.de}
 #' @keywords package
 NULL

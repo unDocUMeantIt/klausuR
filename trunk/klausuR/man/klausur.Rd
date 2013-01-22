@@ -79,11 +79,11 @@
   list of three elements "alpha", "ci" (confidence interval
   95\%) and "deleted" (alpha if item was removed)}
   \item{item.analysis}{A data.frame with information on
-  difficulty, discriminant power and discriminant factor of
-  all items.} \item{misc}{Anything that was stored in the
-  \code{misc} slot of the input data.} Not all slots are
-  shown by default (refer to
-  \code{\link[klausuR:show]{show}} and
+  difficulty, discriminant power, discriminant factor and
+  Lienert's selection index of all items.}
+  \item{misc}{Anything that was stored in the \code{misc}
+  slot of the input data.} Not all slots are shown by
+  default (refer to \code{\link[klausuR:show]{show}} and
   \code{\link[klausuR:plot]{plot}}).
 }
 \description{
@@ -93,9 +93,10 @@
   answers to the test items, a vector with the correct
   answers, and optionally a vector with marks assigned to
   the points achieved. It will compute global test results
-  as well as some item analysis (including Cronbach's alpha
-  and discriminatory power of the test items), and
-  anonymous feedback for the test subjects.
+  as well as some item analysis (including Cronbach's
+  alpha, discriminatory power and Lienert's selection index
+  of the test items), and anonymous feedback for the test
+  subjects.
 }
 \details{
   For details on the ecpected data structure refer to
@@ -208,7 +209,12 @@
 
   To calculate Cronbach's alpha and item analysis methods
   from the package \code{\link[psychometric]{psychometric}}
-  are used.
+  are used. Lienert's selction index ("Selektionskennwert")
+  aims to consider both discriminatory power (correlation
+  of an item with the test results) and difficulty to
+  determine the quality of an item. It is defined as
+  \deqn{S = \frac{r_{it}}{2 \times{} \sqrt{Difficulty
+  \times{} (1-Difficulty)}}}
 }
 \note{
   \code{klausur} allows some tweaks that are probably not

@@ -1,8 +1,10 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-7 (2012-08-07)
+changes in version 0.12-7 (2013-01-22)
 fixed:
   - corrected LaTeX output (carets)
+added:
+  - item analysis now includes Lienert's selection index (selektionskennwert)
 
 changes in version 0.12-6 (2012-04-14)
 fixed:

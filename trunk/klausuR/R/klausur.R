@@ -2,8 +2,8 @@
 #'
 #' The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}, containing some
 #' identification data on all subjects and their answers to the test items, a vector with the correct answers, and optionally a vector with
-#' marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha and
-#' discriminatory power of the test items), and anonymous feedback for the test subjects.
+#' marks assigned to the points achieved. It will compute global test results as well as some item analysis (including Cronbach's alpha,
+#' discriminatory power and Lienert's selection index of the test items), and anonymous feedback for the test subjects.
 #'
 #' For details on the ecpected data structure refer to \code{\link[klausuR:klausur.data]{klausur.data}},
 #'
@@ -62,7 +62,10 @@
 #' ask you step by step. See the documentation of that function for details. To see the suggested result in detail, have a look at the slot
 #' \code{marks} of the returned object.
 #'
-#' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used.
+#' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used. Lienert's selction index
+#' ("Selektionskennwert") aims to consider both discriminatory power (correlation of an item with the test results) and difficulty to determine the
+#' quality of an item. It is defined as
+#' \deqn{S = \frac{r_{it}}{2 \times{} \sqrt{Difficulty \times{} (1-Difficulty)}}}
 #'
 #' @note \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
 #' necessarily yield more diagnostic information, allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
@@ -100,7 +103,7 @@
 #'	\item{mean}{A table with mean, median and quartiles of the test results}
 #'	\item{sd}{Standard deviation of the test results}
 #'	\item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
-#'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power and discriminant factor of all items.}
+#'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power, discriminant factor and Lienert's selection index of all items.}
 #'	\item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
 #'	Not all slots are shown by default (refer to \code{\link[klausuR:show]{show}} and \code{\link[klausuR:plot]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}

@@ -18,7 +18,7 @@
 # @slot mean A table with mean, median and quartiles of the test results
 # @slot sd Standard deviation of the test results
 # @slot cronbach Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)
-# @slot item.analysis A data.frame with information on difficulty, discriminant power and discriminant factor of all items.
+# @slot item.analysis A data.frame with information on difficulty, discriminant power, discriminant factor and selection index of all items.
 # @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 # @slot misc Anything that was stored in the \code{misc} slot of the input data.
 # @name klausuR,-class

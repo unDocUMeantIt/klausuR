@@ -2,14 +2,14 @@
 \name{klausuR-package}
 \alias{klausuR}
 \alias{klausuR-package}
-\title{Multiple Choice Test Evaluation.}
+\title{The klausuR Package}
 \description{
   Multiple Choice Test Evaluation.
 }
 \details{
   \tabular{ll}{ Package: \tab klausuR\cr Type: \tab
-  Package\cr Version: \tab 0.12-6\cr Date: \tab
-  2012-04-14\cr Depends: \tab R (>=
+  Package\cr Version: \tab 0.12-7\cr Date: \tab
+  2013-01-22\cr Depends: \tab R (>=
   2.9.0),xtable,psychometric,methods,graphics,tools\cr
   Enhances: \tab rkward\cr Encoding: \tab UTF-8\cr License:
   \tab GPL (>= 3)\cr LazyLoad: \tab yes\cr URL: \tab
@@ -23,7 +23,7 @@
   power.
 }
 \author{
-  m.eik michalke \email{meik.michalke@hhu.de}
+  Meik Michalke \email{meik.michalke@hhu.de}
 }
 \keyword{package}
 

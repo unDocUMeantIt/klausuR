@@ -184,6 +184,8 @@ calc.cronbach.alpha <- function(dichot.matrix){
 calc.item.analysis <- function(dichot.matrix, cron.alpha.list){
 	try.item.analysis <- function(){
 	  item.anal <- cbind(item.exam(dichot.matrix, discrim=TRUE), alphaIfDeleted=cron.alpha.list$deleted)
+	  # add selection index (selektionskennwert) as suggested by lienert
+	  item.anal <- cbind(item.anal, selIdx=item.anal[["Item.Tot.woi"]] / (2 * sqrt(item.anal[["Difficulty"]] * (1 - item.anal[["Difficulty"]]))))
 	  return(item.anal)
 	}
 	item.analyse <- tryCatch(try.item.analysis(), error=function(e){

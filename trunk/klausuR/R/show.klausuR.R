@@ -32,6 +32,7 @@ setMethod("show", signature(object="klausuR"), function(object){
 		Diffc=round(object@item.analysis$Difficulty, 2),
 		DiscrPwr=round(object@item.analysis$Item.total, 2),
 		PartWhole=round(object@item.analysis$Item.Tot.woi, 2),
+		SelectIdx=round(object@item.analysis$selIdx, 2),
 		Discrim=round(object@item.analysis$Discrimination, 2))
 		if(length(object@item.analysis$alphaIfDeleted) > 1 && !is.na(object@item.analysis$alphaIfDeleted)){
 			item.analysis["alphaIfDeleted"] <- round(object@item.analysis$alphaIfDeleted, 2)
