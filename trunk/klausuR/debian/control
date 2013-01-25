@@ -1,0 +1,16 @@
+Source: r-other-reaktanz-klausur
+Section: math
+Priority: optional
+Maintainer: m.eik michalke <meik.michalke@hhu.de>
+Build-Depends-Indep: debhelper (>> 4.1.0), r-base-dev (>= 2.10.0), cdbs, r-cran-xtable, r-cran-psychometric
+Standards-Version: 3.9.3.1
+Homepage: http://r-forge.r-project.org/projects/klausur
+
+Package: r-other-reaktanz-klausur
+Architecture: all
+Section: math
+Depends: r-base (>= 2.15.0), r-cran-xtable, r-cran-psychometric
+Description: GNU R package: A set of functions designed to quickly generate results of a multiple choice test. Generates detailed
+ global results, lists for anonymous feedback and personalised result feedback (in LaTeX and/or PDF format), as well as item
+ statistics like Cronbach's alpha or disciminatory power.
+Homepage: http://r-forge.r-project.org/projects/klausur
