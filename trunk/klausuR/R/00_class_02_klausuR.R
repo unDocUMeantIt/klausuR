@@ -24,7 +24,7 @@
 # @name klausuR,-class
 # @aliases klausuR-class klausuR,-class
 #' @import methods
-#' @include klausuR.test-class.R
+#' @include 00_class_01_klausuR.test.R
 # @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @exportClass klausuR

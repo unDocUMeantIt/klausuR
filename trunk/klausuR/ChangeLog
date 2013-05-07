@@ -1,5 +1,10 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-8 (2013-05-08)
+changed:
+  - no real new features, restructured the source code layout, as roxygen2
+    doesn't seem to get collate info easy with R 3.0.0 ...
+
 changes in version 0.12-7 (2013-01-25)
 fixed:
   - corrected LaTeX output (carets)

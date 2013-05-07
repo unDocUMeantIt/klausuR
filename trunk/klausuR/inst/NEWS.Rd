@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-8 (2013-05-08)}{
+  \subsection{changed}{
+    \itemize{
+      \item no real new features, restructured the source code layout, as roxygen2
+        doesn't seem to get collate info easy with R 3.0.0 ...
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-7 (2013-01-25)}{
   \subsection{fixed}{
     \itemize{
