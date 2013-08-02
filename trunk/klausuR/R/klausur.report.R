@@ -371,7 +371,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
 		# check for file name scheme
 		if(identical(file.name, "name")){
-			name.scheme <- file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".tex", sep=""))
+			name.scheme <- paste(file.umlaute(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName))),".tex", sep="")
 		} else {
 			name.scheme <- paste(matn,".tex", sep="")
 		}
@@ -392,6 +392,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 			# we need only the tabular environment
 			unused.garbage <- capture.output(
 					marks.info.table <- print(xtable(marks.information),
+					floating=FALSE,
 					sanitize.text.function=function(x){latex.umlaute(x)})
 				)
 			marks.info.tabular <- paste(
@@ -595,7 +596,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		if(identical(file.name, "name")){
 			name.scheme <- sapply(results$MatrNo, function(matn){
 					einzelergebnis <- results[results$MatrNo==matn,]
-					file.umlaute(paste(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName)),".pdf", sep=""))
+					paste(file.umlaute(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName))),".pdf", sep="")
 				})
 		} else {
 			name.scheme <- paste(results$MatrNo,".pdf", sep="")

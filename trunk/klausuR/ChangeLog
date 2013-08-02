@@ -1,5 +1,12 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-9 (2013-08-02)
+fixed:
+  - pdfLaTeX became picky and didn't work with the table of marks any more.
+    set print.xtable() to use floating=FALSE to fix this.
+  - added some more character filtering on generated filenames which could
+    cause LaTeX to fail with an error
+
 changes in version 0.12-8 (2013-05-08)
 changed:
   - no real new features, restructured the source code layout, as roxygen2
