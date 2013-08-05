@@ -14,3 +14,4 @@ Description: GNU R package: A set of functions designed to quickly generate resu
  global results, lists for anonymous feedback and personalised result feedback (in LaTeX and/or PDF format), as well as item
  statistics like Cronbach's alpha or disciminatory power.
 Homepage: http://r-forge.r-project.org/projects/klausur
+Suggests:

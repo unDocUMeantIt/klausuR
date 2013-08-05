@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-9 (2013-08-02)
+changes in version 0.12-9 (2013-08-05)
 fixed:
   - pdfLaTeX became picky and didn't work with the table of marks any more.
     set print.xtable() to use floating=FALSE to fix this.

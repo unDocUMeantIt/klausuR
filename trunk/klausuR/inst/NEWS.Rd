@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-9 (2013-08-02)}{
+\section{Changes in klausuR version 0.12-9 (2013-08-05)}{
   \subsection{fixed}{
     \itemize{
       \item pdfLaTeX became picky and didn't work with the table of marks any more.
