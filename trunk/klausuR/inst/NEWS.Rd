@@ -1,6 +1,13 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-10 (2013-09-28)}{
+  \subsection{fixed}{
+    \itemize{
+      \item removed typos in \code{klausur.repost()} code (\code{"appen"} instead of \code{"append"})
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-9 (2013-08-05)}{
   \subsection{fixed}{
     \itemize{

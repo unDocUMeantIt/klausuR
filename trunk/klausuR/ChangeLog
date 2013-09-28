@@ -1,5 +1,9 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-10 (2013-09-28)
+fixed:
+  - removed typos in klausur.repost() code ("appen" instead of "append")
+
 changes in version 0.12-9 (2013-08-05)
 fixed:
   - pdfLaTeX became picky and didn't work with the table of marks any more.
