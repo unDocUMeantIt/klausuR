@@ -498,7 +498,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		}
 		print(xtable(t(pre.erg.tabelle), digits=c(0,0,0,print.digits),
 		caption=paste(text$Auswertung," ",vorname," ",name," (",text$MatrikelNr," ",matn,")", cap.extra, sep="")),
-		file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
+		file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
 		write(latex.foot, file=dateiname, append=TRUE)
 
 		# check if PDF creation is demanded
@@ -575,11 +575,11 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 		# create table with anonymous feedback
 		print(xtable(anon.glob.table, digits=anon.glob.digits,
 		caption=paste(text$Ergebnisse,": ",latex.umlaute(descr$title)," (",latex.umlaute(descr$name),", ",descr$date,")", sep="")),
-		file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
+		file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
 		if(sum(unlist(marks.info)) > 0){
 			# summary on the defined marks
 			print(xtable(marks.information, caption=latex.umlaute(text$Notenschluessel)),
-			file=dateiname, appen=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, floating=TRUE)
+			file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, floating=TRUE)
 		} else {}
 		write(latex.foot, file=dateiname, append=TRUE)
 
