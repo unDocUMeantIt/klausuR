@@ -3,7 +3,7 @@ pckg.dscrptn <- data.frame(
 		Package="klausuR",
 		Type="Package",
 		Title="Multiple Choice Test Evaluation",
-		Author="m.eik michalke <meik.michalke@hhu.de>",
+		Author="m.eik michalke",
 		AuthorsR="c(person(given=\"Meik\", family=\"Michalke\", email=\"meik.michalke@hhu.de\", role=c(\"aut\", \"cre\")))",
 		Maintainer="m.eik michalke <meik.michalke@hhu.de>",
 		Depends="R (>= 2.9.0),xtable,psychometric,methods,graphics,tools",
