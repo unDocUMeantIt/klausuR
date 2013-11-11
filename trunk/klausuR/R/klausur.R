@@ -1,3 +1,21 @@
+# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package klausuR.
+#
+# klausuR is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# klausuR is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #' Evaluate multiple choice tests
 #'
 #' The function \code{klausur} expects an object of class \code{\link[klausuR]{klausuR.answ-class}}, containing some
@@ -197,7 +215,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		} else {}
 
 		## TODO: clean up checks, so cbind is not needed!
-		## firstly, check input data an quit if necessary
+		## firstly, check input data and quit if necessary
 		# data.check.klausur() is an internal function, defined in klausuR-internal.R
 		sane.data <- data.check.klausur(cbind(slot(data, "id"), slot(data, "items")), corr, items, na.rm)
 		stopifnot(scoring.check.klausur(corr, marks, wght, score, maxp))
@@ -255,30 +273,40 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 			# weights will be considered here as well
 			# if partial answers should be considered
 			if(identical(score, "partial")){
-				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
-				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent")), stringsAsFactors=FALSE)
+				wahr.falsch <- data.frame(sapply(items, function(x){
+						return(partial(item.answ=answ[x], corr=corr, wght=1, strict=TRUE, mode="percent"))
+					}), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x){
+						return(partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent"))
+					}), stringsAsFactors=FALSE)
+			} else if(identical(score, "liberal")){
+				wahr.falsch <- data.frame(sapply(items, function(x){
+						return(partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent"))
+					}), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x){
+						return(partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent"))
+					}), stringsAsFactors=FALSE)
+			} else if(score %in% c("NR", "ET", "NRET", "NRET+")){
+				wahr.falsch <- data.frame(sapply(items, function(x){
+						return(nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
+						num.alt=num.alt, true.false=TRUE))
+					}), stringsAsFactors=FALSE)
+				ergebnisse  <- data.frame(sapply(items, function(x){
+						return(nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
+						num.alt=num.alt, true.false=FALSE))
+					}), stringsAsFactors=FALSE)
 			} else {}
-			if(identical(score, "liberal")){
-				wahr.falsch <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=1, strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
-				ergebnisse  <- data.frame(sapply(items, function(x) partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=FALSE, mode="percent")), stringsAsFactors=FALSE)
-			} else {}
-			if(score %in% c("NR", "ET", "NRET", "NRET+")){
-				wahr.falsch <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
-					num.alt=num.alt, true.false=TRUE)}), stringsAsFactors=FALSE)
-				ergebnisse  <- data.frame(sapply(items, function(x) {nret.score(answ[[x]], corr=corr[names(answ[x])], score=score, is.true="+", is.false="-", missing="0", err="*",
-					num.alt=num.alt, true.false=FALSE)}), stringsAsFactors=FALSE)
-			} else {}
-			dimnames(wahr.falsch)[[2]] <- names(answ[items])
-			dimnames(ergebnisse)[[2]]  <- names(answ[items])
-		}
-		else {
+			colnames(wahr.falsch) <- colnames(answ[items])
+			colnames(ergebnisse)  <- colnames(answ[items])
+		} else {
 			wahr.falsch <- data.frame(t(t(answ[,items]) == corr))
 			# in case weights were defined, e.g. for items with multiple correct answers, take them into account
-			if(!is.null(wght))
+			if(!is.null(wght)) {
 				ergebnisse <- data.frame(t(t(wahr.falsch) * wght))
-			else
+			} else {
 				# we'll add 0 to forcibly convert logical values to numerics
 				ergebnisse <- wahr.falsch + 0
+			}
 		}
 
 		## calculate points

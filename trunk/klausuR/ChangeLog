@@ -1,8 +1,11 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2013-09-28)
+changes in version 0.12-10 (2013-11-11)
 fixed:
   - removed typos in klausur.repost() code ("appen" instead of "append")
+changed:
+  - some code cleaning in klausur() for better readability
+  - added a proper GPL notice at the beginning of each R file
 
 changes in version 0.12-9 (2013-08-05)
 fixed:
