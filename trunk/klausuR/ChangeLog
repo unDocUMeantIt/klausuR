@@ -2,6 +2,10 @@ ChangeLog for package klausuR
 
 changes in version 0.12-10 (2013-11-11)
 fixed:
+  - stripping trailing whitespace from answer data if it is in factor
+    of character format. this happens easily if data was imported from SPSS
+    and can cause nasty problems, because the whitespace characters are
+    interpreted by klausur() as a valid but wrong answer
   - removed typos in klausur.repost() code ("appen" instead of "append")
 changed:
   - some code cleaning in klausur() for better readability

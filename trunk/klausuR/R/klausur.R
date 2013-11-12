@@ -217,8 +217,8 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 		## TODO: clean up checks, so cbind is not needed!
 		## firstly, check input data and quit if necessary
 		# data.check.klausur() is an internal function, defined in klausuR-internal.R
-		sane.data <- data.check.klausur(cbind(slot(data, "id"), slot(data, "items")), corr, items, na.rm)
-		stopifnot(scoring.check.klausur(corr, marks, wght, score, maxp))
+		sane.data <- data.check.klausur(answ=cbind(slot(data, "id"), slot(data, "items")), corr=corr, items=items, na.rm=na.rm)
+		stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score=score, maxp=maxp))
 		answ <- sane.data$answ
 		items <- sane.data$items
 

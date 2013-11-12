@@ -102,6 +102,14 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
 			"\n  The number of items differs between observed and correct answers!", sep="")))
 		}
 
+		# SPSS has a habbit of adding trailing spaces to character data. read.spss() cannot
+		# always cope with this, so check items for factors and return stripped strings
+		for (this.item in relevant.items){
+			if(is.factor(answ[, this.item]) || is.character(answ[, this.item])){
+				answ[, this.item] <- gsub("[[:space:]]+$", "", as.character(answ[, this.item]))
+			} else {}
+		}
+
 	# return objects that have probably changed
 	checked.data <- list(answ=answ, items=items)
 	return(checked.data)
