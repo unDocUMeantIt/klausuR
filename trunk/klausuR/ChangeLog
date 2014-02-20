@@ -1,5 +1,10 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-11 (2014-02-20)
+added:
+  - new slot "distractor.analysis" in objects of class klausuR, listing
+    the selected answer alternatives for each individual item
+
 changes in version 0.12-10 (2013-11-11)
 fixed:
   - stripping trailing whitespace from answer data if it is in factor

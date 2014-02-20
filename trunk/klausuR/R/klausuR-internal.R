@@ -609,6 +609,48 @@ marks.summary <- function(marks, minp=0, add.const=0){
 	return(t(marks.matrix))
 } ## end marks.summary()
 
+
+## function distrct.analysis()
+# answ: a data.frame containing all items in columns and all answers in its rows
+# corr: vector with the correct answers; ignored if NULL
+distrct.analysis <- function(answ, corr=NULL){
+	# check if MatrNo needs to be stripped off
+	if("MatrNo" %in% names(answ)){
+		answ <- subset(answ, select=-MatrNo)
+	} else {}
+
+	if(!is.null(corr)){
+		if(!identical(names(answ), names(corr))){
+			stop(simpleError("Distractor analysis: Item names don't match those in the given vector with correct answers!"))
+		} else {}
+	} else {}
+
+	results <- lapply(names(answ), function(thisItem){
+			selected.absolute <- summary(as.factor(answ[[thisItem]]))
+			selected.percent <- selected.absolute / sum(selected.absolute) * 100
+			selected.all <- data.frame(
+				answer=names(selected.absolute),
+				absolute=selected.absolute,
+				percent=selected.percent,
+				correct="",
+				stringsAsFactors=FALSE)
+			# add a cloumn as indicator for correct answer
+			if(!is.null(corr)){
+				correct <- as.character(corr[[thisItem]])
+				# was the correct alternative checked at all?
+				if(correct %in% selected.all[["answer"]]){
+					selected.all[selected.all[["answer"]] == correct, "correct"] <- "*"
+				} else {}
+			} else {}
+			return(selected.all)
+		})
+
+	names(results) <- names(answ)
+
+	return(results)
+} ## end function distrct.analysis()
+
+
 ## klausur.reorderItems()
 # put items in correct order (multiple test forms)
 klausur.reorderItems <- function(slot, order){

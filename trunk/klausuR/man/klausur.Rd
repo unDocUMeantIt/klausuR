@@ -182,7 +182,7 @@
   possible to end up with a negative sum of points. If you
   consider how in the end a mark will be assigned to the
   achieved points, this would be a problem, because a
-  vactor cannot have negative inices. To circumvent this
+  vactor cannot have negative indices. To circumvent this
   issue, klausuR automatically adds a constant to all
   results, so that the worst possible result is not
   negative but 0. This constant is simply (alternatives-1),

@@ -37,6 +37,7 @@
 # @slot sd Standard deviation of the test results
 # @slot cronbach Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)
 # @slot item.analysis A data.frame with information on difficulty, discriminant power, discriminant factor and selection index of all items.
+# @slot distractor.analysis A list with information on the selected answer alternatives for each individual item.
 # @slot test Currently an empty placeholder. Planned to hold the actual test items in future releases.
 # @slot misc Anything that was stored in the \code{misc} slot of the input data.
 # @name klausuR,-class
@@ -63,6 +64,7 @@ setClass("klausuR",
 		sd="numeric",
 		cronbach="list",
 		item.analysis="data.frame",
+		distractor.analysis="list",
 		test="klausuR.test",
 		misc="data.frame"),
 	prototype(results=data.frame(NULL),
@@ -78,6 +80,7 @@ setClass("klausuR",
 		sd=numeric(),
 		cronbach=list(alpha=NULL, ci=NULL, deleted=NULL),
 		item.analysis=data.frame(NULL),
+		distractor.analysis=list(NULL),
 		test=new("klausuR.test"),
 		misc=data.frame(NULL))
 )

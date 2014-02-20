@@ -7,8 +7,8 @@
 }
 \details{
   \tabular{ll}{ Package: \tab klausuR\cr Type: \tab
-  Package\cr Version: \tab 0.12-10\cr Date: \tab
-  2013-09-28\cr Depends: \tab R (>=
+  Package\cr Version: \tab 0.12-11\cr Date: \tab
+  2014-02-20\cr Depends: \tab R (>=
   2.9.0),xtable,psychometric,methods,graphics,tools\cr
   Enhances: \tab rkward\cr Encoding: \tab UTF-8\cr License:
   \tab GPL (>= 3)\cr LazyLoad: \tab yes\cr URL: \tab
@@ -22,7 +22,7 @@
   power.
 }
 \author{
-  Meik Michalke \email{meik.michalke@hhu.de}
+  Meik Michalke
 }
 \keyword{package}
 
