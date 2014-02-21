@@ -1,9 +1,11 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-11 (2014-02-20)
+changes in version 0.12-11 (2014-02-21)
 added:
   - new slot "distractor.analysis" in objects of class klausuR, listing
     the selected answer alternatives for each individual item
+changed:
+  - polycor was added as a dependency (needed for distractor analysis)
 
 changes in version 0.12-10 (2013-11-11)
 fixed:

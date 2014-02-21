@@ -102,7 +102,7 @@
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
-#' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
+#' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty, discriminatory power and distractor analysis will be calculated.
 #' @param sort.by A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
 #'	If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
@@ -121,8 +121,9 @@
 #'	\item{mean}{A table with mean, median and quartiles of the test results}
 #'	\item{sd}{Standard deviation of the test results}
 #'	\item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
-#'	\item{item.analysis}{A data.frame with information on difficulty, discriminant power, discriminant factor and Lienert's selection index of all items.}
-#'	\item{distractor.analysis}{A list with information on the selected answer alternatives for each individual item (only calculated if \code{item.analysis=TRUE}).}
+#'	\item{item.analysis}{A data.frame with information on difficulty, discriminatory power, discriminant factor and Lienert's selection index of all items.}
+#'	\item{distractor.analysis}{A list with information on the selected answer alternatives for each individual item (only calculated if \code{item.analysis=TRUE}).
+#'		Also lists the discriminatory power of each alternative, being the polyserial correlation of it with the global outcome.}
 #'	\item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
 #'	Not all slots are shown by default (refer to \code{\link[klausuR:show]{show}} and \code{\link[klausuR:plot]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
@@ -379,7 +380,8 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 				# calling another internal function which is also
 				# using alpha() from package "psychometric"
 				item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
-				distractor.analysis <- distrct.analysis(answ=slot(data, "items"), corr=corr)
+				distractor.analysis <- distrct.analysis(answ=slot(data, "items"), corr=corr,
+					points=data.frame(MatrNo=answ$MatrNo, Points=ergebnis.daten$Points))
 			} else {
 				item.analyse <- data.frame(NULL)
 				distractor.analysis <- list(NULL)

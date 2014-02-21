@@ -24,7 +24,7 @@ pckg.dscrptn <- data.frame(
 		Author="m.eik michalke",
 		AuthorsR="c(person(given=\"Meik\", family=\"Michalke\", email=\"meik.michalke@hhu.de\", role=c(\"aut\", \"cre\")))",
 		Maintainer="m.eik michalke <meik.michalke@hhu.de>",
-		Depends="R (>= 2.9.0),xtable,psychometric,methods,graphics,tools",
+		Depends="R (>= 2.9.0), xtable, psychometric, polycor, methods, graphics, tools",
 		Enhances="rkward",
 		Description="A set of functions designed to quickly generate results of
 						a multiple choice test. Generates detailed global results, lists

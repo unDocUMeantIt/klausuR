@@ -4,7 +4,13 @@ Title: Multiple Choice Test Evaluation
 Author: m.eik michalke
 Maintainer: m.eik michalke <meik.michalke@hhu.de>
 Depends:
-    R (>= 2.9.0),xtable,psychometric,methods,graphics,tools
+    R (>= 2.9.0),
+    xtable,
+    psychometric,
+    polycor,
+    methods,
+    graphics,
+    tools
 Enhances: rkward
 Description: A set of functions designed to quickly generate results of
     a multiple choice test. Generates detailed global results,
@@ -18,7 +24,7 @@ URL: http://r-forge.r-project.org/projects/klausur
 Authors@R: c(person(given="Meik", family="Michalke",
     email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-11
-Date: 2014-02-20
+Date: 2014-02-21
 Collate:
     '00_class_01_klausuR.test.R'
     '00_class_02_klausuR.R'

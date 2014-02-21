@@ -44,8 +44,8 @@
   be calculated.}
 
   \item{item.analysis}{Logical. If TRUE, some usual item
-  statistics like difficulty and discriminatory power will
-  be calculated.}
+  statistics like difficulty, discriminatory power and
+  distractor analysis will be calculated.}
 
   \item{sort.by}{A character string naming the variable to
   sort the results by. Set to \code{c()} to skip any
@@ -79,11 +79,17 @@
   list of three elements "alpha", "ci" (confidence interval
   95\%) and "deleted" (alpha if item was removed)}
   \item{item.analysis}{A data.frame with information on
-  difficulty, discriminant power, discriminant factor and
+  difficulty, discriminatory power, discriminant factor and
   Lienert's selection index of all items.}
-  \item{misc}{Anything that was stored in the \code{misc}
-  slot of the input data.} Not all slots are shown by
-  default (refer to \code{\link[klausuR:show]{show}} and
+  \item{distractor.analysis}{A list with information on the
+  selected answer alternatives for each individual item
+  (only calculated if \code{item.analysis=TRUE}).  Also
+  lists the discriminatory power of each alternative, being
+  the polyserial correlation of it with the global
+  outcome.} \item{misc}{Anything that was stored in the
+  \code{misc} slot of the input data.} Not all slots are
+  shown by default (refer to
+  \code{\link[klausuR:show]{show}} and
   \code{\link[klausuR:plot]{plot}}).
 }
 \description{
