@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -33,29 +33,29 @@
 #' @export
 
 klausur.gen <- function(items=NULL, obs=1, items.char=FALSE){
-	# to avoid NOTEs from R CMD check:
-	daten <- NULL
+  # to avoid NOTEs from R CMD check:
+  daten <- NULL
 
-	if(!is.numeric(items) || (floor(items) != items) || !(items < 1000))
-		stop(simpleError("'items' must be an integer < 1000"))
-	if(!is.numeric(obs) || (floor(obs) != obs))
-		stop(simpleError("'obs' must be an integer"))
+  if(!is.numeric(items) || (floor(items) != items) || !(items < 1000))
+    stop(simpleError("'items' must be an integer < 1000"))
+  if(!is.numeric(obs) || (floor(obs) != obs))
+    stop(simpleError("'obs' must be an integer"))
 
-	# generate item names and compute the needed number of leading zeros
-	# gen.item.names() is an internal function of package klausuR
-	item.names <- gen.item.names(items)
+  # generate item names and compute the needed number of leading zeros
+  # gen.item.names() is an internal function of package klausuR
+  item.names <- gen.item.names(items)
 
-	data.filler <- if(items.char){as.character(c(NA))} else {as.integer(NA)}
+  data.filler <- if(items.char){as.character(c(NA))} else {as.integer(NA)}
 
-	eval(parse(text=paste("daten <- data.frame(
-			No=c(1:obs),
-			Name=as.character(c(NA)),
-			FirstName=as.character(c(NA)),
-			MatrNo=as.integer(c(NA)),
-			Pseudonym=as.character(c(NA)),
-			Form=as.character(c(NA)),",
-			paste(item.names, "=data.filler,", collapse=""),
-			"stringsAsFactors=FALSE)")))
+  eval(parse(text=paste("daten <- data.frame(
+      No=c(1:obs),
+      Name=as.character(c(NA)),
+      FirstName=as.character(c(NA)),
+      MatrNo=as.integer(c(NA)),
+      Pseudonym=as.character(c(NA)),
+      Form=as.character(c(NA)),",
+      paste(item.names, "=data.filler,", collapse=""),
+      "stringsAsFactors=FALSE)")))
 
   return(daten)
 }

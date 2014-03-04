@@ -2,10 +2,9 @@
 \alias{klausur.data}
 \title{A function to create data objects with given and correct answers to a test.}
 \usage{
-  klausur.data(answ, corr, items = NULL, marks = NULL,
-    wght = NULL, corr.key = NULL, rename = c(),
-    dummies = c(), disc.misc = FALSE, na.rm = TRUE,
-    item.prefix = c(), sort.by = "Name", maxp = NULL)
+klausur.data(answ, corr, items = NULL, marks = NULL, wght = NULL,
+  corr.key = NULL, rename = c(), dummies = c(), disc.misc = FALSE,
+  na.rm = TRUE, item.prefix = c(), sort.by = "Name", maxp = NULL)
 }
 \arguments{
   \item{answ}{A \code{\link{data.frame}} which has to
@@ -76,91 +75,90 @@
   "partial" scoring and item weights.}
 }
 \value{
-  An object of class
-  \code{\link[klausuR]{klausuR.answ-class}}.
+An object of class
+\code{\link[klausuR]{klausuR.answ-class}}.
 }
 \description{
-  \code{klausur.data} automatically parses the variable
-  names in \code{answ}to decide \strong{which variables are
-  actual test items}, if they are named according to the
-  given scheme \code{Item###}. To help in constructing a
-  data.frame with correct column names one can call the
-  \code{\link[klausuR:klausur.gen]{klausur.gen}} utility to
-  generate an empty data object of a given number of items
-  and test subjects.
+\code{klausur.data} automatically parses the variable names
+in \code{answ}to decide \strong{which variables are actual
+test items}, if they are named according to the given
+scheme \code{Item###}. To help in constructing a data.frame
+with correct column names one can call the
+\code{\link[klausuR:klausur.gen]{klausur.gen}} utility to
+generate an empty data object of a given number of items
+and test subjects.
 }
 \details{
-  If you have \strong{items with multiple correct answers}
-  you can easily code these as one single item: All
-  alternatives a subject has marked should be combined to a
-  single value without spaces. The vector with correct
-  answers will have to be coded accordingly, of course. An
-  example: If someone marked the first, third and fourth
-  answer, you would code this as "134". See
-  \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
-  for a helpful function to create such an answer vector.
-  Internally \code{klausur} checks for equality of given
-  answers and correct values, that is, it will only give
-  that person a point if the correct answer was coded as
-  "134" as well.
+If you have \strong{items with multiple correct answers}
+you can easily code these as one single item: All
+alternatives a subject has marked should be combined to a
+single value without spaces. The vector with correct
+answers will have to be coded accordingly, of course. An
+example: If someone marked the first, third and fourth
+answer, you would code this as "134". See
+\code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
+for a helpful function to create such an answer vector.
+Internally \code{klausur} checks for equality of given
+answers and correct values, that is, it will only give that
+person a point if the correct answer was coded as "134" as
+well.
 
-  \strong{Data for (Number Right) Elimination Testing}
+\strong{Data for (Number Right) Elimination Testing}
 
-  If your test is to be evaluated according to elimination
-  testing (ET), number right elimination testing (NRET) or
-  number right (NR, which is actually multiple choice)
-  scoring, the data has to be in a different format: In
-  contrast to the usual MC procedure, ET items are answered
-  by eliminating all alternatives a subject considers
-  \emph{wrong}; in an NRET test subjects are asked to
-  eliminate all wrong alternatives \emph{and} mark the one
-  they consider the correct answer. That is, for both
-  scoring functions, you need to know for each answer
-  alternative whether a subject saw it as right, wrong or
-  was not sure and left it open.
+If your test is to be evaluated according to elimination
+testing (ET), number right elimination testing (NRET) or
+number right (NR, which is actually multiple choice)
+scoring, the data has to be in a different format: In
+contrast to the usual MC procedure, ET items are answered
+by eliminating all alternatives a subject considers
+\emph{wrong}; in an NRET test subjects are asked to
+eliminate all wrong alternatives \emph{and} mark the one
+they consider the correct answer. That is, for both scoring
+functions, you need to know for each answer alternative
+whether a subject saw it as right, wrong or was not sure
+and left it open.
 
-  In this implementation, these answers are to be coded as
-  a plus sign "\code{+}" (right answer), a minus sign
-  "\code{-}" (wrong answer) or a zero "\code{0}" (missing).
-  If you need to code errors (like both "right" and "wrong"
-  have been marked),use the asterisk "\code{*}" for these
-  cases. All answers to \strong{one item} belong into
-  \strong{one column}. E.g., if you have four answer
-  alternatives, a subject thought the second one to be the
-  correct answer and eliminated the rest, you'd have to
-  code this item as "\code{-+--}". The same is true for the
-  vector of correct answers, of course.
+In this implementation, these answers are to be coded as a
+plus sign "\code{+}" (right answer), a minus sign
+"\code{-}" (wrong answer) or a zero "\code{0}" (missing).
+If you need to code errors (like both "right" and "wrong"
+have been marked),use the asterisk "\code{*}" for these
+cases. All answers to \strong{one item} belong into
+\strong{one column}. E.g., if you have four answer
+alternatives, a subject thought the second one to be the
+correct answer and eliminated the rest, you'd have to code
+this item as "\code{-+--}". The same is true for the vector
+of correct answers, of course.
 
-  \strong{Marks}
+\strong{Marks}
 
-  The \strong{assigned marks} are expected to be in a
-  certain format as well, as long as you don't want
-  \code{klausur} to suggest them itself. Just create an
-  empty vector to start with (say \code{your.marks <- c()})
-  and fill it according to the scheme
-  \code{your.marks[<points from>:<points to>] <- <mark>}.
-  For example: Should one get a 1.7 if in sum 27 to 30
-  points were achieved, you'd assign these points as
-  indices to the vector with \code{your.marks[27:30] <-
-  "1.7"} (see example section below). It is crucial to
-  assign marks to the whole range of points that can be
-  achieved in the test. On the other hand, it's irrelevant
-  wheter you assign decimal marks as in the example, only
-  integer values, a 15 marks scheme or whatever. The
-  convenience function
-  \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
-  can assist you in creating such a valid vector.
+The \strong{assigned marks} are expected to be in a certain
+format as well, as long as you don't want \code{klausur} to
+suggest them itself. Just create an empty vector to start
+with (say \code{your.marks <- c()}) and fill it according
+to the scheme \code{your.marks[<points from>:<points to>]
+<- <mark>}. For example: Should one get a 1.7 if in sum 27
+to 30 points were achieved, you'd assign these points as
+indices to the vector with \code{your.marks[27:30] <-
+"1.7"} (see example section below). It is crucial to assign
+marks to the whole range of points that can be achieved in
+the test. On the other hand, it's irrelevant wheter you
+assign decimal marks as in the example, only integer
+values, a 15 marks scheme or whatever. The convenience
+function
+\code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}
+can assist you in creating such a valid vector.
 }
 \examples{
 data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-	Item30=4, Item31=13, Item32=234)
+ Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+ Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+ Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+ Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+ Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()

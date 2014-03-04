@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -16,34 +16,29 @@
 # along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-## temporarily turned off most of the roxygen comments
-## class docs will remain static until roxygen2 supports "@slot"
-
-# Class klausuR.test
-#
-# This class is currently an empty placeholder. In future releases, it is planned to contain the actual test items in a list
-# like format.
-#
-# @title S4 class klausuR.test
-# @slot items Empty dummy.
-# @name klausuR.test,-class
-# @aliases klausuR.test-class klausuR.test,-class
+#' Class klausuR.test
+#'
+#' This class is currently an empty placeholder. In future releases, it is planned to contain the actual test items in a list
+#' like format.
+#'
+#' @slot items Empty dummy.
+#' @name klausuR.test,-class
+#' @aliases klausuR.test-class klausuR.test,-class
 #' @import methods
-# @keywords classes
+#' @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @exportClass klausuR.test
-#' @noRd
-# @rdname klausuR.test-class
+#' @export
+#' @rdname klausuR.test-class
 
 setClass("klausuR.test",
-	representation=representation(
-		items="list"
+  representation=representation(
+    items="list"
   ),
   prototype(
-		items=list()
+    items=list()
   )
 )
 
 # setValidity("klausuR.titems", function(object){
-# 	obj.test	<- object@test
+#   obj.test  <- object@test
 # })

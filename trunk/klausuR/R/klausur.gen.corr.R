@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -46,9 +46,9 @@ klausur.gen.corr <- function(answ=NULL, items.char=FALSE, test.forms=1){
 
     if(!is.null(answ)){
       if(is.double(answ) && length(answ) == 1)
-	items <- gen.item.names(answ)
+  items <- gen.item.names(answ)
       else
-	items <- names(answ[grep("Item([[:digit:]]{1,3})",names(answ))])
+  items <- names(answ[grep("Item([[:digit:]]{1,3})",names(answ))])
     }
     else {
       items <- gen.item.names(as.numeric(readline(paste("How many items are in your test?"))))
@@ -67,15 +67,15 @@ klausur.gen.corr <- function(answ=NULL, items.char=FALSE, test.forms=1){
       print(correct.answ)
       answ.item <- readline(paste("Please input the correct answer for ",as.character(itemname),":", sep=""))
       if(!identical(answ.item, "")){
-	  if(items.char)
-	    correct.answ[itemname] <- as.character(answ.item)
-	  else
-	    correct.answ[itemname] <- as.numeric(answ.item)
-	  if(is.na(correct.answ[itemname]))
-	    stop(simpleError(paste("Illegal value for ",itemname,": \"",answ.item,
-	    "\"\nklausur.gen.corr() expects numeric values by default.\nYou probably need to use the parameter \"items.char=TRUE\"\n", sep="")))
-	  else
-	    cat("OK: Assigned answer \"",correct.answ[itemname],"\" to ",itemname,"\n", sep="")
+    if(items.char)
+      correct.answ[itemname] <- as.character(answ.item)
+    else
+      correct.answ[itemname] <- as.numeric(answ.item)
+    if(is.na(correct.answ[itemname]))
+      stop(simpleError(paste("Illegal value for ",itemname,": \"",answ.item,
+      "\"\nklausur.gen.corr() expects numeric values by default.\nYou probably need to use the parameter \"items.char=TRUE\"\n", sep="")))
+    else
+      cat("OK: Assigned answer \"",correct.answ[itemname],"\" to ",itemname,"\n", sep="")
       print(correct.answ)
       } else{}
     }
@@ -89,15 +89,15 @@ klausur.gen.corr <- function(answ=NULL, items.char=FALSE, test.forms=1){
     while(identical(answ.item, "")){
       answ.item <- readline(paste("Form,",form,", ",as.character(itemname)," -- Please input the corresponding item in Form 1 (name or number):", sep=""))
       if(!identical(answ.item, "")){
-	  if(items.char)
-	    correct.answ[correct.answ[correct.answ$Form == form],itemname] <- as.character(answ.item)
-	  else
-	    correct.answ[correct.answ[correct.answ$Form == form],itemname] <- as.numeric(answ.item)
-	  if(is.na(itemname))
-	    stop(simpleError(paste("Illegal value for ",itemname,": \"",answ.item,
-	    "\"\nklausur.gen.corr() expects numeric values by default.\nYou probably need to use the parameter \"items.char=TRUE\"\n", sep="")))
-	  else
-	    cat("OK: Assigned answer \"",correct.answ[itemname],"\" to ",itemname,"\n", sep="")
+    if(items.char)
+      correct.answ[correct.answ[correct.answ$Form == form],itemname] <- as.character(answ.item)
+    else
+      correct.answ[correct.answ[correct.answ$Form == form],itemname] <- as.numeric(answ.item)
+    if(is.na(itemname))
+      stop(simpleError(paste("Illegal value for ",itemname,": \"",answ.item,
+      "\"\nklausur.gen.corr() expects numeric values by default.\nYou probably need to use the parameter \"items.char=TRUE\"\n", sep="")))
+    else
+      cat("OK: Assigned answer \"",correct.answ[itemname],"\" to ",itemname,"\n", sep="")
       } else{}
     }
   return(correct.answ)

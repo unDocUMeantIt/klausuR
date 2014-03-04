@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -51,30 +51,30 @@
 #' function \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}} can assist you in creating such a valid vector.
 #'
 #' @param answ A \code{\link{data.frame}} which has to include at least these variables:
-#'	\code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
-#'	and variables for the answered items (according to the scheme \code{Item###},
-#'	where ### is a number with leading zeros, if needed).
+#'  \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, as well as \code{Pseudonym} (optional)
+#'  and variables for the answered items (according to the scheme \code{Item###},
+#'  where ### is a number with leading zeros, if needed).
 #' @param corr A vector with the correct answers to all items in \code{answ} (named also according to \code{Item###}).
 #' @param items Indices of a subset of variables in \code{answ} to be taken as items.
 #' @param marks A vector assigning marks to points achieved (see details). Leave \code{NULL} if not available.
 #' @param wght A vector with weights for each item (named also according to \code{Item###}). Leave \code{NULL} if not available.
 #' @param corr.key If test has several test forms: A data.frame or matrix indicating the positions of all items (columns) in all
-#'		forms (rows). Must have a column called \code{Form} (like \code{answ}), and the item columns must follow the explained name
-#'		scheme \code{Item###}. \code{NULL} if not needed.
+#'    forms (rows). Must have a column called \code{Form} (like \code{answ}), and the item columns must follow the explained name
+#'    scheme \code{Item###}. \code{NULL} if not needed.
 #' @param rename A named vector defining if variables in \code{answ} need to be renamed into the klausuR name scheme. Accepts elements
-#'		named \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}. The values of these elements
-#'		represent the variable names of the input data.
+#'    named \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}. The values of these elements
+#'    represent the variable names of the input data.
 #' @param dummies A vector of dummy variables to be created, e.g. if you don't need/want actual data in the \code{id} slot.
-#'		Can include \code{"No"}, \code{"Name"}, \code{"FirstName"}, \code{"MatrNo"} and \code{"Pseudonym"}. Columns will just be filled
-#'		with increasing integers.
+#'    Can include \code{"No"}, \code{"Name"}, \code{"FirstName"}, \code{"MatrNo"} and \code{"Pseudonym"}. Columns will just be filled
+#'    with increasing integers.
 #' @param disc.misc Logical. If \code{TRUE}, left over columns from \code{answ} will not be stored in slot \code{misc} but silently discarded.
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{answ}. Defaults to TRUE.
 #' @param item.prefix A named character vector with two optional elements, \code{item} and \code{corr}, defining the name prefix
-#'		used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.
+#'    used for the items in the test data and the vector with correct answers, respectively. Defaults to \code{item="Item"} and \code{corr="Item"}.
 #' @param sort.by A character string naming the variable to sort the \code{answ} data by. Set to \code{c()} to skip any re-ordering.
 #' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
-#'		if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
-#'		one correct answers, this option can become handy in combination with "partial" scoring and item weights.
+#'    if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
+#'    one correct answers, this option can become handy in combination with "partial" scoring and item weights.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -82,11 +82,11 @@
 #'
 #' # vector with correct answers:
 #' richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-#'	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-#'	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-#'	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-#'	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-#'	Item30=4, Item31=13, Item32=234)
+#'  Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+#'  Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+#'  Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+#'  Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+#'  Item30=4, Item31=13, Item32=234)
 #'
 #' # vector with assignement of marks:
 #' notenschluessel <- c()
@@ -110,118 +110,118 @@
 #' klsr.obj <- klausur(data.obj)
 
 klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
-	disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL){
+  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL){
 
-	# check for var names to use
-	item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
+  # check for var names to use
+  item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
 
-	# in case no items were specified, take variables of names "Item##" as items
-	if(is.null(items)){
-		items <- grep(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ), ignore.case=TRUE)
-	} else{}
-	# we just allowed lowercase names, force these into expected diction
-	names(answ)[items] <- gsub("item", item.prefix[["item"]], names(answ)[items], ignore.case=TRUE)
-	names(corr) <- gsub("item", item.prefix[["corr"]], names(corr), ignore.case=TRUE)
+  # in case no items were specified, take variables of names "Item##" as items
+  if(is.null(items)){
+    items <- grep(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ), ignore.case=TRUE)
+  } else{}
+  # we just allowed lowercase names, force these into expected diction
+  names(answ)[items] <- gsub("item", item.prefix[["item"]], names(answ)[items], ignore.case=TRUE)
+  names(corr) <- gsub("item", item.prefix[["corr"]], names(corr), ignore.case=TRUE)
 
-	vars.to.rename <- names(rename)
-	id.names <- c("No", "Name", "FirstName", "MatrNo")
-	id.possible.names <- c(id.names, "Pseudonym", "Form")
+  vars.to.rename <- names(rename)
+  id.names <- c("No", "Name", "FirstName", "MatrNo")
+  id.possible.names <- c(id.names, "Pseudonym", "Form")
 
-	# check for name collisions -- do we end up with doubled varnames?
-	if(length(vars.to.rename) > 0){
-		if(any(vars.to.rename %in% names(answ))){
-			double.vars <- vars.to.rename[vars.to.rename %in% names(answ)]
-			warning(paste("Probably duplicate variable names found, please double check the outcome:\n ", paste(double.vars, collapse=", ")), call.=FALSE)
-		} else {}
-	} else {}
-	id.invalid.names <- vars.to.rename[!vars.to.rename %in% id.possible.names]
-	if(length(id.invalid.names) > 0){
-		stop(simpleError(paste("Invalid variable names in 'rename':\n ",
-			paste(id.invalid.names, collapse=", "))))
-	} else {}
+  # check for name collisions -- do we end up with doubled varnames?
+  if(length(vars.to.rename) > 0){
+    if(any(vars.to.rename %in% names(answ))){
+      double.vars <- vars.to.rename[vars.to.rename %in% names(answ)]
+      warning(paste("Probably duplicate variable names found, please double check the outcome:\n ", paste(double.vars, collapse=", ")), call.=FALSE)
+    } else {}
+  } else {}
+  id.invalid.names <- vars.to.rename[!vars.to.rename %in% id.possible.names]
+  if(length(id.invalid.names) > 0){
+    stop(simpleError(paste("Invalid variable names in 'rename':\n ",
+      paste(id.invalid.names, collapse=", "))))
+  } else {}
 
-	# rename columns, if any
-	for (ren.var in vars.to.rename){
-		ren.from <- rename[ren.var]
-		ren.to	<- ren.var
-		dimnames(answ)[[2]][dimnames(answ)[[2]] == rename[ren.var]] <- ren.var
-	}
+  # rename columns, if any
+  for (ren.var in vars.to.rename){
+    ren.from <- rename[ren.var]
+    ren.to  <- ren.var
+    dimnames(answ)[[2]][dimnames(answ)[[2]] == rename[ren.var]] <- ren.var
+  }
 
-	# create dummy values, if demanded
-	invalid.dummies <- dummies[!dummies %in% c(id.names, "Pseudonym")]
-	if(length(invalid.dummies) > 0){
-		stop(simpleError(paste("Invalid variable names in 'dummies':\n ",
-			paste(invalid.dummies, collapse=", "))))
-	} else {
-		# create dummies, if any
-		for(dummy in dummies){
-			answ[[dummy]] <- 1:dim(answ)[[1]]
-		}
-	}
+  # create dummy values, if demanded
+  invalid.dummies <- dummies[!dummies %in% c(id.names, "Pseudonym")]
+  if(length(invalid.dummies) > 0){
+    stop(simpleError(paste("Invalid variable names in 'dummies':\n ",
+      paste(invalid.dummies, collapse=", "))))
+  } else {
+    # create dummies, if any
+    for(dummy in dummies){
+      answ[[dummy]] <- 1:dim(answ)[[1]]
+    }
+  }
 
-	sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix)
-	stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved", maxp=maxp))
-	answ <- sane.data$answ
-	items <- sane.data$items
+  sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix)
+  stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved", maxp=maxp))
+  answ <- sane.data$answ
+  items <- sane.data$items
 
-	# convert probable factors to character, and trimming values
-	found.vars <- names(answ)[names(answ) %in% c("Name", "FirstName", "Pseudonym")]
-	for (char.var in found.vars){
-		answ[[char.var]] <- gsub("(^[[:space:]]+)|([[:space:]]+$)", "", as.character(answ[[char.var]]))
-	}
-	found.vars <- names(answ)[names(answ) %in% c("No", "MatrNo")]
-	for (char.var in found.vars){
-		answ[[char.var]] <- as.numeric(as.character(answ[[char.var]]))
-	}
+  # convert probable factors to character, and trimming values
+  found.vars <- names(answ)[names(answ) %in% c("Name", "FirstName", "Pseudonym")]
+  for (char.var in found.vars){
+    answ[[char.var]] <- gsub("(^[[:space:]]+)|([[:space:]]+$)", "", as.character(answ[[char.var]]))
+  }
+  found.vars <- names(answ)[names(answ) %in% c("No", "MatrNo")]
+  for (char.var in found.vars){
+    answ[[char.var]] <- as.numeric(as.character(answ[[char.var]]))
+  }
 
-	# re-order cases?
-	if(length(sort.by) > 0){
-		if(!sort.by %in% names(answ)){
-			stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
-		} else {}
-		new.order <- order(answ[[sort.by]])
-		answ <- answ[new.order,]
-	} else {}
+  # re-order cases?
+  if(length(sort.by) > 0){
+    if(!sort.by %in% names(answ)){
+      stop(simpleError(paste("Can't sort by '",sort.by,"', there's no such variable!", sep="")))
+    } else {}
+    new.order <- order(answ[[sort.by]])
+    answ <- answ[new.order,]
+  } else {}
 
-	# prepare columns for resulting data.frames
-	if("Pseudonym" %in% names(answ)){
-		id.pseudonym <- answ[["Pseudonym"]]
-	} else {
-		id.pseudonym <- NA
-	}
-	if("Form" %in% names(answ)){
-		id.form <- factor(answ[["Form"]])
-	} else {
-		id.form <- NA
-	}
-	if(isTRUE(disc.misc)){
-		misc.data <- data.frame(MatrNo=answ[["MatrNo"]])
-	} else {
-		# collect the rest for the 'misc' slot
-		unused.stuff <- answ[, !names(answ) %in% c(id.possible.names, names(answ[, items]))]
-		misc.data <- data.frame(MatrNo=answ[["MatrNo"]], unused.stuff)
-	}
+  # prepare columns for resulting data.frames
+  if("Pseudonym" %in% names(answ)){
+    id.pseudonym <- answ[["Pseudonym"]]
+  } else {
+    id.pseudonym <- NA
+  }
+  if("Form" %in% names(answ)){
+    id.form <- factor(answ[["Form"]])
+  } else {
+    id.form <- NA
+  }
+  if(isTRUE(disc.misc)){
+    misc.data <- data.frame(MatrNo=answ[["MatrNo"]])
+  } else {
+    # collect the rest for the 'misc' slot
+    unused.stuff <- answ[, !names(answ) %in% c(id.possible.names, names(answ[, items]))]
+    misc.data <- data.frame(MatrNo=answ[["MatrNo"]], unused.stuff)
+  }
 
-	# force items into klausuR name scheme
-	if(!identical(item.prefix[["item"]], "Item")){
-		old.digits <- as.numeric(gsub(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", items, perl=TRUE))
-		new.item.names <- gen.item.names(old.digits, prefix="Item")
-		dimnames(answ[, items]) <- list(NULL,new.item.names)
-	} else {}
+  # force items into klausuR name scheme
+  if(!identical(item.prefix[["item"]], "Item")){
+    old.digits <- as.numeric(gsub(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), "\\2", items, perl=TRUE))
+    new.item.names <- gen.item.names(old.digits, prefix="Item")
+    dimnames(answ[, items]) <- list(NULL,new.item.names)
+  } else {}
 
-	# create resulting object
-	results <- new("klausuR.answ",
-		corr=list(corr=corr, corr.key=corr.key),
-		id=data.frame(
-			No=answ[["No"]],
-			Name=answ[["Name"]],
-			FirstName=answ[["FirstName"]],
-			MatrNo=answ[["MatrNo"]],
-			Pseudonym=id.pseudonym,
-			Form=id.form, stringsAsFactors=FALSE),
-		items=data.frame(MatrNo=answ[["MatrNo"]], answ[, items], stringsAsFactors=FALSE),
-		score=list(marks=marks, wght=wght, maxp=maxp),
-		misc=misc.data)
+  # create resulting object
+  results <- new("klausuR.answ",
+    corr=list(corr=corr, corr.key=corr.key),
+    id=data.frame(
+      No=answ[["No"]],
+      Name=answ[["Name"]],
+      FirstName=answ[["FirstName"]],
+      MatrNo=answ[["MatrNo"]],
+      Pseudonym=id.pseudonym,
+      Form=id.form, stringsAsFactors=FALSE),
+    items=data.frame(MatrNo=answ[["MatrNo"]], answ[, items], stringsAsFactors=FALSE),
+    score=list(marks=marks, wght=wght, maxp=maxp),
+    misc=misc.data)
 
-	return(results)
+  return(results)
 }

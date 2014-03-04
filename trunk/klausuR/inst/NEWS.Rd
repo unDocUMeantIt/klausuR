@@ -1,28 +1,28 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-11 (2014-02-20)}{
+\section{Changes in klausuR version 0.12-10 (2014-03-05)}{
   \subsection{added}{
     \itemize{
-      \item new slot \code{"distractor.analysis"} in objects of class klausuR, listing
-        the selected answer alternatives for each individual item
+      \item new slot \code{"distractor.analysis"} in objects of class klausuR, listing the
+        selected answer alternatives for each individual item
     }
   }
-}
-\section{Changes in klausuR version 0.12-10 (2013-11-11)}{
   \subsection{fixed}{
     \itemize{
-      \item stripping trailing whitespace from answer data if it is in factor
-        of character format. this happens easily if data was imported from SPSS
-        and can cause nasty problems, because the whitespace characters are
-        interpreted by \code{klausur()} as a valid but wrong answer
+      \item stripping trailing whitespace from answer data if it is in factor of
+        character format. this happens easily if data was imported from SPSS and can
+        cause nasty problems, because the whitespace characters are interpreted by
+        \code{klausur()} as a valid but wrong answer
       \item removed typos in \code{klausur.repost()} code (\code{"appen"} instead of \code{"append"})
     }
   }
   \subsection{changed}{
     \itemize{
+      \item polycor was added as a dependency (needed for distractor analysis)
       \item some code cleaning in \code{klausur()} for better readability
       \item added a proper GPL notice at the beginning of each R file
+      \item replaced all tabs in the source code by two space characters
     }
   }
 }

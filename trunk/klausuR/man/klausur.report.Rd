@@ -2,16 +2,14 @@
 \alias{klausur.report}
 \title{Generate individual reports on multipe choice test results}
 \usage{
-  klausur.report(klsr, matn, save = FALSE, pdf = FALSE,
-    path = NULL, file.name = "matn",
-    hist = list(points = FALSE, marks = FALSE),
-    hist.merge = list(), hist.points = "hist_points.pdf",
-    hist.marks = "hist_marks.pdf",
-    descr = list(title = NULL, name = NULL, date = NULL),
-    marks.info = list(points = FALSE, percent = FALSE),
-    lang = "en", alt.candy = TRUE,
-    anon.glob.file = "anon.tex", NRET.legend = FALSE,
-    table.size = "auto", merge = FALSE, quiet = FALSE)
+klausur.report(klsr, matn, save = FALSE, pdf = FALSE, path = NULL,
+  file.name = "matn", hist = list(points = FALSE, marks = FALSE),
+  hist.merge = list(), hist.points = "hist_points.pdf",
+  hist.marks = "hist_marks.pdf", descr = list(title = NULL, name = NULL,
+  date = NULL), marks.info = list(points = FALSE, percent = FALSE),
+  lang = "en", alt.candy = TRUE, anon.glob.file = "anon.tex",
+  NRET.legend = FALSE, table.size = "auto", merge = FALSE,
+  quiet = FALSE)
 }
 \arguments{
   \item{klsr}{An object of class klausuR or klausuR.mult.
@@ -98,48 +96,47 @@
   on the current status are given.}
 }
 \value{
-  One or several LaTeX and/or PDF documents. If defined two
-  histograms will be plotted.
+One or several LaTeX and/or PDF documents. If defined two
+histograms will be plotted.
 }
 \description{
-  \code{klausur.report} takes (at least) an object of class
-  klausuR (or klausuR.mult) and a matriculation number to
-  generate personal test results in LaTeX and/or PDF
-  format.
+\code{klausur.report} takes (at least) an object of class
+klausuR (or klausuR.mult) and a matriculation number to
+generate personal test results in LaTeX and/or PDF format.
 }
 \details{
-  The report contains, next to the individual results, a
-  table with all given and correct answers (using
-  \code{\link[xtable]{xtable}}), as well as nice histograms
-  showing the distribution of the test results (points
-  and/or marks are supportet). If the matriculation numer
-  is set to "all", reports for all subjects are produced.
-  Setting it to "anon" will get you a printable version of
-  the anonymized results.
+The report contains, next to the individual results, a
+table with all given and correct answers (using
+\code{\link[xtable]{xtable}}), as well as nice histograms
+showing the distribution of the test results (points and/or
+marks are supportet). If the matriculation numer is set to
+"all", reports for all subjects are produced. Setting it to
+"anon" will get you a printable version of the anonymized
+results.
 
-  By default output is sent to standard out. To save them
-  to disk in LaTeX format a "save" parameter is provided.
-  Alternatively, the reports can be converted to PDF format
-  as well. \code{klausur.report} is calling
-  \code{\link[tools]{texi2dvi}} from the \code{tools}
-  package for that.
+By default output is sent to standard out. To save them to
+disk in LaTeX format a "save" parameter is provided.
+Alternatively, the reports can be converted to PDF format
+as well. \code{klausur.report} is calling
+\code{\link[tools]{texi2dvi}} from the \code{tools} package
+for that.
 
-  If the object is of class klausuR.mult, only the global
-  results for tests with several test forms are evaluated.
-  In case you'd rather like reports on each test form, call
-  \code{klausur.report} with the single slots from that
-  object accordingly.
+If the object is of class klausuR.mult, only the global
+results for tests with several test forms are evaluated. In
+case you'd rather like reports on each test form, call
+\code{klausur.report} with the single slots from that
+object accordingly.
 }
 \examples{
 data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-	Item30=4, Item31=13, Item32=234)
+ Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+ Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+ Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+ Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+ Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()
@@ -161,17 +158,16 @@ klsr.obj <- klausur(data.obj)
 
 \dontrun{
 klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
-	name="Dr. T. Aeter", date="24.09.2010"))
+  name="Dr. T. Aeter", date="24.09.2010"))
 }
 }
 \author{
-  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \seealso{
-  \code{\link[klausuR:klausur]{klausur}},
-  \code{\link[xtable]{xtable}},
-  \code{\link[tools]{texi2dvi}}
+\code{\link[klausuR:klausur]{klausur}},
+\code{\link[xtable]{xtable}}, \code{\link[tools]{texi2dvi}}
 }
-\keyword{file}
 \keyword{IO}
+\keyword{file}
 

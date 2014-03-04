@@ -1,11 +1,21 @@
+\docType{methods}
 \name{plot}
 \alias{plot}
-\alias{plot,klausuR-method}
-\alias{plot,klausuR,missing-method}
-\alias{plot,klausuR.mult-method}
-\alias{plot,klausuR.mult,missing-method}
 \alias{plot,-methods}
+\alias{plot,klausuR,missing-method}
+\alias{plot,klausuR-method}
+\alias{plot,klausuR.mult,missing-method}
+\alias{plot,klausuR.mult-method}
 \title{Plot methods for S4 objects of class klausuR and klausuR.mult}
+\usage{
+plot(x, y, ...)
+
+\S4method{plot}{klausuR,missing}(x, marks = FALSE, sd.lines = FALSE,
+  plot.normal = TRUE, na.rm = TRUE, ...)
+
+\S4method{plot}{klausuR.mult,missing}(x, marks = FALSE, sd.lines = FALSE,
+  plot.normal = TRUE, ...)
+}
 \arguments{
   \item{x}{An S4 object of class \code{klausuR} or
   \code{klausuR.mult}}
@@ -24,26 +34,29 @@
   ignored. Defaults to TRUE, because plotting would fail
   otherwise}
 
-  \item{\dots}{Any other argument suitable for plot()}
+  \item{...}{Any other argument suitable for plot()}
+
+  \item{y}{the y coordinates of points in the plot,
+  \emph{optional} if \code{x} is an appropriate structure.}
 }
 \description{
-  These plot methods are beeing called by
-  \code{\link[klausuR:klausur.report]{klausur.report}}. If
-  \code{x} is of class \code{klausuR.mult}, only the global
-  results will be plotted. Should you rather like plots on
-  each test form, call \code{plot} with the single slots
-  from that object accordingly.
+These plot methods are beeing called by
+\code{\link[klausuR:klausur.report]{klausur.report}}. If
+\code{x} is of class \code{klausuR.mult}, only the global
+results will be plotted. Should you rather like plots on
+each test form, call \code{plot} with the single slots from
+that object accordingly.
 }
 \examples{
 data(antworten)
 
 # vector with correct answers:
 richtig <- c(Item01=3, Item02=2, Item03=2, Item04=2, Item05=4,
-	Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
-	Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
-	Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
-	Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
-	Item30=4, Item31=13, Item32=234)
+ Item06=3, Item07=4, Item08=1, Item09=2, Item10=2, Item11=4,
+ Item12=4, Item13=2, Item14=3, Item15=2, Item16=3, Item17=4,
+ Item18=4, Item19=3, Item20=5, Item21=3, Item22=3, Item23=1,
+ Item24=3, Item25=1, Item26=3, Item27=5, Item28=3, Item29=4,
+ Item30=4, Item31=13, Item32=234)
 
 # vector with assignement of marks:
 notenschluessel <- c()
@@ -65,12 +78,12 @@ klsr.obj <- klausur(data.obj)
 plot(klsr.obj, marks=TRUE)
 }
 \author{
-  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \seealso{
-  \code{\link[klausuR:klausur]{klausur}},
-  \code{\link[klausuR:klausur.mufo]{klausur.mufo}},
-  \code{\link[klausuR:klausur.report]{klausur.report}}
+\code{\link[klausuR:klausur]{klausur}},
+\code{\link[klausuR:klausur.mufo]{klausur.mufo}},
+\code{\link[klausuR:klausur.report]{klausur.report}}
 }
 \keyword{methods}
 \keyword{plot}

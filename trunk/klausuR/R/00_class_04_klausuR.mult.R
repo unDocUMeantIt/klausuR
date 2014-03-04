@@ -1,4 +1,4 @@
-# Copyright 2009-2013 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -16,25 +16,20 @@
 # along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-## temporarily turned off most of the roxygen comments
-## class docs will remain static until roxygen2 supports "@slot"
-
-# Class klausuR.mult
-#
-# This class is used for objects that are returned by \code{\link[klausuR:klausur.mufo]{klausur.mufo}}.
-#
-# @title S4 class klausuR.mult
-# @slot forms A vector with the names of all test forms.
-# @slot results.part A list with the partial results of each test form
-# @slot results.glob An object of class klausuR-class with overall results
-# @name klausuR.mult-class
-# @aliases klausuR.mult-class klausuR.mult,-class
+#' Class klausuR.mult
+#'
+#' This class is used for objects that are returned by \code{\link[klausuR:klausur.mufo]{klausur.mufo}}.
+#'
+#' @slot forms A vector with the names of all test forms.
+#' @slot results.part A list with the partial results of each test form
+#' @slot results.glob An object of class klausuR-class with overall results
+#' @name klausuR.mult-class
+#' @aliases klausuR.mult-class klausuR.mult,-class
 #' @import methods
-# @keywords classes
+#' @keywords classes
 # @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
-#' @exportClass klausuR.mult
-#' @noRd
-# @rdname klausuR.mult-class
+#' @export
+#' @rdname klausuR.mult-class
 
 setClass("klausuR.mult",
   representation=representation(

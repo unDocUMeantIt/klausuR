@@ -2,9 +2,9 @@
 \alias{grand.table}
 \title{Export results to a table}
 \usage{
-  grand.table(NR.res = NULL, NRET.res = NULL,
-    NRETp.res = NULL, ET.res = NULL, rescale = TRUE,
-    file = NULL, csv2 = TRUE, encoding = "CP1252", ...)
+grand.table(NR.res = NULL, NRET.res = NULL, NRETp.res = NULL,
+  ET.res = NULL, rescale = TRUE, file = NULL, csv2 = TRUE,
+  encoding = "CP1252", ...)
 }
 \arguments{
   \item{NR.res}{An object of class \code{klausuR} which was
@@ -36,23 +36,22 @@
   \code{write.csv}/\code{write.csv2}.}
 }
 \value{
-  A data.frame.
+A data.frame.
 }
 \description{
-  Try this function to combine results from an evaluated
-  test into a matrix and export it to a table, e.g. to
-  import in other software products. It can be
-  particularily helpful for ET/NRET coded tests, if you
-  want to compare the results of different valid scoring
-  functions.
+Try this function to combine results from an evaluated test
+into a matrix and export it to a table, e.g. to import in
+other software products. It can be particularily helpful
+for ET/NRET coded tests, if you want to compare the results
+of different valid scoring functions.
 }
 \note{
-  For obvious reasons At least one of \code{NR.res},
-  \code{NRET.res}, \code{NRETp.res} or \code{ET.res}, or
-  any combination of those, must be specified.
+For obvious reasons At least one of \code{NR.res},
+\code{NRET.res}, \code{NRETp.res} or \code{ET.res}, or any
+combination of those, must be specified.
 }
 \author{
-  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \keyword{misc}
 

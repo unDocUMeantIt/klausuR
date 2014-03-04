@@ -2,9 +2,9 @@
 \alias{compare}
 \title{Comparison of data sets}
 \usage{
-  compare(set1, set2, select = NULL, ignore = NULL,
-    new.set = FALSE, rename = c(), trim = FALSE,
-    id = list(No = "No", Name = c("FirstName", "Name")))
+compare(set1, set2, select = NULL, ignore = NULL, new.set = FALSE,
+  rename = c(), trim = FALSE, id = list(No = "No", Name = c("FirstName",
+  "Name")))
 }
 \arguments{
   \item{set1,set2}{The data sets to be compared. Can be two
@@ -44,33 +44,31 @@
   string for the output.}
 }
 \value{
-  If \code{new.set=FALSE}, a data.frame of the differences,
-  if found (if not, just a message is returned). Otherwise
-  returns a combined data.frame (see details).
+If \code{new.set=FALSE}, a data.frame of the differences,
+if found (if not, just a message is returned). Otherwise
+returns a combined data.frame (see details).
 }
 \description{
-  The function \code{compare} will take two data.frames (or
-  objects of class
-  \code{\link[klausuR]{klausuR.answ-class}}) and compare
-  them for equality. This is useful to check for typos
-  before you calculate the results with
-  \code{\link[klausuR:klausur]{klausur}}. If you need to
-  type in the given answers by hand, errors easily occur,
-  so it is advisable to input all data at least twice
-  (perhaps by different persons) and check for differences
-  with this function, which can then be corrected by
-  looking up the original answer in the test.
+The function \code{compare} will take two data.frames (or
+objects of class \code{\link[klausuR]{klausuR.answ-class}})
+and compare them for equality. This is useful to check for
+typos before you calculate the results with
+\code{\link[klausuR:klausur]{klausur}}. If you need to type
+in the given answers by hand, errors easily occur, so it is
+advisable to input all data at least twice (perhaps by
+different persons) and check for differences with this
+function, which can then be corrected by looking up the
+original answer in the test.
 }
 \details{
-  If you don't want to compare all variables but only a
-  subset, you can use the \code{select} option (see
-  examples below). But be careful with this, at least all
-  the values given in \code{id} are needed to produce the
-  output table.
+If you don't want to compare all variables but only a
+subset, you can use the \code{select} option (see examples
+below). But be careful with this, at least all the values
+given in \code{id} are needed to produce the output table.
 
-  If \code{new.set=TRUE}, a new data.frame will be
-  returned, that is identical in both sets compared, but
-  all dubious values will be replaced by \code{NA}.
+If \code{new.set=TRUE}, a new data.frame will be returned,
+that is identical in both sets compared, but all dubious
+values will be replaced by \code{NA}.
 }
 \examples{
 \dontrun{
@@ -93,10 +91,10 @@ antworten.comp <- compare(antworten, antworten2, select=-c(3:8), new.set=TRUE)
 }
 }
 \author{
-  m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \seealso{
-  \code{\link[klausuR:klausur]{klausur}}
+\code{\link[klausuR:klausur]{klausur}}
 }
 \keyword{utilities}
 
