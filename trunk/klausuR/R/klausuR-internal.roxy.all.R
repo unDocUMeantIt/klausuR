@@ -30,7 +30,9 @@ pckg.dscrptn <- data.frame(
             a multiple choice test. Generates detailed global results, lists
             for anonymous feedback and personalised result feedback (in LaTeX
             and/or PDF format), as well as item statistics like Cronbach's alpha or
-            disciminatory power.",
+            disciminatory power. klausuR also includes a plugin for the R GUI and
+            IDE RKWard, providing dialogs for basic features. To use them, install
+            RKWard from http://rkward.sf.net (plugins are detected automatically).",
     License="GPL (>= 3)",
     Encoding="UTF-8",
     LazyLoad="yes",
