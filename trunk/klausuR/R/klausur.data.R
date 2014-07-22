@@ -75,6 +75,7 @@
 #' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
 #'    if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
 #'    one correct answers, this option can become handy in combination with "partial" scoring and item weights.
+#' @param wrong If you want full pick-n scoring: A vector similar to \code{corr}, but this time listing all alternatives that are wrong.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -110,7 +111,7 @@
 #' klsr.obj <- klausur(data.obj)
 
 klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
-  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL){
+  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL, wrong=NULL){
 
   # check for var names to use
   item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
@@ -211,7 +212,7 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
 
   # create resulting object
   results <- new("klausuR.answ",
-    corr=list(corr=corr, corr.key=corr.key),
+    corr=list(corr=corr, corr.key=corr.key, wrong=wrong),
     id=data.frame(
       No=answ[["No"]],
       Name=answ[["Name"]],

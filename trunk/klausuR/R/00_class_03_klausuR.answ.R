@@ -24,12 +24,13 @@
 #' @note The slots \code{}, \code{id}, \code{items} and \code{misc}, must have the same number of rows and contain copies of the colum \code{MatrNo}
 #' for identification.
 #
-#' @slot corr Contains two elements:
+#' @slot corr Contains three elements:
 #'    \itemize{
 #'      \item{\code{corr}} {The correct answers to each item.}
 #'      \item{\code{corr.key}} {An optional data.frame or matrix for test with multiple test forms, indicating the positions
 #'        of all items (columns) in all forms (rows). Must have a column called \code{Form} (like in \code{id}), and the
 #'        item columns must follow the usual name scheme \code{Item###}. \code{NULL} if not needed.}
+#'      \item{\code{wrong}} {For pick-n scoring, this is the inverse of \code{corr}, i.e., all wrong item alternatives.}
 #'    }
 #' @slot id Contains the columns \code{No}, \code{Name}, \code{FirstName}, \code{MatrNo}, \code{Pseudonym} and \code{Form}.
 #' @slot items Contains a copy of \code{id$MatrNo} and all answers to the test items (one item per column).
@@ -61,7 +62,7 @@ setClass("klausuR.answ",
     misc="data.frame"
   ),
   prototype(
-    corr=list(corr=c(Item1=NA), corr.key=NULL),
+    corr=list(corr=c(Item1=NA), corr.key=NULL, wrong=NULL),
     id=data.frame(No=NA, Name=NA, FirstName=NA, MatrNo=NA, Pseudonym=NA, Form=NA),
     items=data.frame(MatrNo=NA, Item1=NA),
     score=list(marks=NULL, wght=NULL, maxp=NULL),
@@ -115,8 +116,8 @@ setValidity("klausuR.answ", function(object){
   } else {}
   # check corr elements
   corr.names <- names(obj.corr.l)
-  invalid.corr.names <- corr.names[!corr.names %in% c("corr","corr.key")]
-  missing.corr.names <- corr.names[!c("corr","corr.key") %in% corr.names]
+  invalid.corr.names <- corr.names[!corr.names %in% c("corr","corr.key","wrong")]
+  missing.corr.names <- corr.names[!c("corr","corr.key","wrong") %in% corr.names]
   if(length(invalid.corr.names) > 0){
     stop(simpleError(paste("Invalid elements in slot 'corr':\n ",
       paste(invalid.corr.names, collapse=", "))))
@@ -134,6 +135,8 @@ setValidity("klausuR.answ", function(object){
   }
   ## TODO: check corr.key
   obj.corr.key <- obj.corr.l$corr.key
+  ## TODO: check wrong (e.g., for reoccurences from corr!)
+  obj.corr.wrong <- obj.corr.l$wrong
 
   # check score elements
   score.names <- names(obj.score)

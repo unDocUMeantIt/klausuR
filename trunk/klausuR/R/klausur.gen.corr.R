@@ -16,6 +16,8 @@
 # along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#' A function to generate a vector with correct answers
+#' 
 #' Create a vector of correct answers to be used by \code{\link[klausuR:klausur]{klausur}}.
 #'
 #' By default answers are expected to be numeric values. You can change that to character with \code{items.char=TRUE}.
@@ -25,8 +27,6 @@
 #' \code{klausur.gen.corr} will use all of its items automatically. Or you assign the number of items directly
 #' as an integer value. If you leave \code{answ=NULL}, you will be asked for the number of items.
 #' 
-#' @title A function to generate a vector with correct answers
-#' @usage klausur.gen.corr(answ=NULL, items.char=FALSE, test.forms=1)
 #' @param answ Either an object with item names in klausuR scheme (see \code{\link[klausuR:klausur]{klausur}}),
 #'        e.g. your observation data, or an integer representing the maximum score of the test. If NULL, you will
 #'        be asked for the maximum score.

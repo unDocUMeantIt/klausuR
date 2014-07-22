@@ -58,6 +58,13 @@ setMethod("show", signature(object="klausuR"), function(object){
     show.itan <- FALSE
   }
 
+  if(length(object@distractor.analysis) > 0){
+    distractor.analysis <- object@distractor.analysis
+    show.distan <- TRUE
+  } else {
+    show.distan <- FALSE
+  }
+
   if(!is.null(object@cronbach$alpha)){
     cr.alpha <- paste("\t",round(object@cronbach$alpha, 2), "\n\tConfidence interval:\t",
     round(object@cronbach$ci$LCL, 2),"-",
@@ -94,6 +101,10 @@ setMethod("show", signature(object="klausuR"), function(object){
   if(show.itan){
     cat("\n\nItem analysis:\n")
     print(item.analysis)
+  } else {}
+  if(show.distan){
+    cat("\n\nDistractor analysis:\n")
+    print(distractor.analysis)
   } else {}
   cat("\n\n")
 })

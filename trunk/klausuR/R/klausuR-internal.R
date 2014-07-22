@@ -274,6 +274,48 @@ answ.alternatives <- function(answ, latex=FALSE){
   return(answ.parts)
 } ## end answ.alternatives()
 
+## find.partial()
+# is being called by partial(), see below
+find.partial <- function(item.answ, corr, answers, corr.parts, item, wght=NULL, mode="absolute", strict=TRUE){
+  # how many correct answers are there?
+  corr.length <- length(corr.parts[item][[1]])
+  if(corr.length > 1){
+    result.list <- lapply(answers[[1]],
+        function(x){
+          # count only if no more answers were checked than correct answers available
+            if(length(x) > corr.length){
+            return(0)
+          } else {
+            abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
+            abs.false   <- sum(is.na(pmatch(x, corr.parts[item][[1]])))
+            # if in strict mode, discard if more answers were checked then correct one,
+            # that is, if at least one wrong answer was given, return no points at all
+            if(isTRUE(strict) && abs.false > 0){
+              return(0)
+            } else {
+              return(abs.correct)
+            }
+          }
+        })
+    # this corresponds to the "absolute" value
+    result <- unlist(lapply(result.list, sum))
+    # if we want the percentage instead:
+    if(identical(mode, "percent")){
+      result <- round((result * wght)/corr.length, digits=2)
+    } else{}
+  } else {
+    # this corresponds to the "absolute" value
+    result <- as.numeric(item.answ == corr[item])
+    # percentage is irrelevant for dichotomous items,
+    # but there might be a weight vector
+    if(identical(mode, "percent")){
+      result <- result * wght
+    } else{}
+  }
+  return(result)
+} ## end find.partial()
+
+
 ## partial()
 # this function computes results of one item including partially correct answers
 # if multiple correct answer alternatives are possible.
@@ -300,47 +342,8 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
   corr.parts <- answ.alternatives(corr)
   answ.parts <- lapply(item.answ, answ.alternatives)
 
-  find.partial <- function(answers, corr.parts){
-    # how many correct answers are there?
-    corr.length <- length(corr.parts[item][[1]])
-    if(corr.length > 1){
-      result.list <- lapply(answers[[1]],
-          function(x){
-         # count only if no more answers were checked than correct answers available
-            if(length(x) > corr.length){
-            return(0)
-          } else {
-            abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
-            abs.false   <- sum(is.na(pmatch(x, corr.parts[item][[1]])))
-            # if in strict mode, discard if more answers were checked then correct one,
-            # that is, if at least one wrong answer was given, return no points at all
-            if(isTRUE(strict) && abs.false > 0){
-              return(0)
-            } else {
-              return(abs.correct)
-            }
-            }
-          })
-      # this corresponds to the "absolute" value
-      result <- unlist(lapply(result.list, sum))
-      # if we want the percentage instead:
-      if(identical(mode, "percent")){
-      result <- round((result * wght)/corr.length, digits=2)
-    } else{}
-    }
-    else {
-      # this corresponds to the "absolute" value
-      result <- as.numeric(item.answ == corr[item])
-      # percentage is irrelevant for dichotomous items,
-      # but there might be a weight vector
-      if(identical(mode, "percent")){
-      result <- result * wght
-    } else{}
-    }
-    return(result)
-  }
-
-  part.results <- find.partial(answ.parts, corr.parts)
+  part.results <- find.partial(item.answ=item.answ, corr=corr, answers=answ.parts, corr.parts=corr.parts,
+    item=item, wght=wght, mode=mode, strict=strict)
 
   return(part.results)
 } ## end partial()

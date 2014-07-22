@@ -1,9 +1,11 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-03-05)
+changes in version 0.12-10 (2014-07-22)
 added:
   - new slot "distractor.analysis" in objects of class klausuR, listing the
     selected answer alternatives for each individual item
+  - new element "wrong" in slot "corr" of klausur.answ class items for pick-n scoring
+  - new argument "wrong" in klausur.data() for the same reason
 fixed:
   - stripping trailing whitespace from answer data if it is in factor of
     character format. this happens easily if data was imported from SPSS and can
@@ -15,6 +17,9 @@ changed:
   - some code cleaning in klausur() for better readability
   - added a proper GPL notice at the beginning of each R file
   - replaced all tabs in the source code by two space characters
+  - moved the internal helper function find.partial() out of the function body of partial()
+    for cleaner code
+  - show method for klausuR results now also reports distractor analysis, if found
 
 changes in version 0.12-9 (2013-08-05)
 fixed:

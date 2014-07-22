@@ -18,7 +18,6 @@
 
 #' Generate empty data sets for the use with klausur
 #' 
-#' @title Generate data sets for the use with klausur
 #' @param items An integer declaring the number of items to be created
 #' @param obs Integer, numer ob observations
 #' @param items.char Logical, will the answers be coded as characters or integer numbers (default)?
