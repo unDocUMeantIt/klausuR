@@ -20,6 +20,14 @@
 # they are not exported, hence not to be called by users themselves
 # and are therefore only documented by the comments in this file.
 
+## debug.message()
+# small tool to communicate values of objects in test runs
+debug.message <- function(x){
+    obj.name <- deparse(substitute(x))
+    message(paste0(obj.name, ": ", paste0(x, collapse=", ")))
+    return(invisible(NULL))
+}
+
 ## check.prefixes()
 # used to define variable prefixes for items in data and correct answers vector
 check.prefixes <- function(prefixes=c(), package="klausuR"){
@@ -135,18 +143,18 @@ scoring.check.klausur <- function(corr, marks, wght, score, maxp=NULL){
       } else{}
     }
     if(!identical(score, "solved")){
-      if(!score %in% c("partial", "liberal", "NR", "ET", "NRET", "NRET+")){
-      stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"NR\", \"ET\", \"NRET\", or \"NRET+\"!"))
+      if(!score %in% c("partial", "liberal", "pick-n", "NR", "ET", "NRET", "NRET+")){
+        stop(simpleError("Invalid value for score, must be either \"solved\", \"partial\", \"liberal\", \"pick-n\", \"NR\", \"ET\", \"NRET\", or \"NRET+\"!"))
       } else if(identical(score, "partial")){
-      warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
-      } else if(identical(score, "liberal")){
-      warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
+        warning("Partially answered items were allowed (but only if no wrong alternative was checked).", call.=FALSE)
+      } else if(score %in% c("liberal", "pick-n")){
+        warning("Partially answered items were allowed (wrong alternatives were ignored but didn't invalidate a whole answer).", call.=FALSE)
       } else if(identical(score, "ET")){
-      warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
+        warning("Partially answered items were allowed (scored according to Elimination Testing).", call.=FALSE)
       } else if(score %in% c("NRET", "NRET+")){
-      warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
-      } else{}
-    } else{}
+        warning("Partially answered items were allowed (scored according to Number Right Elimination Testing).", call.=FALSE)
+      } else {}
+    } else {}
 
     if(!is.null(maxp) && !is.numeric(maxp)){
       stop(simpleError("'maxp' must either be numeric or NULL!"))
@@ -274,16 +282,21 @@ answ.alternatives <- function(answ, latex=FALSE){
   return(answ.parts)
 } ## end answ.alternatives()
 
+
 ## find.partial()
 # is being called by partial(), see below
-find.partial <- function(item.answ, corr, answers, corr.parts, item, wght=NULL, mode="absolute", strict=TRUE){
+find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE){
+  # divide all correct answers into their parts
+  corr.parts <- answ.alternatives(corr)
+  answ.parts <- lapply(item.answ, answ.alternatives)
+
   # how many correct answers are there?
   corr.length <- length(corr.parts[item][[1]])
   if(corr.length > 1){
-    result.list <- lapply(answers[[1]],
+    result.list <- lapply(answ.parts[[1]],
         function(x){
           # count only if no more answers were checked than correct answers available
-            if(length(x) > corr.length){
+          if(!isTRUE(pickN) && length(x) > corr.length){
             return(0)
           } else {
             abs.correct <- !is.na(pmatch(x, corr.parts[item][[1]]))
@@ -326,7 +339,7 @@ find.partial <- function(item.answ, corr, answers, corr.parts, item, wght=NULL, 
 # - "percent"  (percent of correct alternatives, can be combined with wght to weight the result)
 #
 # if strict=TRUE, only answers are counted if *no* wrong alternative was checked at all
-partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
+partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE){
   # check for partially correct answers
   # firstly, extract the item name from the answ vector
   item <- names(item.answ)
@@ -338,15 +351,43 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE){
     wght <- 1
   } else{}
 
-  # divide all correct answers into their parts
-  corr.parts <- answ.alternatives(corr)
-  answ.parts <- lapply(item.answ, answ.alternatives)
-
-  part.results <- find.partial(item.answ=item.answ, corr=corr, answers=answ.parts, corr.parts=corr.parts,
-    item=item, wght=wght, mode=mode, strict=strict)
+  part.results <- find.partial(item.answ=item.answ, corr=corr, item=item, wght=wght, mode=mode,
+    strict=strict, pickN=pickN)
 
   return(part.results)
 } ## end partial()
+
+
+## pickN()
+# participants get 1/k points for each correctly checked answer as well as for each
+# correctly *un*checked distractor. if a distractor is falsely checked, no points are given.
+# calls partial() for both correct and wrong answers in absolute mode
+pickN <- function(item.answ, corr, wrong, wght=NULL, mode="percent"){
+  right.alternatives <- sapply(answ.alternatives(corr), length)
+  wrong.alternatives <- sapply(answ.alternatives(wrong), length)
+  all.alternatives <- right.alternatives + wrong.alternatives
+
+  partial.right <- partial(item.answ=item.answ, corr=corr, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
+  # count how many wrong alternatives were falsely chosen
+  partial.wrong <- partial(item.answ=item.answ, corr=wrong, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
+
+  item <- names(item.answ)
+
+  points.absolute <- partial.right + wrong.alternatives[item] - partial.wrong
+  
+  if(is.null(wght)){
+    wght <- 1
+  } else{}
+
+  if(identical(mode, "absolute")){
+    results <- points.absolute * wght
+  } else {
+    results <- round(points.absolute * wght / all.alternatives[item], digits=2)
+  }
+  
+  return(results)
+} ## end pickN()
+
 
 ## function nret.score()
 # as alternative scoring functions, nret.score() implements three modes:
@@ -516,6 +557,7 @@ nret.score <- function(answ, corr, score="NRET", is.true="+", is.false="-", miss
 
   return(all.results)
 } ## end function nret.score()
+
 
 ## function nret.minmax()
 # compute minimum/maximum points, number of alternatives and baseline

@@ -35,6 +35,8 @@
 #'      item if the answer was 100\% correct (that is, all or nothing).}
 #'    \item{\code{"partial"}} {Multiple Choice: Check all correct alternatives, allow partially given answers, but none of the distractors must be checked.}
 #'    \item{\code{"liberal"}} {Multiple Choice: Check all correct alternatives, allow partially given answers, even distractors can be checked.}
+#'    \item{\code{"pick-n"}} {Multiple Choice: Check all correct alternatives, allow partially given answers, even distractors can be checked. Difference to \code{"liberal"} is
+#'      that you will also get points for unchecked distractors.}
 #'    \item{\code{"ET"}} {Elimination Testing: In contrast to the usual MC procedure, eliminate/strike all \emph{wrong} alternatives.}
 #'    \item{\code{"NRET"}} {Number Right Elimination Testing: Like ET+MC, eliminate/strike all \emph{wrong} alternatives \emph{and} check the correct one.}
 #'    \item{\code{"NRET+"}} {Number Right Elimination Testing, more strict: Like NRET, but if more alternatives are checked right than there are right anwers,
@@ -43,8 +45,9 @@
 #'      of different scoring techniques.}
 #' }
 #'
-#' An example for \code{"solved"}, \code{"partial"} and \code{"liberal"}: If the correct answer is "134" and a subject checked "15", \code{"solved"}
-#' will give no point (because "15" is not equal to "134"), as will \code{"partial"} (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
+#' An example for \code{"solved"}, \code{"partial"} and \code{"liberal"}: If an item has five answer alternatives, the correct answer is "134" and a subject checked "15",
+#' \code{"solved"} will give no point (because "15" is not equal to "134"), as will \code{"partial"} (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct),
+#' and \code{"pick-n"} will give 2/5 (because "1" was correctly checked and "2" correctly unchecked).
 #'
 #' \strong{(Number Right) Elimination Testing}
 #'
@@ -97,7 +100,7 @@
 #' @param items Indices of a subset of variables in \code{data} to be taken as items.
 #' @param wght A vector with weights for each item (named also according to \code{Item###}). If \code{NULL}, the value from the \code{data} object
 #'    will be used.
-#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"},
+#' @param score Specify the scoring policy, must be one of \code{"solved"} (default), \code{"partial"}, \code{"liberal"}, \code{"pick-n"},
 #'    \code{"NR"}, \code{"ET"}, \code{"NRET"}, or \code{"NRET+"}.
 #' @param matn A matriculation number of a subject, to receive detailed results for that subject.
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
@@ -166,6 +169,17 @@
 #'
 #' # if that went well, get the test results
 #' klsr.obj <- klausur(data.obj)
+#' 
+#' # to try pick-n scoring, we must also define all distractors
+#' falsch <- c(Item01=1245, Item02=1345, Item03=1345, Item04=1345, Item05=1235,
+#'  Item06=1245, Item07=1235, Item08=2345, Item09=1345, Item10=1345, Item11=1235,
+#'  Item12=1235, Item13=1345, Item14=1245, Item15=1345, Item16=1245, Item17=1235,
+#'  Item18=1235, Item19=1245, Item20=1234, Item21=1245, Item22=1245, Item23=2345,
+#'  Item24=1245, Item25=2345, Item26=1245, Item27=1234, Item28=1245, Item29=1235,
+#'  Item30=1235, Item31=245, Item32=15)
+#'
+#' data.obj <- klausur.data(answ=antworten, corr=richtig, wrong=falsch, marks=notenschluessel)
+#' klsr.obj <- klausur(data.obj, score="pick-n")
 #'
 #' ############################
 #'  # example for an NRET test
@@ -200,6 +214,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
     } else {}
 
     corr <- slot(data, "corr")[["corr"]]
+    wrong <- slot(data, "corr")[["wrong"]]
     if(!is.null(slot(data, "corr")[["corr.key"]])){
       warning("This test seems to have multiple test forms. Perhaps try klausur.mufo() instead?", call.=FALSE)
     } else {}
@@ -271,7 +286,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
 
     # create the TRUE/FALSE-matrix for solved items
     # this will become a point matrix instead if partial results are ok
-    if(length(score) == 1 && score %in% c("partial", "liberal", "NR", "ET", "NRET", "NRET+")){
+    if(length(score) == 1 && score %in% c("partial", "pick-n", "liberal", "NR", "ET", "NRET", "NRET+")){
       # weights will be considered here as well
       # if partial answers should be considered
       if(identical(score, "partial")){
@@ -280,6 +295,13 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
           }), stringsAsFactors=FALSE)
         ergebnisse  <- data.frame(sapply(items, function(x){
             return(partial(item.answ=answ[x], corr=corr, wght=wght[which(items == x)], strict=TRUE, mode="percent"))
+          }), stringsAsFactors=FALSE)
+      } else if(identical(score, "pick-n")){
+        wahr.falsch <- data.frame(sapply(items, function(x){
+            return(pickN(item.answ=answ[x], corr=corr, wrong=wrong, wght=1, mode="percent"))
+          }), stringsAsFactors=FALSE)
+        ergebnisse  <- data.frame(sapply(items, function(x){
+            return(pickN(item.answ=answ[x], corr=corr, wrong=wrong, wght=wght[which(items == x)], mode="percent"))
           }), stringsAsFactors=FALSE)
       } else if(identical(score, "liberal")){
         wahr.falsch <- data.frame(sapply(items, function(x){
