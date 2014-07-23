@@ -24,7 +24,7 @@ If \code{NULL}, this value must be set in the \code{data} object.}
 will be used.}
 
 \item{score}{Specify the scoring policy, must be one of \code{"solved"} (default),
-      \code{"partial"}, \code{"liberal"},
+      \code{"partial"}, \code{"liberal"}, \code{"pick-n"},
 \code{"NR"}, \code{"ET"}, \code{"NRET"}, or \code{"NRET+"}.}
 
 \item{matn}{A matriculation number of a subject,
@@ -99,6 +99,9 @@ check more alternatives than there are correct ones (that is,
       allow partially given answers, but none of the distractors must be checked.}
    \item{\code{"liberal"}} {Multiple Choice: Check all correct alternatives,
       allow partially given answers, even distractors can be checked.}
+   \item{\code{"pick-n"}} {Multiple Choice: Check all correct alternatives,
+      allow partially given answers, even distractors can be checked. Difference to \code{"liberal"} is
+     that you will also get points for unchecked distractors.}
    \item{\code{"ET"}} {Elimination Testing: In contrast to the usual MC procedure,
       eliminate/strike all \emph{wrong} alternatives.}
    \item{\code{"NRET"}} {Number Right Elimination Testing: Like ET+MC,
@@ -112,9 +115,11 @@ check more alternatives than there are correct ones (that is,
 }
 
 An example for \code{"solved"},
-      \code{"partial"} and \code{"liberal"}: If the correct answer is "134" and a subject checked "15", \code{"solved"}
-will give no point (because "15" is not equal to "134"),
-      as will \code{"partial"} (because "5" is wrong), but \code{"liberal"} will give 1/3 (because "1" is correct).
+      \code{"partial"} and \code{"liberal"}: If an item has five answer alternatives, the correct answer is "134" and a subject checked "15",
+\code{"solved"} will give no point (because "15" is not equal to "134"),
+      as will \code{"partial"} (because "5" is wrong),
+      but \code{"liberal"} will give 1/3 (because "1" is correct),
+and \code{"pick-n"} will give 2/5 (because "1" was correctly checked and "2" correctly unchecked).
 
 \strong{(Number Right) Elimination Testing}
 
@@ -205,6 +210,18 @@ data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 
 # if that went well, get the test results
 klsr.obj <- klausur(data.obj)
+
+# to try pick-n scoring, we must also define all distractors
+falsch <- c(Item01=1245, Item02=1345, Item03=1345, Item04=1345, Item05=1235,
+ Item06=1245, Item07=1235, Item08=2345, Item09=1345, Item10=1345, Item11=1235,
+ Item12=1235, Item13=1345, Item14=1245, Item15=1345, Item16=1245, Item17=1235,
+ Item18=1235, Item19=1245, Item20=1234, Item21=1245, Item22=1245, Item23=2345,
+ Item24=1245, Item25=2345, Item26=1245, Item27=1234, Item28=1245, Item29=1235,
+ Item30=1235, Item31=245, Item32=15)
+
+data.obj <- klausur.data(answ=antworten, corr=richtig, wrong=falsch,
+      marks=notenschluessel)
+klsr.obj <- klausur(data.obj, score="pick-n")
 
 ############################
  # example for an NRET test

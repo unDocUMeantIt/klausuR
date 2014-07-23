@@ -1,12 +1,14 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-07-22)}{
+\section{Changes in klausuR version 0.12-10 (2014-07-23)}{
   \subsection{added}{
     \itemize{
+      \item support for pick-n scoring was added to \code{klausur()}
       \item new slot \code{"distractor.analysis"} in objects of class klausuR, listing the
         selected answer alternatives for each individual item
-      \item new element \code{"wrong"} in slot \code{"corr"} of klausur.answ class items for pick-n scoring
+      \item new element \code{"wrong"} in slot \code{"corr"} of klausur.answ class items for pick-n
+        scoring
       \item new argument \code{"wrong"} in \code{klausur.data()} for the same reason
     }
   }
@@ -25,9 +27,10 @@
       \item some code cleaning in \code{klausur()} for better readability
       \item added a proper GPL notice at the beginning of each R file
       \item replaced all tabs in the source code by two space characters
-      \item moved the internal helper function \code{find.partial()} out of the function body of \code{partial()}
-        for cleaner code
-      \item show method for klausuR results now also reports distractor analysis, if found
+      \item moved the internal helper function \code{find.partial()} out of the function
+        body of \code{partial()} for cleaner code
+      \item show method for klausuR results now also reports distractor analysis, if
+        found
     }
   }
 }
