@@ -318,7 +318,13 @@ find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", stri
     } else{}
   } else {
     # this corresponds to the "absolute" value
-    result <- as.numeric(item.answ == corr[item])
+    # one exception: in pickN items with missing correct answers (i.e., all
+    # alternatives are in fact wrong) must *not* be counted here!
+    if(isTRUE(pickN) & (identical(as.character(corr[item]), "") | is.na(corr[item]) | is.null(corr[item]))){
+      result <- rep(0, length(unlist(item.answ)))
+    } else {
+      result <- as.numeric(item.answ == corr[item])
+    }
     # percentage is irrelevant for dichotomous items,
     # but there might be a weight vector
     if(identical(mode, "percent")){
@@ -370,7 +376,6 @@ pickN <- function(item.answ, corr, wrong, wght=NULL, mode="percent"){
   partial.right <- partial(item.answ=item.answ, corr=corr, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
   # count how many wrong alternatives were falsely chosen
   partial.wrong <- partial(item.answ=item.answ, corr=wrong, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
-
   item <- names(item.answ)
 
   points.absolute <- partial.right + wrong.alternatives[item] - partial.wrong

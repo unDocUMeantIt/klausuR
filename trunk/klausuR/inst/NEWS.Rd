@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-07-23)}{
+\section{Changes in klausuR version 0.12-10 (2014-07-27)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}

@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-07-23)
+changes in version 0.12-10 (2014-07-27)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
