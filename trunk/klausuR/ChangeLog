@@ -23,6 +23,7 @@ changed:
     body of partial() for cleaner code
   - show method for klausuR results now also reports distractor analysis, if
     found
+  - partial points are no longer rounded before end results are calculated
 
 changes in version 0.12-9 (2013-08-05)
 fixed:

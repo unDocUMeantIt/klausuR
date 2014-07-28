@@ -285,14 +285,16 @@ answ.alternatives <- function(answ, latex=FALSE){
 
 ## find.partial()
 # is being called by partial(), see below
-find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE){
+find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE, digits=NULL){
   # divide all correct answers into their parts
   corr.parts <- answ.alternatives(corr)
   answ.parts <- lapply(item.answ, answ.alternatives)
+#debug.message(corr.parts)
+#debug.message(answ.parts)
 
   # how many correct answers are there?
   corr.length <- length(corr.parts[item][[1]])
-  if(corr.length > 1){
+  if(corr.length > 1 | (isTRUE(pickN) & length(unlist(answ.parts)) > 1)){
     result.list <- lapply(answ.parts[[1]],
         function(x){
           # count only if no more answers were checked than correct answers available
@@ -314,7 +316,10 @@ find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", stri
     result <- unlist(lapply(result.list, sum))
     # if we want the percentage instead:
     if(identical(mode, "percent")){
-      result <- round((result * wght)/corr.length, digits=2)
+      result <- (result * wght)/corr.length
+      if(!is.null(digits)){
+        result <- round(result, digits=digits)
+      }
     } else{}
   } else {
     # this corresponds to the "absolute" value
@@ -324,6 +329,8 @@ find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", stri
       result <- rep(0, length(unlist(item.answ)))
     } else {
       result <- as.numeric(item.answ == corr[item])
+#debug.message(item.answ)
+#debug.message(corr[item])
     }
     # percentage is irrelevant for dichotomous items,
     # but there might be a weight vector
@@ -345,7 +352,7 @@ find.partial <- function(item.answ, corr, item, wght=NULL, mode="absolute", stri
 # - "percent"  (percent of correct alternatives, can be combined with wght to weight the result)
 #
 # if strict=TRUE, only answers are counted if *no* wrong alternative was checked at all
-partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE){
+partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE, pickN=FALSE, digits=NULL){
   # check for partially correct answers
   # firstly, extract the item name from the answ vector
   item <- names(item.answ)
@@ -358,7 +365,7 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE, pi
   } else{}
 
   part.results <- find.partial(item.answ=item.answ, corr=corr, item=item, wght=wght, mode=mode,
-    strict=strict, pickN=pickN)
+    strict=strict, pickN=pickN, digits=digits)
 
   return(part.results)
 } ## end partial()
@@ -368,15 +375,17 @@ partial <- function(item.answ, corr, wght=NULL, mode="absolute", strict=TRUE, pi
 # participants get 1/k points for each correctly checked answer as well as for each
 # correctly *un*checked distractor. if a distractor is falsely checked, no points are given.
 # calls partial() for both correct and wrong answers in absolute mode
-pickN <- function(item.answ, corr, wrong, wght=NULL, mode="percent"){
+pickN <- function(item.answ, corr, wrong, wght=NULL, mode="percent", digits=NULL){
   right.alternatives <- sapply(answ.alternatives(corr), length)
   wrong.alternatives <- sapply(answ.alternatives(wrong), length)
   all.alternatives <- right.alternatives + wrong.alternatives
 
   partial.right <- partial(item.answ=item.answ, corr=corr, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
+#debug.message(partial.right)
   # count how many wrong alternatives were falsely chosen
   partial.wrong <- partial(item.answ=item.answ, corr=wrong, wght=1, mode="absolute", strict=FALSE, pickN=TRUE)
   item <- names(item.answ)
+#debug.message(partial.wrong)
 
   points.absolute <- partial.right + wrong.alternatives[item] - partial.wrong
   
@@ -387,7 +396,10 @@ pickN <- function(item.answ, corr, wrong, wght=NULL, mode="percent"){
   if(identical(mode, "absolute")){
     results <- points.absolute * wght
   } else {
-    results <- round(points.absolute * wght / all.alternatives[item], digits=2)
+    results <- points.absolute * wght / all.alternatives[item]
+    if(!is.null(digits)){
+      results <- round(results, digits=digits)
+    }
   }
   
   return(results)
