@@ -105,10 +105,11 @@ setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, 
     erg.max <- max(erg.points)
     erg.mittel <- mean(erg.points)
     erg.sd <- sd(erg.points)
-    erg.max.freq <- max(summary(as.factor(erg.points)))
-
-    hist(erg.points, breaks=c((erg.min-1):erg.max), col="grey", xaxt="n", yaxp=c(0,erg.max.freq,erg.max.freq), ...)
-    axis(1, at=c((erg.min-0.5):(erg.max-0.5)), labels=c(erg.min:erg.max))
+    hist.breaks <- axis.breaks(erg.min, erg.max)
+    erg.max.freq <- max(summary(as.factor(round(erg.points))))
+    
+    hist(erg.points, breaks=hist.breaks[["breaks"]], col="grey", xaxt="n", yaxp=c(0,erg.max.freq,erg.max.freq), ...)
+    axis(1, at=c((hist.breaks[["min"]]+0.5):(hist.breaks[["max"]]-0.5)), labels=c((hist.breaks[["min"]]+1):hist.breaks[["max"]]))
     if(plot.normal){
       # plot normal distribution
       par(new=TRUE)

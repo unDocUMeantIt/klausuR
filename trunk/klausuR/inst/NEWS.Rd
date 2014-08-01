@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-08-01)}{
+\section{Changes in klausuR version 0.12-10 (2014-08-02)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}
@@ -20,10 +20,12 @@
         cause nasty problems, because the whitespace characters are interpreted by
         \code{klausur()} as a valid but wrong answer
       \item removed typos in \code{klausur.repost()} code (\code{"appen"} instead of \code{"append"})
-      \item anonymous feedback output is now sorted by points as a default. the previous
-        default took the order as is, which usually sorted it by family names
+      \item anonymous feedback output is now sorted by points as a default. the
+        previous default took the order as is, which usually sorted it by family names
         of participants, which limits anonymity to a certain degree
       \item the character "'" is now also filtered out of file names
+      \item breaks for axis labels in histograms are now calculated by internal
+        function \code{axis.breaks()}, which fixes a problem with non-integer points
     }
   }
   \subsection{changed}{

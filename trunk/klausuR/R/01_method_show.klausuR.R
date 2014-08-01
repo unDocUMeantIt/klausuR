@@ -78,7 +78,9 @@ setMethod("show", signature(object="klausuR"), function(object){
   }
 
   global.results <- object@results
+  global.results[["Points"]] <- round(global.results[["Points"]], digits=2)
   anon.results <- object@anon
+  anon.results[["Points"]] <- round(anon.results[["Points"]], digits=2)
 
   cat("\nKlausuR results:")
   cat("\n\nMarks defined:\n")

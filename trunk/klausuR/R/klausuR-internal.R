@@ -816,3 +816,23 @@ file.umlaute <- function(input){
   output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#|\\'", "", as.character(output))
   return(output)
 } ## end function file.umlaute()
+
+
+## function axis.breaks()
+# makes sure that the range of breaks for histograms' labels captures all values
+axis.breaks <- function(min, max){
+  min <- floor(min) - 1
+  max <- ceiling(max)
+  breaks <- c(min:max)
+  if(min(breaks) > min){
+    min <- min - 1
+    breaks <- axis.breaks(min, max)
+  } else {}
+  
+  if(max(breaks) < max){
+    max <- max + 1
+    breaks <- axis.breaks(min, max)
+  } else {}
+  return(list(breaks=breaks, min=min, max=max))
+}
+## end function axis.breaks()
