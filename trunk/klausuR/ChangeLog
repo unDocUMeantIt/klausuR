@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-07-27)
+changes in version 0.12-10 (2014-08-01)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
@@ -8,12 +8,17 @@ added:
   - new element "wrong" in slot "corr" of klausur.answ class items for pick-n
     scoring
   - new argument "wrong" in klausur.data() for the same reason
+  - klausur.report() gained options from sort() for "anon" and "glob" results
 fixed:
   - stripping trailing whitespace from answer data if it is in factor of
     character format. this happens easily if data was imported from SPSS and can
     cause nasty problems, because the whitespace characters are interpreted by
     klausur() as a valid but wrong answer
   - removed typos in klausur.repost() code ("appen" instead of "append")
+  - anonymous feedback output is now sorted by points as a default. the previous
+    default took the order as is, which usually sorted it by family names
+    of participants, which limits anonymity to a certain degree
+  - the character "'" is now also filtered out of file names
 changed:
   - polycor was added as a dependency (needed for distractor analysis)
   - some code cleaning in klausur() for better readability

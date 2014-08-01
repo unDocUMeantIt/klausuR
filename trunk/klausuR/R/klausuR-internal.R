@@ -813,6 +813,6 @@ file.umlaute <- function(input){
   output <- gsub("\u00FC","ue",as.character(output)) # ü
   output <- gsub("\u00FD|\u00FF","y",as.character(output)) # ý ÿ
   output <- gsub("\u00FE","th",as.character(output)) # þ
-  output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#", "", as.character(output))
+  output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#|\\'", "", as.character(output))
   return(output)
 } ## end function file.umlaute()

@@ -9,8 +9,8 @@ klausur.report(klsr, matn, save = FALSE, pdf = FALSE, path = NULL,
   hist.marks = "hist_marks.pdf", descr = list(title = NULL, name = NULL,
   date = NULL), marks.info = list(points = FALSE, percent = FALSE),
   lang = "en", alt.candy = TRUE, anon.glob.file = "anon.tex",
-  NRET.legend = FALSE, table.size = "auto", merge = FALSE,
-  quiet = FALSE)
+  decreasing = TRUE, sort.by = "Points", NRET.legend = FALSE,
+  table.size = "auto", merge = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{klsr}{An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration,
@@ -61,6 +61,13 @@ how marks were assigned to points achieved and/or percent solved, respectively.}
 
 \item{anon.glob.file}{If \code{matn="anon"} or \code{matn="glob"},
       you can specify a filename for this particular report.}
+
+\item{decreasing}{Logical,
+      whether sorting of output should be done increasing or decreasing (only relevant for \code{matn="anon"} or
+\code{matn="glob"}).}
+
+\item{sort.by}{Character string naming a variable to sort the results by. Defaults to \code{"Marks"} (only relevant for \code{matn="anon"} or
+\code{matn="glob"}).}
 
 \item{NRET.legend}{Logical, If ET/NRET data is reported,
       you can demand a legend in the table caption by setting this to true.}

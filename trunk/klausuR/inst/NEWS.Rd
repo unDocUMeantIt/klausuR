@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-07-27)}{
+\section{Changes in klausuR version 0.12-10 (2014-08-01)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}
@@ -10,6 +10,7 @@
       \item new element \code{"wrong"} in slot \code{"corr"} of klausur.answ class items for pick-n
         scoring
       \item new argument \code{"wrong"} in \code{klausur.data()} for the same reason
+      \item \code{klausur.report()} gained options from \code{sort()} for \code{"anon"} and \code{"glob"} results
     }
   }
   \subsection{fixed}{
@@ -19,6 +20,10 @@
         cause nasty problems, because the whitespace characters are interpreted by
         \code{klausur()} as a valid but wrong answer
       \item removed typos in \code{klausur.repost()} code (\code{"appen"} instead of \code{"append"})
+      \item anonymous feedback output is now sorted by points as a default. the previous
+        default took the order as is, which usually sorted it by family names
+        of participants, which limits anonymity to a certain degree
+      \item the character "'" is now also filtered out of file names
     }
   }
   \subsection{changed}{
@@ -31,6 +36,7 @@
         body of \code{partial()} for cleaner code
       \item show method for klausuR results now also reports distractor analysis, if
         found
+      \item partial points are no longer rounded before end results are calculated
     }
   }
 }

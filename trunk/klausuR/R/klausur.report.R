@@ -52,6 +52,10 @@
 #' @param lang Set to "de" for reports in German, English is the default.
 #' @param alt.candy If TRUE, a comma will be inserted for items with multiple alternatives ("235" becomes "2, 3, 5" in the printout)
 #' @param anon.glob.file If \code{matn="anon"} or \code{matn="glob"}, you can specify a filename for this particular report.
+#' @param decreasing Logical, whether sorting of output should be done increasing or decreasing (only relevant for \code{matn="anon"} or
+#'  \code{matn="glob"}).
+#' @param sort.by Character string naming a variable to sort the results by. Defaults to \code{"Marks"} (only relevant for \code{matn="anon"} or
+#'  \code{matn="glob"}).
 #' @param NRET.legend Logical, If ET/NRET data is reported, you can demand a legend in the table caption by setting this to true.
 #' @param table.size Character string to shrink the tables, must be one of \code{"auto"}, \code{"normalsize"}, \code{"small"},
 #'    \code{"footnotesize"}, \code{"scriptsize"} or \code{"tiny"}. The default \code{table.size="auto"} tries to decide between
@@ -103,7 +107,7 @@
 klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
           hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
           descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
-          lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", NRET.legend=FALSE, table.size="auto", merge=FALSE, quiet=FALSE){
+          lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", decreasing=TRUE, sort.by="Points", NRET.legend=FALSE, table.size="auto", merge=FALSE, quiet=FALSE){
   # to avoid NOTEs from R CMD check:
   marks.information <- NULL
 
@@ -114,19 +118,23 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       klausur.report(klsr=this.klsr, matn=matn, save=save, pdf=pdf, path=path, file.name=file.name,
         hist=hist, hist.points=hist.points, hist.marks=hist.marks,
         descr=descr, marks.info=marks.info, lang=lang, alt.candy=alt.candy, anon.glob.file=anon.glob.file,
-        NRET.legend=NRET.legend, table.size=table.size)
+        decreasing=decreasing, sort.by=sort.by, NRET.legend=NRET.legend, table.size=table.size)
     }
     return("done")
+  } else {}
+  # check if output needs to be sorted
+  if(identical(matn, "anon") | identical(matn, "glob")){
+    klsr <- sort(klsr, decreasing=decreasing, sort.by=sort.by)
   } else {}
   # if it's of class "klausuR.mult", extract global results and drop the rest
   if(inherits(klsr, "klausuR.mult")){
     klsr <- klsr@results.glob
-    } else{
-      # check whether klsr is an object of class "klausuR" instead
-      if(!inherits(klsr, "klausuR")){
-        stop(simpleError("The given object is not of class \"klausuR\"!"))
-      } else {}
-    }
+  } else{
+    # check whether klsr is an object of class "klausuR" instead
+    if(!inherits(klsr, "klausuR")){
+      stop(simpleError("The given object is not of class \"klausuR\"!"))
+    } else {}
+  }
 
   if(!is.numeric(matn) && !identical(matn, "all") && !identical(matn, "anon") && !identical(matn, "glob")){
     stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
@@ -541,13 +549,13 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
       # prepare the table
       if(identical(form, "anon")){
-      anon.glob.table <- klsr@anon
-      colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
-      anon.glob.digits <- c(0,0,0,1,1)
-      if (!isTRUE(quiet)){
-        # give some feedback on current status
-        message(paste("Processing: Anonymous feedback...", sep=""))
-      } else {}
+        anon.glob.table <- klsr@anon
+        colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
+        anon.glob.digits <- c(0,0,0,1,1)
+        if (!isTRUE(quiet)){
+          # give some feedback on current status
+          message(paste("Processing: Anonymous feedback...", sep=""))
+        } else {}
       } else {
       anon.glob.table <- klsr@results
       colnames(anon.glob.table) <- c((if(!is.null(anon.glob.table$No)) text$LfdNr),text$Name,text$Vorname,text$GMatNr,text$Punkte,text$AProzent,text$ANote,(if(!is.null(anon.glob.table$Pseudonym)) text$Pseudonym))
