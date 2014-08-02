@@ -256,9 +256,9 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
   results <- klsr@results
   res.points <- klsr@points
   truefalse <- klsr@trfls
+  wght <- klsr@wght
   answers <- klsr@answ
   correct <- klsr@corr
-  wght <- klsr@wght
 
   # for a nice printout, check numer of needed digits for points.
   # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
@@ -551,7 +551,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       if(identical(form, "anon")){
         anon.glob.table <- klsr@anon
         colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
-        anon.glob.digits <- c(0,0,0,1,1)
+        anon.glob.digits <- c(0,0,print.digits,1,1)
         if (!isTRUE(quiet)){
           # give some feedback on current status
           message(paste("Processing: Anonymous feedback...", sep=""))
@@ -559,7 +559,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       } else {
       anon.glob.table <- klsr@results
       colnames(anon.glob.table) <- c((if(!is.null(anon.glob.table$No)) text$LfdNr),text$Name,text$Vorname,text$GMatNr,text$Punkte,text$AProzent,text$ANote,(if(!is.null(anon.glob.table$Pseudonym)) text$Pseudonym))
-      anon.glob.digits <- c(0,(if(!is.null(anon.glob.table$No)) 0),0,0,0,0,1,1,(if(!is.null(anon.glob.table$Pseudonym)) 0))
+      anon.glob.digits <- c(0,(if(!is.null(anon.glob.table$No)) 0),0,0,0,print.digits,1,1,(if(!is.null(anon.glob.table$Pseudonym)) 0))
       if (!isTRUE(quiet)){
         # give some feedback on current status
         message(paste("Processing: Global results...", sep=""))

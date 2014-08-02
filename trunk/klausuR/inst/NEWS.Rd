@@ -26,6 +26,11 @@
       \item the character "'" is now also filtered out of file names
       \item breaks for axis labels in histograms are now calculated by internal
         function \code{axis.breaks()}, which fixes a problem with non-integer points
+      \item \code{klausur.report()} does now also check for digits to display in global and
+        anonymous feedback PDF
+      \item \code{klausur.report()} now shows empty answers (\code{""}) as empty, not as a question mark
+      \item LaTeX replacements of characters has been corrected to also match first
+        character
     }
   }
   \subsection{changed}{

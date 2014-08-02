@@ -21,6 +21,11 @@ fixed:
   - the character "'" is now also filtered out of file names
   - breaks for axis labels in histograms are now calculated by internal
     function axis.breaks(), which fixes a problem with non-integer points
+  - klausur.report() does now also check for digits to display in global and
+    anonymous feedback PDF
+  - klausur.report() now shows empty answers ("") as empty, not as a question mark
+  - LaTeX replacements of characters has been corrected to also match first
+    character
 changed:
   - polycor was added as a dependency (needed for distractor analysis)
   - some code cleaning in klausur() for better readability

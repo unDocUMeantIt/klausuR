@@ -268,14 +268,20 @@ anon.results <- function(glob.res){
 # or, if latex=TRUE, one object with all alternatives separated by commas,
 # which is used for nicer looking output in klausur.report()
 answ.alternatives <- function(answ, latex=FALSE){
+  pasteAlt <- function(x){
+    if(identical(x, character()) | isTRUE(is.na(x))){
+      return("{}")
+    } else {}
+    return(paste(x, collapse=", "))
+  }
   # divide all answers into its parts
   answ.parts <- strsplit(as.character(answ), "")
   names(answ.parts) <- names(answ)
   if(isTRUE(latex)){
     if(length(answ.parts) > 1){
-      answ.parts <- lapply(answ.parts, function(x) paste(x, collapse=", "))
+      answ.parts <- lapply(answ.parts, pasteAlt)
     } else {
-      answ.parts <- paste(answ.parts[[1]], collapse=", ")
+      answ.parts <- pasteAlt(answ.parts[[1]])
     }
   } else{}
 
@@ -775,10 +781,10 @@ plot.merger <- function(klsr=list()){
 # some sanitizing is also done
 # it's used in tabellenbau() of klausur.report()
 latex.umlaute <- function(input){
-  output <- gsub("([^\\\\])&", '\\1\\\\&', as.character(input), perl=TRUE)
-  output <- gsub("([^\\\\])_", '\\1\\\\_{}', as.character(output), perl=TRUE)
-  output <- gsub("([^\\\\])#", '\\1\\\\#', as.character(output), perl=TRUE)
-  output <- gsub("([^\\\\])\\^", '\\1\\\\^{}', as.character(output), perl=TRUE)
+  output <- gsub("(\\\\?)&", '\\\\&', as.character(input), perl=TRUE)
+  output <- gsub("(\\\\?)_", '\\\\_{}', as.character(output), perl=TRUE)
+  output <- gsub("(\\\\?)#", '\\\\#', as.character(output), perl=TRUE)
+  output <- gsub("(\\\\?)\\^", '\\\\^{}', as.character(output), perl=TRUE)
   output <- encoded_text_to_latex(enc2utf8(output), "utf8")
   return(output)
 } ## end function latex.umlaute()
