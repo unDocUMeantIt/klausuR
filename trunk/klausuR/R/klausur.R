@@ -126,7 +126,7 @@
 #'  \item{cronbach}{Internal consistency, a list of three elements "alpha", "ci" (confidence interval 95\%) and "deleted" (alpha if item was removed)}
 #'  \item{item.analysis}{A data.frame with information on difficulty, discriminatory power, discriminant factor and Lienert's selection index of all items.}
 #'  \item{distractor.analysis}{A list with information on the selected answer alternatives for each individual item (only calculated if \code{item.analysis=TRUE}).
-#'    Also lists the discriminatory power of each alternative, being the polyserial correlation of it with the global outcome.}
+#'    Also lists the discriminatory power of each alternative, being the point-biserial (a.k.a Pearson) correlation of it with the global outcome.}
 #'  \item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
 #'  Not all slots are shown by default (refer to \code{\link[klausuR:show-methods]{show}} and \code{\link[klausuR:plot]{plot}}).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
@@ -402,8 +402,8 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
         # calling another internal function which is also
         # using alpha() from package "psychometric"
         item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
-        distractor.analysis <- distrct.analysis(answ=slot(data, "items"), corr=corr,
-          points=data.frame(MatrNo=answ$MatrNo, Points=ergebnis.daten$Points))
+        distractor.analysis <- distrct.analysis(answ=slot(data, "items"), corr=corr, wght=wght.results,
+          points=data.frame(MatrNo=answ$MatrNo, Points=ergebnis.daten$Points), score=score)
       } else {
         item.analyse <- data.frame(NULL)
         distractor.analysis <- list(NULL)

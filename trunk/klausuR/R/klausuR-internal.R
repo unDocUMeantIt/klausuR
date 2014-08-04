@@ -682,7 +682,7 @@ marks.summary <- function(marks, minp=0, add.const=0){
 # answ: a data.frame containing all items in columns and all answers in its rows
 # corr: named vector with the correct answers (names indicate items); ignored if NULL
 # points: a data.frame with two columns, "MatrNo" and "Points"; ignored if NULL
-distrct.analysis <- function(answ, corr=NULL, points=NULL){
+distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL){
   # set MatrNo NULL to fulfill CRAN check's needs
   MatrNo <- NULL
   # check if MatrNo needs to be stripped off
@@ -728,11 +728,13 @@ distrct.analysis <- function(answ, corr=NULL, points=NULL){
           selected.all[selected.all[["answer"]] == correct, "correct"] <- "*"
         } else {}
       } else {}
-      # compute polyserial correlations with the end result, if available,
+      # compute correlations with the end result, if available,
       # as an indicator for discriminate power
       if(!is.null(points) && nrow(selected.all) > 1){
         selected.all[["discrim"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
-            return(suppressWarnings(polyserial(points[["Points"]], answ[[thisItem]] == thisAnswer)))
+            # return(suppressWarnings(polyserial(points[["Points"]], answ[[thisItem]] == thisAnswer)))
+            # point-biserial correlations seems to be the proper one here, which is equivalent to pearson
+            return(suppressWarnings(cor(points[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
           })
       } else {}
       rownames(selected.all) <- NULL
