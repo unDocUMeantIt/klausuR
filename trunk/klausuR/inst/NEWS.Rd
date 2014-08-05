@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-08-02)}{
+\section{Changes in klausuR version 0.12-10 (2014-08-05)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}
@@ -28,7 +28,8 @@
         function \code{axis.breaks()}, which fixes a problem with non-integer points
       \item \code{klausur.report()} does now also check for digits to display in global and
         anonymous feedback PDF
-      \item \code{klausur.report()} now shows empty answers (\code{""}) as empty, not as a question mark
+      \item \code{klausur.report()} now shows empty answers (\code{""}) as empty, not as a question
+        mark
       \item LaTeX replacements of characters has been corrected to also match first
         character
     }

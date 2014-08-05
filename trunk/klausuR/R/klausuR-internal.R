@@ -681,7 +681,9 @@ marks.summary <- function(marks, minp=0, add.const=0){
 ## function distrct.analysis()
 # answ: a data.frame containing all items in columns and all answers in its rows
 # corr: named vector with the correct answers (names indicate items); ignored if NULL
+# wght: vector with item weights
 # points: a data.frame with two columns, "MatrNo" and "Points"; ignored if NULL
+# score: character string defining the scoring method
 distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL){
   # set MatrNo NULL to fulfill CRAN check's needs
   MatrNo <- NULL
@@ -708,6 +710,10 @@ distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL
     if(!identical(names(answNoMatr), names(corr))){
       stop(simpleError("Distractor analysis: Item names don't match those in the given vector with correct answers!"))
     } else {}
+## TODO:
+#     if(all(!is.null(wght), !identical(names(wght), names(corr)))){
+#       stop(simpleError("Distractor analysis: Item weight names don't match those in the given vector with correct answers!"))
+#     } else {}
   } else {}
 
   results <- lapply(names(answNoMatr), function(thisItem){
@@ -719,6 +725,7 @@ distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL
         percent=selected.percent,
         correct="",
         discrim=NA,
+        points=NA,
         stringsAsFactors=FALSE)
       # add a cloumn as indicator for correct answer
       if(!is.null(corr)){
@@ -735,6 +742,9 @@ distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL
             # return(suppressWarnings(polyserial(points[["Points"]], answ[[thisItem]] == thisAnswer)))
             # point-biserial correlations seems to be the proper one here, which is equivalent to pearson
             return(suppressWarnings(cor(points[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
+          })
+        selected.all[["points"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
+            return(suppressWarnings(mean(points[answ[[thisItem]] == thisAnswer, "Points"])))
           })
       } else {}
       rownames(selected.all) <- NULL

@@ -68,7 +68,7 @@ An object of class \code{\link[klausuR]{klausuR-class}} with the following slots
       discriminant factor and Lienert's selection index of all items.}
  \item{distractor.analysis}{A list with information on the selected answer alternatives for each individual item (only calculated if \code{item.analysis=TRUE}).
    Also lists the discriminatory power of each alternative,
-      being the polyserial correlation of it with the global outcome.}
+      being the point-biserial (a.k.a Pearson) correlation of it with the global outcome.}
  \item{misc}{Anything that was stored in the \code{misc} slot of the input data.}
  Not all slots are shown by default (refer to \code{\link[klausuR:show-methods]{show}} and \code{\link[klausuR:plot]{plot}}).
 }

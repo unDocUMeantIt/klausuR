@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-08-02)
+changes in version 0.12-10 (2014-08-05)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
@@ -23,7 +23,8 @@ fixed:
     function axis.breaks(), which fixes a problem with non-integer points
   - klausur.report() does now also check for digits to display in global and
     anonymous feedback PDF
-  - klausur.report() now shows empty answers ("") as empty, not as a question mark
+  - klausur.report() now shows empty answers ("") as empty, not as a question
+    mark
   - LaTeX replacements of characters has been corrected to also match first
     character
 changed:
