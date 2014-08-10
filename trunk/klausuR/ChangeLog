@@ -1,10 +1,12 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-08-05)
+changes in version 0.12-10 (2014-08-10)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
-    selected answer alternatives for each individual item
+    selected answer alternatives for each individual item and some statistics
+    like correlation with the overall results and mean results of subjects
+    chosing an alternative
   - new element "wrong" in slot "corr" of klausur.answ class items for pick-n
     scoring
   - new argument "wrong" in klausur.data() for the same reason

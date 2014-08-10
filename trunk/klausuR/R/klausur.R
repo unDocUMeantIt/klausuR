@@ -332,6 +332,8 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
         ergebnisse <- wahr.falsch + 0
       }
     }
+    # make a copy of the matrix with resulting points, especially interesting if items were weighted
+    ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
 
     ## calculate points
     punkte <- rowSums(ergebnisse)
@@ -402,8 +404,13 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
         # calling another internal function which is also
         # using alpha() from package "psychometric"
         item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
-        distractor.analysis <- distrct.analysis(answ=slot(data, "items"), corr=corr, wght=wght.results,
-          points=data.frame(MatrNo=answ$MatrNo, Points=ergebnis.daten$Points), score=score)
+        distractor.analysis <- distrct.analysis(
+            answ=slot(data, "items"),
+            corr=corr,
+            points=ergebnisse.daten,
+            results=data.frame(MatrNo=answ$MatrNo, Points=ergebnis.daten$Points),
+            partWhole=isTRUE(score %in% c("solved", "NR"))
+          )
       } else {
         item.analyse <- data.frame(NULL)
         distractor.analysis <- list(NULL)
@@ -412,9 +419,7 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
     ## compose the resulting object
     # here we make a copy of the TRUE/FALSE matrix, to be able to check each result individually
     wahrfalsch.daten <- cbind(MatrNo=answ$MatrNo, wahr.falsch)
-    # the same way make a copy of the matrix with resulting points, especially interesting if items were weighted
-    ergebnisse.daten <- cbind(MatrNo=answ$MatrNo, ergebnisse)
-    # and we make a copy with given answers as well
+    # the same way make a copy with given answers as well
     antwort.daten <- cbind(MatrNo=answ$MatrNo, answ[,items])
     # use the internal marks.summary() function to create convenient information on the mark definitions
     marks.info <- marks.summary(marks, minp=min.score)

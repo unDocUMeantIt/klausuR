@@ -681,39 +681,40 @@ marks.summary <- function(marks, minp=0, add.const=0){
 ## function distrct.analysis()
 # answ: a data.frame containing all items in columns and all answers in its rows
 # corr: named vector with the correct answers (names indicate items); ignored if NULL
-# wght: vector with item weights
-# points: a data.frame with two columns, "MatrNo" and "Points"; ignored if NULL
-# score: character string defining the scoring method
-distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL){
+# points: a matrix with columns "MatrNo" and one for each item, listing the results in points, already weighted!
+# results: a data.frame with two columns, "MatrNo" and "Points"; ignored if NULL
+# partWHole: logical, wheter part-whole correction should be applied; since this is tricky to implement and
+#   interpret for scoring functions other than "NR" and "solved", it can be turned off
+distrct.analysis <- function(answ, corr=NULL, points=NULL, results=NULL, partWhole=FALSE){
   # set MatrNo NULL to fulfill CRAN check's needs
   MatrNo <- NULL
   # check if MatrNo needs to be stripped off
   if("MatrNo" %in% names(answ)){
-    if(!is.null(points)){
-      if(!identical(sort(answ[["MatrNo"]]), sort(points[["MatrNo"]]))){
-        stop(simpleError("Distractor analysis: MatrNo in given items doesn't match those in the given results (points)!"))
+    if(!is.null(results)){
+      if(any(!identical(sort(answ[["MatrNo"]]), sort(results[["MatrNo"]])), !identical(sort(answ[["MatrNo"]]), sort(points[["MatrNo"]])))){
+        stop(simpleError("Distractor analysis: MatrNo in given items doesn't match those in the given points/results!"))
       } else {}
-      if(!"Points" %in% names(points)){
+      if(!"Points" %in% names(results)){
         stop(simpleError("Distractor analysis: Missing column \"Points\" in given object!"))
       } else {}
-      # "MatrNo" in both data sets are identical, so we'll sort both by it
+      # "MatrNo" in all data sets are identical, so we'll sort both by it
       answ <- answ[order(answ[["MatrNo"]]),]
+      results.partWhole <- results <- results[order(results[["MatrNo"]]),]
       points <- points[order(points[["MatrNo"]]),]
     } else {}
     # create an object without "MatrNo"
     answNoMatr <- subset(answ, select=-MatrNo)
   } else {
-    points <- NULL
+    results <- points <- NULL
   }
 
   if(!is.null(corr)){
     if(!identical(names(answNoMatr), names(corr))){
-      stop(simpleError("Distractor analysis: Item names don't match those in the given vector with correct answers!"))
+      stop(simpleError("Distractor analysis: Item names (answ) don't match those in the given vector with correct answers!"))
     } else {}
-## TODO:
-#     if(all(!is.null(wght), !identical(names(wght), names(corr)))){
-#       stop(simpleError("Distractor analysis: Item weight names don't match those in the given vector with correct answers!"))
-#     } else {}
+    if(!identical(names(subset(points, select=-MatrNo)), names(corr))){
+      stop(simpleError("Distractor analysis: Item names (points) don't match those in the given vector with correct answers!"))
+    } else {}
   } else {}
 
   results <- lapply(names(answNoMatr), function(thisItem){
@@ -737,15 +738,25 @@ distrct.analysis <- function(answ, corr=NULL, wght=NULL, points=NULL, score=NULL
       } else {}
       # compute correlations with the end result, if available,
       # as an indicator for discriminate power
-      if(!is.null(points) && nrow(selected.all) > 1){
+      if(!is.null(results) && !is.null(points) && nrow(selected.all) > 1){
         selected.all[["discrim"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
-            # return(suppressWarnings(polyserial(points[["Points"]], answ[[thisItem]] == thisAnswer)))
+            # return(suppressWarnings(polyserial(results[["Points"]], answ[[thisItem]] == thisAnswer)))
             # point-biserial correlations seems to be the proper one here, which is equivalent to pearson
-            return(suppressWarnings(cor(points[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
+            return(suppressWarnings(cor(results[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
           })
         selected.all[["points"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
-            return(suppressWarnings(mean(points[answ[[thisItem]] == thisAnswer, "Points"])))
+            return(suppressWarnings(mean(results[answ[[thisItem]] == thisAnswer, "Points"])))
           })
+        if(isTRUE(partWhole)){
+          indiv.points <- points[[thisItem]]
+          results.partWhole[["Points"]] <- results.partWhole[["Points"]] - indiv.points
+          selected.all[["discrim.partWhole"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
+              return(suppressWarnings(cor(results.partWhole[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
+            })
+          selected.all[["points.partWhole"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
+              return(suppressWarnings(mean(results.partWhole[answ[[thisItem]] == thisAnswer, "Points"])))
+            })
+        } else {}
       } else {}
       rownames(selected.all) <- NULL
       return(selected.all)

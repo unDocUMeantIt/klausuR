@@ -1,12 +1,14 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-08-05)}{
+\section{Changes in klausuR version 0.12-10 (2014-08-10)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}
       \item new slot \code{"distractor.analysis"} in objects of class klausuR, listing the
-        selected answer alternatives for each individual item
+        selected answer alternatives for each individual item and some statistics
+        like correlation with the overall results and mean results of subjects
+        chosing an alternative
       \item new element \code{"wrong"} in slot \code{"corr"} of klausur.answ class items for pick-n
         scoring
       \item new argument \code{"wrong"} in \code{klausur.data()} for the same reason
