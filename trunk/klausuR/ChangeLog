@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-08-10)
+changes in version 0.12-10 (2014-09-29)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
@@ -11,6 +11,8 @@ added:
     scoring
   - new argument "wrong" in klausur.data() for the same reason
   - klausur.report() gained options from sort() for "anon" and "glob" results
+  - new elements "keep.cases" and "recode.na" in klausur.data(), to keep cases
+    with missing data, even if "na.rm=TRUE"
 fixed:
   - stripping trailing whitespace from answer data if it is in factor of
     character format. this happens easily if data was imported from SPSS and can

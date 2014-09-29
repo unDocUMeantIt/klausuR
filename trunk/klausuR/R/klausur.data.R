@@ -76,6 +76,9 @@
 #'    if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
 #'    one correct answers, this option can become handy in combination with "partial" scoring and item weights.
 #' @param wrong If you want full pick-n scoring: A vector similar to \code{corr}, but this time listing all alternatives that are wrong.
+#' @param keep.cases A vector of \code{MatrNo} values, if you want to prevent these cases from being dropped even if they contain missing data.
+#'    If not \code{NULL}, missing values in all test items are replaced by the value given to \code{recode.na}, before \code{na.rm} is evaluated.
+#' @param recode.na A value to replace missing data with in all cases specified by \code{keep.cases}. Ignored if \code{keep.cases=NULL}.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -111,7 +114,7 @@
 #' klsr.obj <- klausur(data.obj)
 
 klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
-  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL, wrong=NULL){
+  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL, wrong=NULL, keep.cases=NULL, recode.na=0){
 
   # check for var names to use
   item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
@@ -160,7 +163,8 @@ klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key
     }
   }
 
-  sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix)
+  sane.data <- data.check.klausur(answ=answ, corr=corr, items=items, na.rm=na.rm, prefixes=item.prefix,
+    keep.cases=keep.cases, recode.na=recode.na)
   stopifnot(scoring.check.klausur(corr=corr, marks=marks, wght=wght, score="solved", maxp=maxp))
   answ <- sane.data$answ
   items <- sane.data$items

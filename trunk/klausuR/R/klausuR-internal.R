@@ -57,7 +57,7 @@ check.prefixes <- function(prefixes=c(), package="klausuR"){
 ## data.check.klausur()
 # this function is called by klausur() and klausur.mufo()
 # for some sanity checks of the given data
-data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
+data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c(), keep.cases=NULL, recode.na=0){
 
     # check for var names to use
     prefix <- check.prefixes(prefixes=prefixes, package="klausuR")
@@ -77,6 +77,11 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c()){
     # we'll check for NAs only in variables we will use, so define them here
     relevant.items <- c(grep("^Name$|^FirstName$|^MatrNo$", names(answ)), items)
 
+    # before we check for missing values, let's see if there are cases which should prevail
+    if(!is.null(keep.cases)){
+      missings.to.keep <- is.na(answ[answ[["MatrNo"]]==keep.cases,items])
+      answ[answ[["MatrNo"]]==keep.cases,items[missings.to.keep]] <- recode.na
+    } else {}
     # are there missing values in answ, at least in the relevant parts?
     if(sum(is.na(answ[, relevant.items]) > 0)){
       invalid.cases.row <- sort(unique(unlist(sapply(relevant.items, function(na.var){
