@@ -67,6 +67,9 @@
 #' plot(klsr.obj, marks=TRUE)
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 
+#' @export
+#' @docType methods
+#' @aliases plot,klausuR,missing-method
 #' @rdname plot-methods
 setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, na.rm=TRUE, ...){
 
@@ -122,8 +125,11 @@ setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, 
   }
 })
 
+#' @export
+#' @docType methods
+#' @aliases plot,klausuR.mult,missing-method
 #' @rdname plot-methods
 setMethod("plot", signature(x="klausuR.mult", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, ...){
   klausur.global.object <- x@results.glob
-  plot(x=klausur.global.object, , marks=marks, sd.lines=sd.lines, plot.normal=plot.normal, ...)
+  plot(x=klausur.global.object, marks=marks, sd.lines=sd.lines, plot.normal=plot.normal, ...)
 })
