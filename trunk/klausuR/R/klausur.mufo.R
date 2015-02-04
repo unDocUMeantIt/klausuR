@@ -104,10 +104,10 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
     stop(simpleError("'data' must be of class 'klausuR.answ'!"))
   } else {}
 
-  corr <- data@corr$corr
-  corr.key <- data@corr$corr.key
+  corr <- slot(data, "corr")$corr
+  corr.key <- slot(data, "corr")$corr.key
   if(is.null(wght)){
-    wght <- data@score$wght
+    wght <- slot(data, "score")$wght
     if(is.null(wght)){
       # for the results, create a vector of 1's by number of items
       wght.results <- rep(1, length(corr))
@@ -118,16 +118,16 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
     wght.results <- wght
   }
   if(is.null(marks)){
-    marks <- data@score$marks
+    marks <- slot(data, "score")$marks
   } else {}
 
   ## first we'll check if the data is sane
   # are we given any parallel forms at all?
-  if(is.null(data@id[["Form"]]) || is.null(dim(corr.key)) || is.null(corr.key[, "Form"])){
+  if(is.null(slot(data, "id")[["Form"]]) || is.null(dim(corr.key)) || is.null(corr.key[, "Form"])){
     stop(simpleError("Both answ and corr.key must contain the variable \"Form\"!"))
   } else {}
   # ok, so how many test forms are there?
-  test.forms.answ <- levels(as.factor(data@id[["Form"]]))
+  test.forms.answ <- levels(as.factor(slot(data, "id")[["Form"]]))
   test.forms.corr <- levels(as.factor(corr.key[, "Form"]))
   # the relevant value is what's in answ. it won't hurt if corr.key has more,
   # as long as it holds all relevant data for the forms in answ
@@ -145,61 +145,70 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
             mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
             na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
     ## calculation would end here if only one form was submitted
-  }
-  else {
+  } else {
     ## separate forms and calculate partial results
     # we'll call klausur() for each test form, and later combine the results
-  klausur.mufo.results <- new("klausuR.mult")
-  # first save the names of all test forms to the first slot
-  klausur.mufo.results@forms <- test.forms.answ
-  # create an empty object of class klausuR to store combined global results
-  klausur.mufo.global <- new("klausuR", corr=corr, marks=marks, marks.sum=marks.summary(marks),
-    wght=wght.results, misc=as.data.frame(data@misc, stringsAsFactors=FALSE))
-  for(single.test in test.forms.answ){
-    corr.inices <- as.numeric(corr.key[corr.key[, "Form"] == single.test,][!dimnames(corr.key)[[2]] == "Form"])
-    corr.part <- corr[corr.inices]
-    names(corr.part) <- names(corr)
-    subj.in.test <- data@id$Form == single.test
-    data.part <- new("klausuR.answ",
-      corr=list(corr=corr.part, corr.key=NULL),
-      id=subset(data@id, subj.in.test),
-      items=subset(data@items, subj.in.test),
-      score=list(marks=marks, wght=wght),
-      misc=subset(data@misc, subj.in.test))
-    klausur.part.results <- klausur(data=data.part, marks=marks,
-            mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
-            na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
-    result.part <- list(Form=single.test, Results=klausur.part.results)
-    klausur.mufo.results@results.part[[single.test]] <- result.part
-    # append partial results to global results
-    klausur.mufo.global@results   <- rbind(klausur.mufo.global@results, klausur.part.results@results)
-    klausur.mufo.global@answ   <- rbind(klausur.mufo.global@answ, klausur.reorderItems(slot=klausur.part.results@answ, order=corr.inices))
-    klausur.mufo.global@trfls   <- rbind(klausur.mufo.global@trfls, klausur.reorderItems(slot=klausur.part.results@trfls, order=corr.inices))
-    klausur.mufo.global@anon   <- rbind(klausur.mufo.global@anon, klausur.part.results@anon)
-  }
-    ## combine global results
-    # missing pieces we need to calculate
-    klausur.mufo.global@mean  <- summary(klausur.mufo.global@results$Points)
-    klausur.mufo.global@sd  <- sd(klausur.mufo.global@results$Points)
-  ## psychometic quality of the items
-  if(isTRUE(cronbach)){
-    # calling an internal function which is
-    # using alpha() from package "psychometric"
-    cron.alpha.list <- calc.cronbach.alpha(subset(klausur.mufo.global@trfls, select=-MatrNo))
-  } else {
-    cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
-  }
-  if(isTRUE(item.analysis)){
-    # calling another internal function which is also
-    # using alpha() from package "psychometric"
-    item.analyse <- calc.item.analysis(subset(klausur.mufo.global@trfls, select=-MatrNo), cron.alpha.list)
-  } else {
-    item.analyse <- NULL
-  }
-    klausur.mufo.global@cronbach <- cron.alpha.list
-    klausur.mufo.global@item.analysis <- item.analyse
+    klausur.mufo.results <- new("klausuR.mult")
+    # first save the names of all test forms to the first slot
+    slot(klausur.mufo.results, "forms") <- test.forms.answ
+    # create an empty object of class klausuR to store combined global results
+    klausur.mufo.global <- new("klausuR", corr=corr, marks=marks, marks.sum=marks.summary(marks),
+      wght=wght.results, misc=as.data.frame(data@misc, stringsAsFactors=FALSE))
+    for(single.test in test.forms.answ){
+      corr.inices <- as.numeric(corr.key[corr.key[, "Form"] == single.test,][!dimnames(corr.key)[[2]] == "Form"])
+      corr.part <- corr[corr.inices]
+      names(corr.part) <- names(corr)
+      subj.in.test <- slot(data, "id")$Form == single.test
+      data.part <- new("klausuR.answ",
+        corr=list(corr=corr.part, corr.key=NULL, wrong=NULL),
+        id=subset(slot(data, "id"), subj.in.test),
+        items=subset(slot(data, "items"), subj.in.test),
+        score=list(marks=marks, wght=wght),
+        misc=subset(slot(data, "misc"), subj.in.test))
+      klausur.part.results <- klausur(data=data.part, marks=marks,
+              mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
+              na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
+      result.part <- list(Form=single.test, Results=klausur.part.results)
+      slot(klausur.mufo.results, "results.part")[[single.test]] <- result.part
+      # append partial results to global results
+      slot(klausur.mufo.global, "results") <- rbind(slot(klausur.mufo.global, "results"), slot(klausur.part.results, "results"))
+      slot(klausur.mufo.global, "answ")    <- rbind(slot(klausur.mufo.global, "answ"), klausur.reorderItems(slot=slot(klausur.part.results, "answ"), order=corr.inices))
+      slot(klausur.mufo.global, "trfls")   <- rbind(slot(klausur.mufo.global, "trfls"), klausur.reorderItems(slot=slot(klausur.part.results, "trfls"), order=corr.inices))
+      slot(klausur.mufo.global, "anon")    <- rbind(slot(klausur.mufo.global, "anon"), slot(klausur.part.results, "anon"))
+    }
+      ## combine global results
+      # missing pieces we need to calculate
+      slot(klausur.mufo.global, "mean")  <- summary(slot(klausur.mufo.global, "results")$Points)
+      slot(klausur.mufo.global, "sd")  <- sd(slot(klausur.mufo.global, "results")$Points)
+    ## psychometic quality of the items
+    if(isTRUE(cronbach)){
+      # calling an internal function which is
+      # using alpha() from package "psychometric"
+      cron.alpha.list <- calc.cronbach.alpha(subset(slot(klausur.mufo.global, "trfls"), select=-MatrNo))
+    } else {
+      cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
+    }
+    if(isTRUE(item.analysis)){
+      # calling another internal function which is also
+      # using alpha() from package "psychometric"
+      item.analyse <- calc.item.analysis(subset(slot(klausur.mufo.global, "trfls"), select=-MatrNo), cron.alpha.list)
+      distractor.analysis <- distrct.analysis(
+          answ=slot(klausur.mufo.global, "answ"),
+          corr=corr,
+          points=slot(klausur.mufo.global, "trfls"),
+          results=data.frame(MatrNo=slot(klausur.mufo.global, "results")$MatrNo, Points=slot(klausur.mufo.global, "results")$Points),
+          partWhole=isTRUE(score %in% c("solved", "NR"))
+        )
+    } else {
+      item.analyse <- data.frame(NULL)
+      distractor.analysis <- list(NULL)
+    }
 
-    klausur.mufo.results@results.glob <- klausur.mufo.global
+    slot(klausur.mufo.global, "cronbach") <- cron.alpha.list
+    slot(klausur.mufo.global, "item.analysis") <- item.analyse
+    slot(klausur.mufo.global, "distractor.analysis") <- distractor.analysis
+    
+    slot(klausur.mufo.results, "results.glob") <- klausur.mufo.global
   }
 
   return(klausur.mufo.results)

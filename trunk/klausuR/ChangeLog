@@ -33,6 +33,7 @@ fixed:
     character
   - manual setting of "table.size" was buggy in klausur.report(), adding just
     the word of the chosen size to the table
+  - klausur.mufo() was using outdated object classes
 changed:
   - polycor was added as a dependency (needed for distractor analysis)
   - some code cleaning in klausur() for better readability
