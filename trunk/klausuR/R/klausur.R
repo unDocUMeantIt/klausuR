@@ -137,6 +137,7 @@
 #'    \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
 #' @keywords misc
 #' @import psychometric
+#' @import polycor
 #' @export
 #' @examples
 #' data(antworten)

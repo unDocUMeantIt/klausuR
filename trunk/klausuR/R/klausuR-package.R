@@ -27,6 +27,6 @@
 #' @name klausuR-package
 #' @docType package
 #' @title The klausuR Package
-#' @author Meik Michalke
+#' @author m.eik michalke
 #' @keywords package
 NULL

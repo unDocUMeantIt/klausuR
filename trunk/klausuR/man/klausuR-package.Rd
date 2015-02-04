@@ -32,7 +32,7 @@ automatically). Due to some restrictions on CRAN, the full package
 sources are only available from the project homepage.
 }
 \author{
-Meik Michalke
+m.eik michalke
 }
 \keyword{package}
 
