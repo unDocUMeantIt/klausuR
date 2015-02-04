@@ -4,8 +4,10 @@
 \name{plot}
 \alias{plot}
 \alias{plot,-methods}
+\alias{plot,klausuR,missing,ANY-method}
 \alias{plot,klausuR,missing-method}
 \alias{plot,klausuR-method}
+\alias{plot,klausuR.mult,missing,ANY-method}
 \alias{plot,klausuR.mult,missing-method}
 \alias{plot,klausuR.mult-method}
 \title{Plot methods for S4 objects of class klausuR and klausuR.mult}
@@ -20,6 +22,8 @@ plot(x, y, ...)
 }
 \arguments{
 \item{x}{An S4 object of class \code{klausuR} or \code{klausuR.mult}}
+
+\item{y}{From the generic \code{plot} function, ignored for klausuR class objects.}
 
 \item{...}{Any other argument suitable for plot()}
 

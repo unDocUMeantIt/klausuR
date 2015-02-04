@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -24,6 +24,7 @@
 #'
 #' @aliases plot,-methods plot,klausuR-method plot,klausuR,missing-method plot,klausuR.mult-method plot,klausuR.mult,missing-method
 #' @param x An S4 object of class \code{klausuR} or \code{klausuR.mult}
+#' @param y From the generic \code{plot} function, ignored for klausuR class objects.
 #' @param marks Logical, whether the histogram should show the distribution of points (default) or marks
 #' @param sd.lines Logical, whether standard deviation lines should be plotted
 #' @param plot.normal Logical, whether normal distribution should be plotted (according to mean and Sd of the results)
@@ -67,9 +68,8 @@
 #' plot(klsr.obj, marks=TRUE)
 setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 
-#' @export
 #' @docType methods
-#' @aliases plot,klausuR,missing-method
+#' @aliases plot,klausuR,missing,ANY-method
 #' @rdname plot-methods
 setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, na.rm=TRUE, ...){
 
@@ -125,9 +125,8 @@ setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, 
   }
 })
 
-#' @export
 #' @docType methods
-#' @aliases plot,klausuR.mult,missing-method
+#' @aliases plot,klausuR.mult,missing,ANY-method
 #' @rdname plot-methods
 setMethod("plot", signature(x="klausuR.mult", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, ...){
   klausur.global.object <- x@results.glob
