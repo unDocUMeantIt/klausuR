@@ -19,10 +19,9 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyLoad: yes
 URL: http://r-forge.r-project.org/projects/klausur
-Authors@R: c(person(given="Meik", family="Michalke",
-    email="meik.michalke@hhu.de", role=c("aut", "cre")))
+Authors@R: c(person(given="Meik", family="Michalke", email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-10
-Date: 2014-08-10
+Date: 2015-02-04
 Collate:
     '00_class_01_klausuR.test.R'
     '00_class_02_klausuR.R'

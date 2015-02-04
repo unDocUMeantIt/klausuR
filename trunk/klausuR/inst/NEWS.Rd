@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-10 (2014-08-10)}{
+\section{Changes in klausuR version 0.12-10 (2015-02-04)}{
   \subsection{added}{
     \itemize{
       \item support for pick-n scoring was added to \code{klausur()}
@@ -13,6 +13,8 @@
         scoring
       \item new argument \code{"wrong"} in \code{klausur.data()} for the same reason
       \item \code{klausur.report()} gained options from \code{sort()} for \code{"anon"} and \code{"glob"} results
+      \item new elements \code{"keep.cases"} and \code{"recode.na"} in \code{klausur.data()}, to keep cases
+        with missing data, even if "na.rm=TRUE"
     }
   }
   \subsection{fixed}{
@@ -34,6 +36,8 @@
         mark
       \item LaTeX replacements of characters has been corrected to also match first
         character
+      \item manual setting of \code{"table.size"} was buggy in \code{klausur.report()}, adding just
+        the word of the chosen size to the table
     }
   }
   \subsection{changed}{

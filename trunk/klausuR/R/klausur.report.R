@@ -379,7 +379,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
         table.size <- "\\normalsize\n"
       }
     } else {
-      table.size <- paste("\\",table.size,"\n")
+      table.size <- paste0("\\",table.size,"\n")
     }
 
     # name and first name from the answer matrix
@@ -576,7 +576,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
         table.size <- "\\normalsize\n"
       }
     } else {
-      table.size <- paste("\\",table.size,"\n")
+      table.size <- paste0("\\",table.size,"\n")
     }
 
     latex.foot <- paste(

@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-10 (2014-09-29)
+changes in version 0.12-10 (2015-02-04)
 added:
   - support for pick-n scoring was added to klausur()
   - new slot "distractor.analysis" in objects of class klausuR, listing the
@@ -31,6 +31,8 @@ fixed:
     mark
   - LaTeX replacements of characters has been corrected to also match first
     character
+  - manual setting of "table.size" was buggy in klausur.report(), adding just
+    the word of the chosen size to the table
 changed:
   - polycor was added as a dependency (needed for distractor analysis)
   - some code cleaning in klausur() for better readability
