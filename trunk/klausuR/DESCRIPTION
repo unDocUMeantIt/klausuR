@@ -12,24 +12,22 @@ Depends:
     graphics,
     tools
 Enhances: rkward
-Description: A set of functions designed to quickly generate results of
-    a multiple choice test. Generates detailed global results,
-    lists for anonymous feedback and personalised result feedback
-    (in LaTeX and/or PDF format), as well as item statistics like
-    Cronbach's alpha or disciminatory power. klausuR also includes
-    a plugin for the R GUI and IDE RKWard, providing dialogs for
-    its basic features. To use them, install RKWard from
-    http://rkward.sf.net (plugins are detected automatically). Due
-    to some restrictions on CRAN, the full package sources are only
-    available from the project homepage.
+Description: A set of functions designed to quickly generate results of a
+    multiple choice test. Generates detailed global results, lists for
+    anonymous feedback and personalised result feedback (in LaTeX and/or PDF
+    format), as well as item statistics like Cronbach's alpha or disciminatory
+    power. klausuR also includes a plugin for the R GUI and IDE RKWard,
+    providing dialogs for its basic features. To use them, install RKWard from
+    http://rkward.sf.net (plugins are detected automatically). Due to some
+    restrictions on CRAN, the full package sources are only available from the
+    project homepage.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyLoad: yes
 URL: http://r-forge.r-project.org/projects/klausur
-Authors@R: c(person(given="m.eik", family="michalke",
-    email="meik.michalke@hhu.de", role=c("aut", "cre")))
+Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-10
-Date: 2015-02-04
+Date: 2015-02-07
 Collate:
     '00_class_01_klausuR.test.R'
     '00_class_02_klausuR.R'
