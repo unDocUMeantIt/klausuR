@@ -17,8 +17,10 @@ Sample data of a test with NRET data.
     \item{\code{MatrNo}}{Matriculation number (character vector)}
     \item{\code{FirstName}}{First name (character vector)}
     \item{\code{Name}}{Family name (character vector)}
-    \item{\code{Nickname}}{Pseudonym for anonymous feedback, needs to be renamed (character vector)}
-    \item{\code{item01a1} to \code{item10a3}}{Given answers, three answers for each item, i.e. one for each alternative (numeric vector)}
+    \item{\code{Nickname}}{Pseudonym for anonymous feedback,
+      needs to be renamed (character vector)}
+    \item{\code{item01a1} to \code{item10a3}}{Given answers, three answers for each item,
+      i.e. one for each alternative (numeric vector)}
   }
 }
 \details{

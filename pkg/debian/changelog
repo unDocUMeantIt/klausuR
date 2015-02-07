@@ -1,0 +1,30 @@
+r-other-reaktanz-klausur (0.12-10-1) unstable; urgency=low
+
+  * new upstream release
+
+ -- m.eik michalke <meik.michalke@hhu.de>  Sat, 28 Sep 2013 12:16:21 +0000
+
+r-other-reaktanz-klausur (0.12-9-1) unstable; urgency=low
+
+  * new upstream release
+
+ -- m.eik michalke <meik.michalke@hhu.de>  Mon, 05 Aug 2013 19:52:24 +0000
+
+r-other-reaktanz-klausur (0.12-8-1) unstable; urgency=low
+
+  * new upstream release
+
+ -- m.eik michalke <meik.michalke@hhu.de>  Wed, 08 May 2013 00:47:24 +0000
+
+r-other-reaktanz-klausur (0.12-7-2) unstable; urgency=low
+
+  * build against R 3.0.0
+
+ -- m.eik michalke <meik.michalke@hhu.de>  Wed, 08 May 2013 00:15:24 +0000
+
+r-other-reaktanz-klausur (0.12-7-1) unstable; urgency=low
+
+  * new upstream release
+
+ -- m.eik michalke <meik.michalke@hhu.de>  Fri, 25 Jan 2013 20:10:50 +0000
+

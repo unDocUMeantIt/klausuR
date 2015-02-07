@@ -5,7 +5,7 @@
 	<include file="../klausuR.pluginmap" />
 
 	<logic>
-		<convert id="logic_weight_items" mode="notequals" sources="chk_weights.state" standard="weight" />
+		<convert id="logic_weight_items" mode="notequals" sources="chk_weights.state" standard="1" />
 		<connect client="wght.enabled"  governor="logic_weight_items" />
 		<connect client="wght.required" governor="logic_weight_items" />
 		

@@ -4,9 +4,9 @@
 	<about
 		name="klausuR"
 		shortinfo="Evaluate multiple choice tests."
-		version="0.12-0"
-		releasedate="2011-07-31"
-		url="http://reaktanz.de/index.php?content=hacking&amp;subcat=klausuR"
+		version="0.12-3"
+		releasedate="2011-10-04"
+		url="http://reaktanz.de/?c=hacking&amp;s=klausuR"
 		license="GPL"
 		category="Multiple Choice">
 		<author
@@ -21,7 +21,7 @@
 			R_max_verion="">
 			<package
 				name="klausuR"
-				min_version="0.12-0"
+				min_version="0.12-3"
 				max_version=""
 				repository="http://r-forge.r-project.org"
 			/>

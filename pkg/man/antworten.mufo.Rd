@@ -19,15 +19,18 @@ Sample data of a multiple choice test with two test forms.
     \item{\code{FirstName}}{First name (character vector)}
     \item{\code{MatrNo}}{Matriculation number (numeric vector)}
     \item{\code{Pseudonym}}{Pseudonym for anonymous feedback (character)}
-    \item{\code{Item01} to \code{Item30}}{given answers, only one answer per item (numeric vector)}
-    \item{\code{Item31} to \code{Item32}}{given answers, several answers per item (numeric vector)}
+    \item{\code{Item01} to \code{Item30}}{given answers,
+      only one answer per item (numeric vector)}
+    \item{\code{Item31} to \code{Item32}}{given answers,
+      several answers per item (numeric vector)}
     \item{\code{Form}}{Test form (character vector)}
   }
   And a matrix called \code{corr.key} with indices for all items in the two test forms.
 }
 \details{
 The data is actually the same as \code{antworten}. But in this object the items of the last 10 test
-subjects were reversed, hence this is test form ''b''. As a convenience, a matrix called \code{corr.key}
+subjects were reversed, hence this is test form ''b''. As a convenience,
+      a matrix called \code{corr.key}
 is also included. This data can be used to test \code{klausur.mufo}.
 }
 \source{

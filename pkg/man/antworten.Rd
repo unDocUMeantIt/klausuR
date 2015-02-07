@@ -18,12 +18,15 @@ Sample data of a multiple choice test.
     \item{\code{FirstName}}{First name (character vector)}
     \item{\code{MatrNo}}{Matriculation number (numeric vector)}
     \item{\code{Pseudonym}}{Pseudonym for anonymous feedback (character)}
-    \item{\code{Item01} to \code{Item30}}{given answers, only one answer per item (numeric vector)}
-    \item{\code{Item31} to \code{Item32}}{given answers, several answers per item (numeric vector)}
+    \item{\code{Item01} to \code{Item30}}{given answers,
+      only one answer per item (numeric vector)}
+    \item{\code{Item31} to \code{Item32}}{given answers,
+      several answers per item (numeric vector)}
   }
 }
 \details{
-This data was anonymised and Items 31 and 32 modified, to demonstrate items with multiple answers as well.
+This data was anonymised and Items 31 and 32 modified,
+      to demonstrate items with multiple answers as well.
 }
 \source{
 The data was taken from a final exam test in differential psychology at the Institute for Experimental
