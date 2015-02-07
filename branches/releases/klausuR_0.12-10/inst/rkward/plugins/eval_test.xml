@@ -1,0 +1,179 @@
+<!DOCTYPE rkplugin>
+<document>
+	<code file="eval_test.js" />
+	<help file="eval_test.rkh" />
+	<include file="../klausuR.pluginmap" />
+
+	<logic>
+		<convert id="logic_weight_items" mode="notequals" sources="chk_weights.state" standard="weight" />
+		<connect client="wght.enabled"  governor="logic_weight_items" />
+		<connect client="wght.required" governor="logic_weight_items" />
+		<connect client="drp_partial.enabled"  governor="chk_partial.state" />
+		drp_mark_sugg
+<!--		<convert id="logic_marks" mode="notequals" sources="chk_mark_sugg.state" standard="TRUE" />
+		<connect client="drp_mark_schm.enabled"  governor="chk_mark_sugg.state" />
+		<connect client="noten.enabled"  governor="logic_marks" />
+		<connect client="noten.required" governor="logic_marks" />-->
+		<convert id="logic_marks_sugg" mode="equals" sources="drp_mark_sugg.string" standard="suggest" />
+		<connect client="drp_mark_schm.enabled"  governor="logic_marks_sugg" />
+		<convert id="logic_marks_indiv" mode="equals" sources="drp_mark_sugg.string" standard="individual" />
+		<connect client="noten.enabled"  governor="logic_marks_indiv" />
+		<connect client="noten.required" governor="logic_marks_indiv" />
+
+		<connect client="frame_show_results.enabled"  governor="chk_matn_all.state" />
+		<connect client="save_results.enabled"  governor="chk_save.state" />
+		<connect client="save_results.required" governor="chk_save.state" />
+
+		<connect client="report_path.enabled"  governor="chk_reports.state" />
+		<connect client="report_path.required" governor="chk_reports.state" />
+		<connect client="frame_report_infos.enabled" governor="chk_reports.state" />
+		<connect client="report_title.required" governor="chk_reports.state" />
+		<connect client="report_name.required" governor="chk_reports.state" />
+		<connect client="report_date.required" governor="chk_reports.state" />
+		<connect client="frame_report_hist.enabled" governor="chk_reports.state" />
+		<connect client="frame_rep_special.enabled" governor="chk_reports.state" />
+		<connect client="rep_anonym_file.enabled"  governor="chk_rep_anonym.state" />
+		<connect client="rep_anonym_file.required" governor="chk_rep_anonym.state" />
+		<connect client="rep_global_file.enabled"  governor="chk_rep_global.state" />
+		<connect client="rep_global_file.required" governor="chk_rep_global.state" />
+		<connect client="drp_format.enabled" governor="chk_reports.state" />
+		<connect client="drp_report_lang.enabled" governor="chk_reports.state" />
+		<connect client="drp_filenames.enabled" governor="chk_reports.state" />
+
+		<convert id="logic_rep_matn" mode="notequals" sources="chk_matn_all.state" standard="all" />
+		<connect client="rep_matn.enabled"  governor="logic_rep_matn" />
+		<connect client="rep_matn.required" governor="logic_rep_matn" />
+	</logic>
+
+	<dialog label="klausuR: Test Evaluation">
+		<tabbook>
+			<tab id="tab_klausur" label="klausuR">
+				<row id="row_klausur">
+					<varselector id="vars" />
+					<column>
+						<frame id="frame_data" label="Data">
+							<varslot type="numeric" id="antworten" classes="klausuR.answ" source="vars" required="true" label="Test data"/>
+							<text>Must be an object of class klausuR.answ</text>
+						</frame>
+						<stretch />
+						<frame id="frame_marks" label="Marks">
+							<!-- <checkbox id="chk_mark_sugg" label="Suggest marks automatically" value="TRUE" checked="true" /> -->
+							<dropdown id="drp_mark_sugg" label="How should results be graded?">
+								<option label="Marks are defined in data object" value="data" checked="true" />
+								<option label="Suggest marks automatically" value="suggest" />
+								<option label="Provide individual mark assignments" value="individual" />
+							</dropdown>
+							<dropdown id="drp_mark_schm" label="Choose scheme:">
+								<option label="1.0 to 5.0" value="11" checked="true" />
+								<option label="1 to 6 (DIHK)" value="DIHK" />
+								<option label="1 to 6 (generic)" value="6" />
+								<option label="15 to 0" value="16" />
+								<option label="A to F (UK)" value="UK" />
+								<option label="A to E (USA)" value="USA" />
+								<option label="A to F (generic)" value="A" />
+							</dropdown>
+							<varslot type="numeric" id="noten" source="vars" label="Individual mark assignments"/>
+						</frame>
+						<frame id="frame_report_select">
+							<checkbox id="chk_matn_all" label="Return results for all tests" value="all" checked="true" />
+							<text>This affects the results shown as well as individual reports.</text>
+							<input id="rep_matn" label="Only for this matriculation number:" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+			<tab id="tab_reports" label="Individual Reports">
+				<row>
+					<column>
+						<checkbox id="chk_reports" label="Write individual reports" value="TRUE" checked="false" />
+						<browser id="report_path" type="dir" label="Path to save to" required="false" />
+					</column>
+				</row>
+				<row>
+					<column>
+						<frame id="frame_report_infos" label="Information on the test">
+							<input id="report_title" label="Title of the test" />
+							<input id="report_name" label="Docent's name" />
+							<input id="report_date" label="Date of test" />
+							<checkbox id="chk_alt_comma" label="Separate answer alternatives by comma" value="TRUE" checked="true" />
+						</frame>
+						<stretch />
+						<dropdown id="drp_format" label="Output format:">
+							<option label="PDF (merged file)" value="pdfmerge" checked="true" />
+							<option label="PDF (indiv. files)" value="pdf" />
+							<option label="PDF (merged file) + LaTeX" value="pdfmergelatex" />
+							<option label="PDF (indiv. files) + LaTeX" value="pdflatex" />
+							<option label="LaTeX only" value="latex" />
+						</dropdown>
+						<dropdown id="drp_report_lang" label="Choose a language:">
+							<option label="English" value="en" checked="true" />
+							<option label="German" value="de" />
+						</dropdown>
+						<dropdown id="drp_filenames" label="File name scheme:">
+							<option label="Matriculation Number" value="matn" checked="true" />
+							<option label="Name_Firstname" value="name" />
+						</dropdown>
+					</column>
+					<column>
+						<frame id="frame_report_hist" label="Histograms and mark assignemnts">
+							<checkbox id="chk_hist_points" label="Distribution of points (histogram)" value_unchecked="FALSE" value="TRUE" checked="true" />
+							<checkbox id="chk_hist_marks" label="Distribution of marks (histogram)" value_unchecked="FALSE" value="TRUE" checked="true" />
+							<checkbox id="chk_marks_info_pts" label="Points to marks (table)" value_unchecked="FALSE" value="TRUE" checked="false" />
+							<checkbox id="chk_marks_info_pct" label="Percent to marks (table)" value_unchecked="FALSE" value="TRUE" checked="false" />
+						</frame>
+						<stretch />
+						<frame id="frame_rep_special" label="Special reports">
+							<checkbox id="chk_rep_anonym" label="Create anonymous feedback" value="TRUE" checked="false" />
+							<input id="rep_anonym_file" label="File name for anonymous report" initial="anon.tex" />
+							<checkbox id="chk_rep_global" label="Create global results report" value="TRUE" checked="false" />
+							<input id="rep_global_file" label="File name for global report" initial="glob.tex" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+			<tab id="tab_options" label="Advanced Options">
+				<row id="row_options">
+					<varselector id="vars2" />
+					<column>
+						<frame id="frame_data_options">
+							<checkbox id="chk_mufo" label="Test has several parallel test forms" value="TRUE" checked="false" />
+							<checkbox id="chk_weights" label="All items are weighted equally (1 point if solved)" value="weight" checked="true" />
+							<varslot type="numeric" id="wght" source="vars2" label="Item weights"/>
+						</frame>
+						<frame id="frame_partial" label="Scoring policy">
+							<checkbox id="chk_partial" label="Allow partial answers" value="partial" checked="false" />
+							<dropdown id="drp_partial" label="Policy:">
+								<option label="Partial (no distractor checked)" value="partial" checked="true" />
+								<option label="Liberal" value="liberal" />
+								<option label="Elimination Testing" value="ET" />
+								<option label="Number Right Elimination Testing" value="NRET" />
+								<option label="Number Right Elimination Testing +" value="NRET+" />
+								<option label="Number Right" value="NR" />
+							</dropdown>
+						</frame>
+					</column>
+				</row>
+				<row>
+					<column>
+						<frame id="frame_show_results" label="Results shown">
+							<checkbox id="chk_globres" label="Global results" value="globres" checked="true" />
+							<checkbox id="chk_anon" label="Anonymous feedback" value="anon" checked="false" />
+							<checkbox id="chk_marks_sum" label="Mark definitions" value="marks.sum" checked="true" />
+							<checkbox id="chk_distrib" label="Data distribution" value="distrib" checked="true" />
+							<checkbox id="chk_cronbach" label="Cronbach's alpha" value="cronbach" checked="true" />
+							<checkbox id="chk_itemanal" label="Item analysis" value="itemanal" checked="true" />
+						</frame>
+					</column>
+					<column>
+						<frame id="frame_missing_values">
+							<checkbox id="chk_na_remove" label="Remove missing values (NA)" value="TRUE" checked="true" />
+						</frame>
+						<frame id="frame_save">
+							<saveobject id="save_results" label="Keep results in current workspace" initial="klsr.obj" checkable="true" checked="false" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>
