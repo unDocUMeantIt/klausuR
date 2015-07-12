@@ -3,8 +3,8 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.12-10\cr
-#' Date: \tab 2015-02-07\cr
+#' Version: \tab 0.12-11\cr
+#' Date: \tab 2015-07-12\cr
 #' Depends: \tab R (>= 2.9.0), xtable, psychometric, polycor, methods, graphics, tools\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
@@ -17,9 +17,11 @@
 #' a multiple choice test. Generates detailed global results, lists
 #' for anonymous feedback and personalised result feedback (in LaTeX
 #' and/or PDF format), as well as item statistics like Cronbach's alpha or
-#' disciminatory power. klausuR also includes a plugin for the R GUI and
-#' IDE RKWard, providing dialogs for its basic features. To use them,
-#' install RKWard from http://rkward.sf.net (plugins are detected
+#' disciminatory power. 'klausuR' also includes a plugin for the R GUI and
+#' IDE RKWard, providing graphical dialogs for its basic features. The
+#' respective R package 'rkward' cannot be installed directly from a
+#' repository, as it is a part of RKWard. To make full use of this feature,
+#' please install RKWard from https://rkward.kde.org (plugins are detected
 #' automatically). Due to some restrictions on CRAN, the full package
 #' sources are only available from the project homepage.
 #'

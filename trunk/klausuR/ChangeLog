@@ -1,5 +1,11 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-11 (2015-07-12)
+unreleased:
+  - this release is under development
+changed:
+  - rephrased the description to comply with CRAN terms
+  
 changes in version 0.12-10 (2015-02-07)
 added:
   - support for pick-n scoring was added to klausur()

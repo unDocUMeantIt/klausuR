@@ -1,6 +1,18 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-11 (2015-07-12)}{
+  \subsection{unreleased}{
+    \itemize{
+      \item this release is under development
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item rephrased the description to comply with CRAN terms
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-10 (2015-02-07)}{
   \subsection{added}{
     \itemize{
