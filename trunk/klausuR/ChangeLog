@@ -1,11 +1,15 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-11 (2015-07-12)
+changes in version 0.12-11 (2015-07-22)
 unreleased:
   - this release is under development
+added:
+  - new argument "fancyhdr" in klausur.report() to add information to headers
+    and footers of generated reports
 changed:
+  - cleaned up klausur.report(): moved internal functions to separate file
   - rephrased the description to comply with CRAN terms
-  
+
 changes in version 0.12-10 (2015-02-07)
 added:
   - support for pick-n scoring was added to klausur()

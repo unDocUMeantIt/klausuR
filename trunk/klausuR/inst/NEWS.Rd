@@ -1,14 +1,21 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-11 (2015-07-12)}{
+\section{Changes in klausuR version 0.12-11 (2015-07-22)}{
   \subsection{unreleased}{
     \itemize{
       \item this release is under development
     }
   }
+  \subsection{added}{
+    \itemize{
+      \item new argument \code{"fancyhdr"} in \code{klausur.report()} to add information to headers
+        and footers of generated reports
+    }
+  }
   \subsection{changed}{
     \itemize{
+      \item cleaned up \code{klausur.report()}: moved internal functions to separate file
       \item rephrased the description to comply with CRAN terms
     }
   }

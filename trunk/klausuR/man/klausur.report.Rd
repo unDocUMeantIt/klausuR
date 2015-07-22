@@ -11,7 +11,7 @@ klausur.report(klsr, matn, save = FALSE, pdf = FALSE, path = NULL,
   date = NULL), marks.info = list(points = FALSE, percent = FALSE),
   lang = "en", alt.candy = TRUE, anon.glob.file = "anon.tex",
   decreasing = TRUE, sort.by = "Points", NRET.legend = FALSE,
-  table.size = "auto", merge = FALSE, quiet = FALSE)
+  table.size = "auto", merge = FALSE, quiet = FALSE, fancyhdr = TRUE)
 }
 \arguments{
 \item{klsr}{An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration,
@@ -86,6 +86,9 @@ and only useful if \code{pdf=TRUE} as well.}
 
 \item{quiet}{Logical,
       if \code{TRUE} no feedback messages on the current status are given.}
+
+\item{fancyhdr}{Logical,
+      if \code{TRUE} additional information is printed in the header and footer of the LaTeX/PDF files.}
 }
 \value{
 One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.

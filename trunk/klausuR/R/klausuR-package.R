@@ -4,7 +4,7 @@
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
 #' Version: \tab 0.12-11\cr
-#' Date: \tab 2015-07-12\cr
+#' Date: \tab 2015-07-22\cr
 #' Depends: \tab R (>= 2.9.0), xtable, psychometric, polycor, methods, graphics, tools\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr
