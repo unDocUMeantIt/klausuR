@@ -1,3 +1,20 @@
+# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+#
+# This file is part of the R package klausuR.
+#
+# klausuR is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# klausuR is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
+
 ## function latex.head()
 latex.head <- function(text, one.file=FALSE, individual=TRUE, hist.and.marks=FALSE, marks.hist.stuff=NULL, person=list(),
   descr=list(title=NULL, name=NULL, date=NULL), fancyhdr=TRUE){
@@ -126,8 +143,10 @@ tabellenbau <- function(matn, res.points, results, answers, correct, klsr, text,
 
   # define table size
   if(identical(table.size, "auto")){
-    if(length(items) > 37 & length(items) < 43){
+    if(length(items) > 37 & length(items) <= 45){
       # to avoid ugly tables with few lines on one page, shrink by heuristics
+      table.size <- "\\small\n"
+    } else if(length(items) > 45 & length(items) < 50){
       table.size <- "\\footnotesize\n"
     } else {
       table.size <- "\\normalsize\n"
@@ -165,7 +184,7 @@ tabellenbau <- function(matn, res.points, results, answers, correct, klsr, text,
   # prepare histograms and/or marks info
   if(any(unlist(marks.info))){
     # if informatin on marks is wanted, only grab the intended stuff
-    marks.information <- as.matrix(klsr@marks.sum[,unlist(marks.info)])
+    marks.information <- as.matrix(slot(klsr, "marks.sum")[,unlist(marks.info)])
     colnames(marks.information) <- c(text$Punkte, text$AProzent)[unlist(marks.info)]
     # summary on the defined marks
     # use capture.output() to get rid of the printout; the table tags need to be removed,
@@ -307,7 +326,7 @@ global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.fil
 
     # prepare the table
     if(identical(form, "anon")){
-      anon.glob.table <- klsr@anon
+      anon.glob.table <- slot(klsr, "anon")
       colnames(anon.glob.table) <- c(text$Pseudonym,text$Punkte,text$AProzent,text$ANote)
       anon.glob.digits <- c(0,0,print.digits,1,1)
       if (!isTRUE(quiet)){
@@ -315,7 +334,7 @@ global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.fil
         message(paste("Processing: Anonymous feedback...", sep=""))
       } else {}
     } else {
-    anon.glob.table <- klsr@results
+    anon.glob.table <- slot(klsr, "results")
     colnames(anon.glob.table) <- c((if(!is.null(anon.glob.table$No)) text$LfdNr),text$Name,text$Vorname,text$GMatNr,text$Punkte,text$AProzent,text$ANote,(if(!is.null(anon.glob.table$Pseudonym)) text$Pseudonym))
     anon.glob.digits <- c(0,(if(!is.null(anon.glob.table$No)) 0),0,0,0,print.digits,1,1,(if(!is.null(anon.glob.table$Pseudonym)) 0))
     if (!isTRUE(quiet)){

@@ -130,7 +130,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
   } else {}
   # if it's of class "klausuR.mult", extract global results and drop the rest
   if(inherits(klsr, "klausuR.mult")){
-    klsr <- klsr@results.glob
+    klsr <- slot(klsr, "results.glob")
   } else{
     # check whether klsr is an object of class "klausuR" instead
     if(!inherits(klsr, "klausuR")){
@@ -233,7 +233,7 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
 
   klsr.to.plot <- klsr
   if(is.list(hist.merge) & length(hist.merge) > 0){
-    klsr.to.plot@results <- plot.merger(hist.merge)
+    slot(klsr.to.plot, "results") <- plot.merger(hist.merge)
   } else {}
 
   if(hist$points | hist$marks) {
@@ -255,12 +255,12 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
   } else {}
 
   ## let's grab some info out of the klausuR-object for code readability
-  results <- klsr@results
-  res.points <- klsr@points
-  truefalse <- klsr@trfls
-  wght <- klsr@wght
-  answers <- klsr@answ
-  correct <- klsr@corr
+  results <- slot(klsr, "results")
+  res.points <- slot(klsr, "points")
+  truefalse <- slot(klsr, "trfls")
+  wght <- slot(klsr, "wght")
+  answers <- slot(klsr, "answ")
+  correct <- slot(klsr, "corr")
 
   # for a nice printout, check numer of needed digits for points.
   # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
