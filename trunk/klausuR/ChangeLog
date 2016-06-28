@@ -1,8 +1,10 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-11 (2015-07-22)
+changes in version 0.12-12 (2016-06-29)
 unreleased:
   - this release is under development
+
+changes in version 0.12-11 (2016-06-29)
 added:
   - new argument "fancyhdr" in klausur.report() to add information to headers
     and footers of generated reports

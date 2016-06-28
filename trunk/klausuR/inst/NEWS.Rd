@@ -1,12 +1,7 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
-\section{Changes in klausuR version 0.12-11 (2015-07-22)}{
-  \subsection{unreleased}{
-    \itemize{
-      \item this release is under development
-    }
-  }
+\section{Changes in klausuR version 0.12-11 (2016-06-29)}{
   \subsection{added}{
     \itemize{
       \item new argument \code{"fancyhdr"} in \code{klausur.report()} to add information to headers
@@ -16,6 +11,7 @@
   \subsection{changed}{
     \itemize{
       \item cleaned up \code{klausur.report()}: moved internal functions to separate file
+      \item adjusted the auto table sizes in \code{klausur.report()} a bit
       \item rephrased the description to comply with CRAN terms
     }
   }
