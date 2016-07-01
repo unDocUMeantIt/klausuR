@@ -1,5 +1,7 @@
 # klausuR
 
+[![Flattr this git repo](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=m.eik&url=https://github.com/unDocUMeantIt/klausuR&title=klausuR&language=en_GB&tags=github&category=software)
+
 klausuR is an [R](https://r-project.org) package that contains a set of functions designed to quickly generate results of a multiple choice test. It generates detailed global results, lists for anonymous feedback and personalised result feedback (in LaTeX and/or PDF format), as well as item statistics like Cronbach's alpha or disciminatory power.
 
 klausuR also includes a plugin for [RKWard](https://rkward.kde.org), a powerful GUI and
