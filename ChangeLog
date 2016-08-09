@@ -3,6 +3,8 @@ ChangeLog for package klausuR
 changes in version 0.12-12 (2016-06-29)
 unreleased:
   - this release is under development
+fixed:
+  - the option 'keep.cases' in klausur.data() was broken
 
 changes in version 0.12-11 (2016-06-29)
 added:

@@ -79,8 +79,10 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c(), keep.case
 
     # before we check for missing values, let's see if there are cases which should prevail
     if(!is.null(keep.cases)){
-      missings.to.keep <- is.na(answ[answ[["MatrNo"]]==keep.cases,items])
-      answ[answ[["MatrNo"]]==keep.cases,items[missings.to.keep]] <- recode.na
+      for (thisCase in keep.cases){
+        missings.to.keep <- is.na(answ[as.character(answ[["MatrNo"]]) %in% as.character(thisCase), items])
+        answ[as.character(answ[["MatrNo"]]) %in% as.character(thisCase), items[missings.to.keep]] <- recode.na
+      }
     } else {}
     # are there missing values in answ, at least in the relevant parts?
     if(sum(is.na(answ[, relevant.items]) > 0)){
