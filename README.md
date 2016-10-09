@@ -8,7 +8,7 @@ klausuR also includes a plugin for [RKWard](https://rkward.kde.org), a powerful 
 IDE for R, providing graphical dialogs for its basic features. To make full use of this feature,
 please install [RKWard](https://rkward.kde.org) (plugins are detected automatically).
 
-More information on klausuR is available on the [project homepage](http://reaktanz.de/?c=hacking&s=klausuR).
+More information on klausuR is available on the [project homepage](https://reaktanz.de/?c=hacking&s=klausuR).
 
 ## Installation
 
@@ -35,14 +35,14 @@ or supposed bug fixes, and get feedback before the next release goes to CRAN.
 Installation is fairly easy, too:
 
 ```
-install.packages("klausuR", repo="http://R.reaktanz.de")
+install.packages("klausuR", repo="https://reaktanz.de/R")
 ```
 
 To automatically get updates, consider adding the repository to your R configuration.  You might also
-want to subscribe to the package's [RSS feed](http://r.reaktanz.de/pckg/klausuR/RSS.xml) to get notified of new releases.
+want to subscribe to the package's [RSS feed](https://reaktanz.de/R/pckg/klausuR/RSS.xml) to get notified of new releases.
 
 If you're running a Debian based operating system, you might be interested in the
-[precompiled *.deb packages](http://r.reaktanz.de/pckg/klausuR/deb_repo.html).
+[precompiled *.deb packages](https://reaktanz.de/R/pckg/klausuR/deb_repo.html).
 
 ### Installation via GitHub
 
