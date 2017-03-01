@@ -3,8 +3,8 @@
 \docType{methods}
 \name{sort}
 \alias{sort}
-\alias{sort,-methods}
 \alias{sort,klausuR-method}
+\alias{sort,-methods}
 \alias{sort.klausuR,klausuR-method}
 \title{Sort method for S4 objects of class klausuR}
 \usage{
@@ -32,11 +32,10 @@ klsr.obj <- klausur(data.obj)
 sort(klsr.obj, sort.by="Points")
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{methods}
-

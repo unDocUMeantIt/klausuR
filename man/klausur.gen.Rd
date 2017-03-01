@@ -24,13 +24,12 @@ Generate empty data sets for the use with klausur
 \examples{
 antworten2 <- klausur.gen(items=20,obs=40)
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:compare]{compare}},
   \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
       \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{datagen}
-

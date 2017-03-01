@@ -15,5 +15,5 @@ like format.
 \describe{
 \item{\code{items}}{Empty dummy.}
 }}
-\keyword{classes}
 
+\keyword{classes}

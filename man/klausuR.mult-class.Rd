@@ -2,8 +2,8 @@
 % Please edit documentation in R/00_class_04_klausuR.mult.R
 \docType{class}
 \name{klausuR.mult-class}
-\alias{klausuR.mult,-class}
 \alias{klausuR.mult-class}
+\alias{klausuR.mult,-class}
 \title{Class klausuR.mult}
 \description{
 This class is used for objects that are returned by \code{\link[klausuR:klausur.mufo]{klausur.mufo}}.
@@ -17,5 +17,5 @@ This class is used for objects that are returned by \code{\link[klausuR:klausur.
 
 \item{\code{results.glob}}{An object of class klausuR-class with overall results}
 }}
-\keyword{classes}
 
+\keyword{classes}

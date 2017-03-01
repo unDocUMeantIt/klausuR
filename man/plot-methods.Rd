@@ -4,12 +4,14 @@
 \name{plot}
 \alias{plot}
 \alias{plot,-methods}
-\alias{plot,klausuR,missing,ANY-method}
-\alias{plot,klausuR,missing-method}
 \alias{plot,klausuR-method}
-\alias{plot,klausuR.mult,missing,ANY-method}
-\alias{plot,klausuR.mult,missing-method}
+\alias{plot,klausuR,missing-method}
 \alias{plot,klausuR.mult-method}
+\alias{plot,klausuR.mult,missing-method}
+\alias{plot,klausuR,missing-method}
+\alias{plot,klausuR,missing,ANY-method}
+\alias{plot,klausuR.mult,missing-method}
+\alias{plot,klausuR.mult,missing,ANY-method}
 \title{Plot methods for S4 objects of class klausuR and klausuR.mult}
 \usage{
 plot(x, y, ...)
@@ -74,13 +76,12 @@ data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 klsr.obj <- klausur(data.obj)
 plot(klsr.obj, marks=TRUE)
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}},
       \code{\link[klausuR:klausur.report]{klausur.report}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{methods}
 \keyword{plot}
-

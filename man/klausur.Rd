@@ -248,9 +248,6 @@ NRETplus.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR
 NR.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR")
 ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur.data]{klausur.data}},
       \code{\link[klausuR:klausur.report]{klausur.report}},
@@ -260,5 +257,7 @@ m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
    \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
    \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{misc}
-

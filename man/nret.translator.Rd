@@ -97,11 +97,10 @@ spss.corr <- nret.translator(klausuR.corr, corr=TRUE, num.alt=3)
 cat(spss.corr$syntax, file="~/somewhere/NRET.sps")
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{misc}
-

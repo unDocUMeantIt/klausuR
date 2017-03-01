@@ -147,13 +147,12 @@ klausur.report(klsr=klsr.obj, matn="all", descr=list(title="Klausur Tatort",
   name="Dr. T. Aeter", date="24.09.2010"))
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}},
       \code{\link[tools]{texi2dvi}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{IO}
 \keyword{file}
-

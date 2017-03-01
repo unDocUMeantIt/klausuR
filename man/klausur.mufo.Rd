@@ -115,11 +115,10 @@ mufo.data.obj <- klausur.data(answ=antworten.mufo, corr=richtig, marks=notenschl
 # in their subtest results, hence item analysis fails on them
 klsr.mufo.obj <- klausur.mufo(mufo.data.obj)
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.data]{klausur.data}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{misc}
-

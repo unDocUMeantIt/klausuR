@@ -82,11 +82,10 @@ However, this feature can directly be called by \code{\link[klausuR:klausur]{kla
 notenschluessel <- klausur.gen.marks(mark.labels=11,answ=antworten)
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{utilities}
-

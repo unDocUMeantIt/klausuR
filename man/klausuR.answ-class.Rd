@@ -42,10 +42,10 @@ They contain all relevant data to calculate test results.
 \item{\code{misc}}{Any additional data you'd like to be stored along with \code{id} and \code{items},
 e.g. table data from/for other software products. Won't be used for anything.}
 }}
+
 \note{
 The slots \code{}, \code{id}, \code{items} and \code{misc},
       must have the same number of rows and contain copies of the colum \code{MatrNo}
 for identification.
 }
 \keyword{classes}
-

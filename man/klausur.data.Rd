@@ -151,4 +151,3 @@ data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
 # if that went well, get the test results
 klsr.obj <- klausur(data.obj)
 }
-

@@ -36,4 +36,3 @@ you can rescale them with this function.
 m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \keyword{misc}
-

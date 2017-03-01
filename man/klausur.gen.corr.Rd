@@ -39,11 +39,10 @@ as an integer value. If you leave \code{answ=NULL},
 richtig <- klausur.gen.corr(answ=antworten)
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{utilities}
-

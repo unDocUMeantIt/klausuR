@@ -2,8 +2,9 @@
 % Please edit documentation in R/01_method_show.klausuR.R
 \docType{methods}
 \name{show,klausuR-method}
-\alias{show,-methods}
 \alias{show,klausuR-method}
+\alias{show,-methods}
+\alias{show,klausuR.mult-method}
 \alias{show,klausuR.mult-method}
 \title{Show methods for S4 objects of classes klausuR and klausuR.mult}
 \usage{
@@ -28,11 +29,10 @@ klausur(data.obj)
 klausur.mufo(data.obj, marks=notenschluessel)
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.mufo]{klausur.mufo}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{methods}
-

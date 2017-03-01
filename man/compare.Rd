@@ -78,11 +78,10 @@ compare(antworten, antworten2, select=c(1:12))
 antworten.comp <- compare(antworten, antworten2, select=-c(3:8), new.set=TRUE)
 }
 }
-\author{
-m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
-}
 \seealso{
 \code{\link[klausuR:klausur]{klausur}}
 }
+\author{
+m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
+}
 \keyword{utilities}
-

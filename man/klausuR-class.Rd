@@ -46,5 +46,5 @@ This class is used for objects that are returned by \code{\link[klausuR:klausur]
 
 \item{\code{misc}}{Anything that was stored in the \code{misc} slot of the input data.}
 }}
-\keyword{classes}
 
+\keyword{classes}

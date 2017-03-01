@@ -50,4 +50,3 @@ For obvious reasons At least one of \code{NR.res}, \code{NRET.res},
 m.eik michalke \email{meik.michalke@uni-duesseldorf.de}
 }
 \keyword{misc}
-
