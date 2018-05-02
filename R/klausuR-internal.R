@@ -814,6 +814,7 @@ latex.umlaute <- function(input){
   output <- gsub("(\\\\?)&", '\\\\&', as.character(input), perl=TRUE)
   output <- gsub("(\\\\?)_", '\\\\_{}', as.character(output), perl=TRUE)
   output <- gsub("(\\\\?)#", '\\\\#', as.character(output), perl=TRUE)
+  output <- gsub("(\\\\?)%", '\\\\%', as.character(output), perl=TRUE)
   output <- gsub("(\\\\?)\\^", '\\\\^{}', as.character(output), perl=TRUE)
   output <- encoded_text_to_latex(enc2utf8(output), "utf8")
   return(output)
@@ -849,7 +850,7 @@ file.umlaute <- function(input){
   output <- gsub("\u00FC","ue",as.character(output)) # ü
   output <- gsub("\u00FD|\u00FF","y",as.character(output)) # ý ÿ
   output <- gsub("\u00FE","th",as.character(output)) # þ
-  output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#|\\'", "", as.character(output))
+  output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#|\\'|\\%", "", as.character(output))
   return(output)
 } ## end function file.umlaute()
 

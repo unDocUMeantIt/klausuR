@@ -1,11 +1,13 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-12 (2017-03-01)
+changes in version 0.12-12 (2018-05-02)
 unreleased:
   - this release is under development
 fixed:
   - the option 'keep.cases' in klausur.data() was broken
+  - klausur.report(): fixed LaTeX issue if percent sign was used in psedonyms
 changed:
+  - klausur.report(): global reports are now printed in landscape mode
   - reaktanz.de supports HTTPS now, updated references
   - the source code has moved from R-forge to
     https://github.com/unDocUMeantIt/klausuR

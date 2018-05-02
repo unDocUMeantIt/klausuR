@@ -17,9 +17,9 @@
 
 ## function latex.head()
 latex.head <- function(text, one.file=FALSE, individual=TRUE, hist.and.marks=FALSE, marks.hist.stuff=NULL, person=list(),
-  descr=list(title=NULL, name=NULL, date=NULL), fancyhdr=TRUE){
+  descr=list(title=NULL, name=NULL, date=NULL), fancyhdr=TRUE, landscape=FALSE){
   # use paste to create the LaTeX head, that is up to the table
-  full.head <- paste0("\\documentclass[a4paper,ngerman]{scrartcl}\n",
+  full.head <- paste0("\\documentclass[a4paper,ngerman", ifelse(isTRUE(landscape), ",landscape", ""),"]{scrartcl}\n",
     ifelse(isTRUE(hist.and.marks), "      \\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}\n", ""),
     "      \\usepackage{longtable}
     \\usepackage{mathptmx}
@@ -375,7 +375,7 @@ global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.fil
   sep="")
   # combine parts to a document
   write(paste(latex.head(text=text, one.file=FALSE, individual=FALSE, hist.and.marks=FALSE, marks.hist.stuff=NULL,
-      descr=descr, fancyhdr=fancyhdr), table.size), file=dateiname)
+      descr=descr, fancyhdr=fancyhdr, landscape=identical(form, "global")), table.size), file=dateiname)
   # create table with anonymous feedback
   print(xtable(anon.glob.table, digits=anon.glob.digits,
   caption=paste(text$Ergebnisse,": ",latex.umlaute(descr$title)," (",latex.umlaute(descr$name),", ",descr$date,")", sep="")),
