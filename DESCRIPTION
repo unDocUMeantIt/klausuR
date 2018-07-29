@@ -26,7 +26,7 @@ Encoding: UTF-8
 LazyLoad: yes
 Authors@R: c(person(given="m.eik", family="michalke",
         email="meik.michalke@hhu.de", role=c("aut", "cre")))
-Version: 0.12-12
+Version: 0.12-13
 Date: 2018-07-29
 Collate: 
     '00_class_01_klausuR.test.R'
