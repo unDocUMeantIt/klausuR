@@ -1,6 +1,22 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-12 (2018-07-29)}{
+  \subsection{fixed}{
+    \itemize{
+      \item the option 'keep.cases' in \code{klausur.data()} was broken
+      \item \code{klausur.report()}: fixed LaTeX issue if percent sign was used in psedonyms
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item \code{klausur.report()}: global reports are now printed in landscape mode
+      \item reaktanz.de supports HTTPS now, updated references
+      \item the source code has moved from R-forge to
+        https://github.com/unDocUMeantIt/klausuR
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-11 (2016-06-29)}{
   \subsection{added}{
     \itemize{

@@ -1,8 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-12 (2018-05-02)
-unreleased:
-  - this release is under development
+changes in version 0.12-12 (2018-07-29)
 fixed:
   - the option 'keep.cases' in klausur.data() was broken
   - klausur.report(): fixed LaTeX issue if percent sign was used in psedonyms

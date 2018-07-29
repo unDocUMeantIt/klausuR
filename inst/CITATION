@@ -1,14 +1,14 @@
 bibentry("Manual",
     title="klausuR: Multiple Choice Test Evaluation",
     author="m.eik michalke",
-    year="2016",
-    note="(Version 0.12-11)",
-    url="http://r-forge.r-project.org/projects/klausur",
+    year="2018",
+    note="(Version 0.12-12)",
+    url="https://reaktanz.de/?c=hacking&s=klausuR",
 
     textVersion =
-    paste("michalke, m. (2016). ",
-        "klausuR: Multiple Choice Test Evaluation (Version 0.12-11). ",
-        "Available from http://r-forge.r-project.org/projects/klausur",
+    paste("michalke, m. (2018). ",
+        "klausuR: Multiple Choice Test Evaluation (Version 0.12-12). ",
+        "Available from https://reaktanz.de/?c=hacking&s=klausuR",
         sep=""),
 
     mheader = "To cite klausuR in publications use:")

@@ -2,39 +2,37 @@
 % Please edit documentation in R/klausuR-package.R
 \docType{package}
 \name{klausuR-package}
+\alias{klausuR}
 \alias{klausuR-package}
-\title{The klausuR Package}
+\title{\packageTitle{klausuR}}
 \description{
-Multiple Choice Test Evaluation.
+\packageDescription{klausuR}
 }
 \details{
+The DESCRIPTION file:
 \tabular{ll}{
 Package: \tab klausuR\cr
 Type: \tab Package\cr
 Version: \tab 0.12-12\cr
-Date: \tab 2017-03-01\cr
-Depends: \tab R (>= 2.9.0), xtable, psychometric, polycor, methods, graphics, tools\cr
+Date: \tab 2018-07-29\cr
+Depends: \tab R (>= 2.9.0), xtable, psychometric, polycor\cr
 Enhances: \tab rkward\cr
 Encoding: \tab UTF-8\cr
 License: \tab GPL (>= 3)\cr
 LazyLoad: \tab yes\cr
 URL: \tab https://reaktanz.de/?c=hacking&s=klausuR\cr
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://reaktanz.de/?c=hacking&s=klausuR}
+  \item Report bugs at \url{https://github.com/unDocUMeantIt/klausuR/issues}
+}
 
-A set of functions designed to quickly generate results of a multiple choice test.
-Generates detailed global results,
-      lists for anonymous feedback and personalised result feedback
-(in LaTeX and/or PDF format), as well as item statistics like Cronbach's alpha or
-disciminatory power. 'klausuR' also includes a plugin for the R GUI and IDE RKWard,
-      providing
-graphical dialogs for its basic features. The respective R package 'rkward' cannot be
-installed directly from a repository, as it is a part of RKWard. To make full use of this
-feature,
-      please install RKWard from https://rkward.kde.org (plugins are detected automatically).
-Due to some restrictions on CRAN, the full package sources are only available from the
-project homepage.
 }
 \author{
-m.eik michalke
+\packageAuthor{klausuR}
+
+Maintainer: \packageMaintainer{klausuR}
 }
-\keyword{package}
