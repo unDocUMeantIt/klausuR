@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -204,34 +204,71 @@ gen.item.names <- function(num, prefix="Item"){
 
 ## calc.cronbach.alpha()
 # calculates cronbachs alpha, needs a matrix with dichotomous data
-# this function uses the package "psychometric"!
+#' @importFrom psych alpha
 calc.cronbach.alpha <- function(dichot.matrix){
-  try.cron.alpha <- function(){
-    cr.alpha <- alpha(dichot.matrix)
-    cr.alpha.ci <- alpha.CI(cr.alpha, k=dim(dichot.matrix)[2], N=dim(dichot.matrix)[1], level=0.95)
-    cr.deleted <- as.matrix(sapply(1:dim(dichot.matrix)[2], function(x){alpha(dichot.matrix[-x])}))
-  rownames(cr.deleted) <- names(dichot.matrix)
-  colnames(cr.deleted) <- "alphaIfDeleted"
-    return(list(alpha=cr.alpha, ci=cr.alpha.ci, deleted=cr.deleted))
-  }
-  cron.alpha.list <- tryCatch(try.cron.alpha(), error=function(e){
-  warning("Cronbach's alpha calculation failed!\n", e, call.=FALSE)
-  return(list(alpha=NA, ci=NA, deleted=NA))})
+    try.cron.alpha <- function(){
+      alpha_results <- list()
+      alpha_full <- psych::alpha(dichot.matrix)
+      alpha_results[["alpha"]] <- alpha_full[["total"]][["raw_alpha"]]
+      alpha_results[["ci"]] <- c(
+        LCL=alpha_results[["alpha"]] - 1.96 * alpha_full[["total"]][["ase"]],
+        ALPHA=alpha_results[["alpha"]],
+        UCL=alpha_results[["alpha"]] + 1.96 * alpha_full[["total"]][["ase"]]
+      )
+      alpha_results[["deleted"]] <- alpha_full[["alpha.drop"]]["raw_alpha"]
+      colnames(alpha_results[["deleted"]]) <- "alphaIfDeleted"
+      return(alpha_results)
+    }
+    cron.alpha.list <- tryCatch(
+      try.cron.alpha(),
+      error=function(e){
+        warning("Cronbach's alpha calculation failed!\n", e, call.=FALSE)
+        return(list(alpha=NA, ci=NA, deleted=NA))
+      }
+    )
+    return(cron.alpha.list)
   } ## end function calc.cronbach.alpha()
+
+## discrimination()
+# re-implementing the discrim() function of the now archived "psychometric" package
+discrimination <- function(dichot.matrix){
+    data <- na.exclude(dichot.matrix)
+    third <- nrow(data) %/% 3
+    points <- apply(data, 1, mean)
+    points_order <- order(points, decreasing=TRUE)
+    upper <- data[points_order[1:third], ]
+    lower <- data[points_order[(nrow(data) - third + 1):nrow(data)], ]
+    discrim <- (apply(upper, 2, sum) - apply(lower, 2, sum))/third
+    return(discrim)
+  } ## end function discrimination()
 
 ## calc.item.analysis()
 # performes basic item analysis, like discrimatory power etc.
-# this function uses the package "psychometric"!
-calc.item.analysis <- function(dichot.matrix, cron.alpha.list){
-  try.item.analysis <- function(){
-    item.anal <- cbind(item.exam(dichot.matrix, discrim=TRUE), alphaIfDeleted=cron.alpha.list$deleted)
-    # add selection index (selektionskennwert) as suggested by lienert
-    item.anal <- cbind(item.anal, selIdx=item.anal[["Item.Tot.woi"]] / (2 * sqrt(item.anal[["Difficulty"]] * (1 - item.anal[["Difficulty"]]))))
-    return(item.anal)
-  }
-  item.analyse <- tryCatch(try.item.analysis(), error=function(e){
-  warning("Item analysis failed!\n", e, call.=FALSE)
-  return(data.frame(NA))})
+#' @importFrom psych alpha
+calc.item.analysis <- function(dichot.matrix){
+    try.item.analysis <- function(){
+      item_full <- psych::alpha(dichot.matrix)
+      item.results <- data.frame(
+          SD=item_full[["item.stats"]][["sd"]],
+          Diffc=item_full[["item.stats"]][["mean"]],
+          DiscrPwr=item_full[["item.stats"]][["raw.r"]],
+          PartWhole=item_full[["item.stats"]][["r.drop"]],
+          # add selection index (selektionskennwert) as suggested by lienert
+          SelectIdx=item_full[["item.stats"]][["r.drop"]] / (2 * sqrt(item_full[["item.stats"]][["mean"]] * (1 - item_full[["item.stats"]][["mean"]]))),
+          Discrim=discrimination(dichot.matrix[, rownames(item_full[["item.stats"]]["sd"])]),
+          alphaIfDeleted=item_full[["alpha.drop"]][["raw_alpha"]]
+      )
+      row.names(item.results) <- rownames(item_full[["item.stats"]]["sd"])
+      return(item.results)
+    }
+    item.analyse <- tryCatch(
+      try.item.analysis(),
+      error=function(e){
+        warning("Item analysis failed!\n", e, call.=FALSE)
+        return(data.frame(NA))
+      }
+    )
+    return(item.analyse)
   } ## end function calc.item.analysis()
 
 ## global.results()
@@ -747,7 +784,6 @@ distrct.analysis <- function(answ, corr=NULL, points=NULL, results=NULL, partWho
       # as an indicator for discriminate power
       if(!is.null(results) && !is.null(points) && nrow(selected.all) > 1){
         selected.all[["discrim"]] <- sapply(selected.all[["answer"]], function(thisAnswer){
-            # return(suppressWarnings(polyserial(results[["Points"]], answ[[thisItem]] == thisAnswer)))
             # point-biserial correlations seems to be the proper one here, which is equivalent to pearson
             return(suppressWarnings(cor(results[["Points"]], answ[[thisItem]] == thisAnswer, method="pearson")))
           })

@@ -4,9 +4,20 @@
 \alias{klausur}
 \title{Evaluate multiple choice tests}
 \usage{
-klausur(data, marks = NULL, mark.labels = NULL, items = NULL,
-  wght = NULL, score = "solved", matn = NULL, na.rm = TRUE,
-  cronbach = TRUE, item.analysis = TRUE, sort.by = "Name", maxp = NULL)
+klausur(
+  data,
+  marks = NULL,
+  mark.labels = NULL,
+  items = NULL,
+  wght = NULL,
+  score = "solved",
+  matn = NULL,
+  na.rm = TRUE,
+  cronbach = TRUE,
+  item.analysis = TRUE,
+  sort.by = "Name",
+  maxp = NULL
+)
 }
 \arguments{
 \item{data}{An object of class \code{\link[klausuR]{klausuR.answ-class}}.}
@@ -167,10 +178,11 @@ ask you step by step. See the documentation of that function for details. To see
       have a look at the slot
 \code{marks} of the returned object.
 
-To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used. Lienert's selction index
+To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psych]{psych}} are used. Lienert's selction index
 ("Selektionskennwert") aims to consider both discriminatory power (correlation of an item with the test results) and difficulty to determine the
 quality of an item. It is defined as
 \deqn{S = \frac{r_{it}}{2 \times{} \sqrt{Difficulty \times{} (1-Difficulty)}}}
+Item analysis also includes item discrimination.
 }
 \note{
 \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance,

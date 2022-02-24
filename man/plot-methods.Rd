@@ -8,19 +8,17 @@
 \alias{plot,klausuR,missing-method}
 \alias{plot,klausuR.mult-method}
 \alias{plot,klausuR.mult,missing-method}
-\alias{plot,klausuR,missing-method}
 \alias{plot,klausuR,missing,ANY-method}
-\alias{plot,klausuR.mult,missing-method}
 \alias{plot,klausuR.mult,missing,ANY-method}
 \title{Plot methods for S4 objects of class klausuR and klausuR.mult}
 \usage{
 plot(x, y, ...)
 
-\S4method{plot}{klausuR,missing}(x, marks = FALSE, sd.lines = FALSE,
-  plot.normal = TRUE, na.rm = TRUE, ...)
+\S4method{plot}{klausuR,missing}(x, marks = FALSE, sd.lines = FALSE, plot.normal = TRUE,
+      na.rm = TRUE, ...)
 
 \S4method{plot}{klausuR.mult,missing}(x, marks = FALSE, sd.lines = FALSE,
-  plot.normal = TRUE, ...)
+      plot.normal = TRUE, ...)
 }
 \arguments{
 \item{x}{An S4 object of class \code{klausuR} or \code{klausuR.mult}}

@@ -4,14 +4,30 @@
 \alias{klausur.report}
 \title{Generate individual reports on multipe choice test results}
 \usage{
-klausur.report(klsr, matn, save = FALSE, pdf = FALSE, path = NULL,
-  file.name = "matn", hist = list(points = FALSE, marks = FALSE),
-  hist.merge = list(), hist.points = "hist_points.pdf",
-  hist.marks = "hist_marks.pdf", descr = list(title = NULL, name = NULL,
-  date = NULL), marks.info = list(points = FALSE, percent = FALSE),
-  lang = "en", alt.candy = TRUE, anon.glob.file = "anon.tex",
-  decreasing = TRUE, sort.by = "Points", NRET.legend = FALSE,
-  table.size = "auto", merge = FALSE, quiet = FALSE, fancyhdr = TRUE)
+klausur.report(
+  klsr,
+  matn,
+  save = FALSE,
+  pdf = FALSE,
+  path = NULL,
+  file.name = "matn",
+  hist = list(points = FALSE, marks = FALSE),
+  hist.merge = list(),
+  hist.points = "hist_points.pdf",
+  hist.marks = "hist_marks.pdf",
+  descr = list(title = NULL, name = NULL, date = NULL),
+  marks.info = list(points = FALSE, percent = FALSE),
+  lang = "en",
+  alt.candy = TRUE,
+  anon.glob.file = "anon.tex",
+  decreasing = TRUE,
+  sort.by = "Points",
+  NRET.legend = FALSE,
+  table.size = "auto",
+  merge = FALSE,
+  quiet = FALSE,
+  fancyhdr = TRUE
+)
 }
 \arguments{
 \item{klsr}{An object of class klausuR or klausuR.mult. To create reports from more than one object with the same configuration,

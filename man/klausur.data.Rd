@@ -4,10 +4,24 @@
 \alias{klausur.data}
 \title{A function to create data objects with given and correct answers to a test.}
 \usage{
-klausur.data(answ, corr, items = NULL, marks = NULL, wght = NULL,
-  corr.key = NULL, rename = c(), dummies = c(), disc.misc = FALSE,
-  na.rm = TRUE, item.prefix = c(), sort.by = "Name", maxp = NULL,
-  wrong = NULL, keep.cases = NULL, recode.na = 0)
+klausur.data(
+  answ,
+  corr,
+  items = NULL,
+  marks = NULL,
+  wght = NULL,
+  corr.key = NULL,
+  rename = c(),
+  dummies = c(),
+  disc.misc = FALSE,
+  na.rm = TRUE,
+  item.prefix = c(),
+  sort.by = "Name",
+  maxp = NULL,
+  wrong = NULL,
+  keep.cases = NULL,
+  recode.na = 0
+)
 }
 \arguments{
 \item{answ}{A \code{\link{data.frame}} which has to include at least these variables:

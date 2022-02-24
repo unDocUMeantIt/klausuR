@@ -4,9 +4,17 @@
 \alias{grand.table}
 \title{Export results to a table}
 \usage{
-grand.table(NR.res = NULL, NRET.res = NULL, NRETp.res = NULL,
-  ET.res = NULL, rescale = TRUE, file = NULL, csv2 = TRUE,
-  encoding = "CP1252", ...)
+grand.table(
+  NR.res = NULL,
+  NRET.res = NULL,
+  NRETp.res = NULL,
+  ET.res = NULL,
+  rescale = TRUE,
+  file = NULL,
+  csv2 = TRUE,
+  encoding = "CP1252",
+  ...
+)
 }
 \arguments{
 \item{NR.res}{An object of class \code{klausuR} which was evaluated according to the NR scoring policy.

@@ -5,7 +5,6 @@
 \alias{show,klausuR-method}
 \alias{show,-methods}
 \alias{show,klausuR.mult-method}
-\alias{show,klausuR.mult-method}
 \title{Show methods for S4 objects of classes klausuR and klausuR.mult}
 \usage{
 \S4method{show}{klausuR}(object)

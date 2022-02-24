@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -60,7 +60,6 @@
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.data]{klausur.data}}
 #' @keywords misc
-#' @import psychometric
 #' @export
 #' @examples
 #' # this will create the data.frame "antworten.mufo"
@@ -183,15 +182,13 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
     ## psychometic quality of the items
     if(isTRUE(cronbach)){
       # calling an internal function which is
-      # using alpha() from package "psychometric"
       cron.alpha.list <- calc.cronbach.alpha(subset(slot(klausur.mufo.global, "trfls"), select=-MatrNo))
     } else {
       cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
     }
     if(isTRUE(item.analysis)){
       # calling another internal function which is also
-      # using alpha() from package "psychometric"
-      item.analyse <- calc.item.analysis(subset(slot(klausur.mufo.global, "trfls"), select=-MatrNo), cron.alpha.list)
+      item.analyse <- calc.item.analysis(subset(slot(klausur.mufo.global, "trfls"), select=-MatrNo))
       distractor.analysis <- distrct.analysis(
           answ=slot(klausur.mufo.global, "answ"),
           corr=corr,

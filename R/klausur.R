@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -83,10 +83,11 @@
 #' ask you step by step. See the documentation of that function for details. To see the suggested result in detail, have a look at the slot
 #' \code{marks} of the returned object.
 #'
-#' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psychometric]{psychometric}} are used. Lienert's selction index
+#' To calculate Cronbach's alpha and item analysis methods from the package \code{\link[psych]{psych}} are used. Lienert's selction index
 #' ("Selektionskennwert") aims to consider both discriminatory power (correlation of an item with the test results) and difficulty to determine the
 #' quality of an item. It is defined as
 #' \deqn{S = \frac{r_{it}}{2 \times{} \sqrt{Difficulty \times{} (1-Difficulty)}}}
+#' Item analysis also includes item discrimination.
 #'
 #' @note \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance, having items with more than one correct answer doesn't
 #' necessarily yield more diagnostic information, allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
@@ -136,8 +137,7 @@
 #'    \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
 #'    \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
 #' @keywords misc
-#' @import psychometric
-#' @import polycor
+# @import polycor
 #' @export
 #' @examples
 #' data(antworten)
@@ -396,15 +396,13 @@ klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, s
     }
       if(isTRUE(cronbach)){
         # calling an internal function which is
-        # using alpha() from package "psychometric"
         cron.alpha.list <- calc.cronbach.alpha(na.omit(item.values.to.anl))
       } else {
         cron.alpha.list <- list(alpha=NULL, ci=NULL, deleted=NULL)
       }
       if(isTRUE(item.analysis)){
         # calling another internal function which is also
-        # using alpha() from package "psychometric"
-        item.analyse <- calc.item.analysis(item.values.to.anl, cron.alpha.list)
+        item.analyse <- calc.item.analysis(item.values.to.anl)
         distractor.analysis <- distrct.analysis(
             answ=slot(data, "items"),
             corr=corr,

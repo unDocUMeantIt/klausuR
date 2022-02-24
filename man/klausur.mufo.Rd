@@ -4,9 +4,18 @@
 \alias{klausur.mufo}
 \title{Evaluate multiple choice tests with several test forms}
 \usage{
-klausur.mufo(data, marks = NULL, mark.labels = NULL, items = NULL,
-  wght = NULL, score = "solved", matn = NULL, na.rm = TRUE,
-  cronbach = TRUE, item.analysis = TRUE)
+klausur.mufo(
+  data,
+  marks = NULL,
+  mark.labels = NULL,
+  items = NULL,
+  wght = NULL,
+  score = "solved",
+  matn = NULL,
+  na.rm = TRUE,
+  cronbach = TRUE,
+  item.analysis = TRUE
+)
 }
 \arguments{
 \item{data}{An object of class \code{\link[klausuR]{klausuR.answ-class}}.}

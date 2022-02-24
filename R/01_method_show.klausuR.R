@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -37,61 +37,65 @@
 #' @docType methods
 #' @rdname show-methods
 setMethod("show", signature(object="klausuR"), function(object){
-  if(length(object@results) == 0){
+  results <- slot(object, "results")
+  item.analysis <- slot(object, "item.analysis")
+  distractor.analysis <- slot(object, "distractor.analysis")
+  cronbach <- slot(object, "cronbach")
+
+  if(length(results) == 0){
     return(invisible(NULL))
   } else {}
 
-  if(nrow(object@item.analysis) > 0){
-    item.analysis <- data.frame(
-    SD=round(object@item.analysis$Sample.SD, 2),
-    Diffc=round(object@item.analysis$Difficulty, 2),
-    DiscrPwr=round(object@item.analysis$Item.total, 2),
-    PartWhole=round(object@item.analysis$Item.Tot.woi, 2),
-    SelectIdx=round(object@item.analysis$selIdx, 2),
-    Discrim=round(object@item.analysis$Discrimination, 2))
-    if(length(object@item.analysis$alphaIfDeleted) > 1 && !is.na(object@item.analysis$alphaIfDeleted)){
-      item.analysis["alphaIfDeleted"] <- round(object@item.analysis$alphaIfDeleted, 2)
-    } else {}
-    dimnames(item.analysis)[[1]] <- dimnames(object@item.analysis)[[1]]
+  if(nrow(item.analysis) > 0){
+    item.analysis <- round(item.analysis, 2)
+#     item.analysis <- data.frame(
+#     SD=round(object@item.analysis$Sample.SD, 2),
+#     Diffc=round(object@item.analysis$Difficulty, 2),
+#     DiscrPwr=round(object@item.analysis$Item.total, 2),
+#     PartWhole=round(object@item.analysis$Item.Tot.woi, 2),
+#     SelectIdx=round(object@item.analysis$selIdx, 2),
+#     Discrim=round(object@item.analysis$Discrimination, 2))
+#     if(length(object@item.analysis$alphaIfDeleted) > 1 && !is.na(object@item.analysis$alphaIfDeleted)){
+#       item.analysis["alphaIfDeleted"] <- round(object@item.analysis$alphaIfDeleted, 2)
+#     } else {}
+#     dimnames(item.analysis)[[1]] <- dimnames(object@item.analysis)[[1]]
     show.itan <- TRUE
   } else {
     show.itan <- FALSE
   }
 
-  if(length(object@distractor.analysis) > 0){
-    distractor.analysis <- object@distractor.analysis
+  if(length(distractor.analysis) > 0){
     show.distan <- TRUE
   } else {
     show.distan <- FALSE
   }
 
-  if(!is.null(object@cronbach$alpha)){
-    cr.alpha <- paste("\t",round(object@cronbach$alpha, 2), "\n\tConfidence interval:\t",
-    round(object@cronbach$ci$LCL, 2),"-",
-    round(object@cronbach$ci$UCL, 2)," (95%)",sep="")
+  if(!is.null(cronbach$alpha)){
+    cr.alpha <- paste("\t",round(cronbach$alpha, 2), "\n\tConfidence interval:\t",
+    round(cronbach[["ci"]][["LCL"]], 2),"-",
+    round(cronbach[["ci"]][["UCL"]], 2)," (95%)",sep="")
     if(!show.itan){
-      cr.deleted <- round(object@cronbach$deleted, 2)
+      cr.deleted <- round(cronbach$deleted, 2)
     } else {}
     show.alpha <- TRUE
   } else {
     show.alpha <- FALSE
   }
 
-  global.results <- object@results
-  global.results[["Points"]] <- round(global.results[["Points"]], digits=2)
-  anon.results <- object@anon
+  results[["Points"]] <- round(results[["Points"]], digits=2)
+  anon.results <- slot(object, "anon")
   anon.results[["Points"]] <- round(anon.results[["Points"]], digits=2)
 
   cat("\nKlausuR results:")
   cat("\n\nMarks defined:\n")
-  print(object@marks.sum)
+  print(slot(object, "marks.sum"))
   cat("\n\nGlobal results:\n")
-  print(global.results)
+  print(results)
   cat("\n\nAnonymised results:\n")
   print(anon.results)
   cat("\n\nDescriptive statistics:\n")
-  print(object@mean)
-  cat("\n  Sd:",round(object@sd, 2))
+  print(slot(object, "mean"))
+  cat("\n  Sd:",round(slot(object, "sd"), 2))
   if(show.alpha){
     cat("\n\nInternal consistency:\n")
     cat("\tCronbach's alpha:", cr.alpha)

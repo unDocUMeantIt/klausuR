@@ -1,8 +1,11 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-13 (2018-07-29)
+changes in version 0.12-13 (2022-02-24)
 unreleased:
   - this version is under development
+changed:
+  - dropped dependencies to polycor (no longer used) and psychometric
+    (archived on CRAN), item analysis is now bone by psych::alpha()
 
 changes in version 0.12-12 (2018-07-29)
 fixed:

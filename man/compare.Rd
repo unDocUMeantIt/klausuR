@@ -4,9 +4,16 @@
 \alias{compare}
 \title{Comparison of data sets}
 \usage{
-compare(set1, set2, select = NULL, ignore = NULL, new.set = FALSE,
-  rename = c(), trim = FALSE, id = list(No = "No", Name = c("FirstName",
-  "Name")))
+compare(
+  set1,
+  set2,
+  select = NULL,
+  ignore = NULL,
+  new.set = FALSE,
+  rename = c(),
+  trim = FALSE,
+  id = list(No = "No", Name = c("FirstName", "Name"))
+)
 }
 \arguments{
 \item{set1,
