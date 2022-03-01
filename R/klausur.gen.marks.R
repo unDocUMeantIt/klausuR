@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -60,12 +60,13 @@
 #' @return A character vector.
 #' @keywords utilities
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
+#' @seealso \code{\link[klausuR:klausur]{klausur}}
+#' @importFrom stats qnorm
+#' @export
 #' @examples
 #' \dontrun{
 #' notenschluessel <- klausur.gen.marks(mark.labels=11,answ=antworten)
 #' }
-#' @seealso \code{\link[klausuR:klausur]{klausur}}
-#' @export
 
 klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=list(mean=NULL, sd=NULL), minp=0){
 

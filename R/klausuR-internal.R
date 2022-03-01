@@ -231,6 +231,8 @@ calc.cronbach.alpha <- function(dichot.matrix){
 
 ## discrimination()
 # re-implementing the discrim() function of the now archived "psychometric" package
+#' @importFrom stats na.exclude
+#' @noRd
 discrimination <- function(dichot.matrix){
     data <- na.exclude(dichot.matrix)
     third <- nrow(data) %/% 3
@@ -245,6 +247,7 @@ discrimination <- function(dichot.matrix){
 ## calc.item.analysis()
 # performes basic item analysis, like discrimatory power etc.
 #' @importFrom psych alpha
+#' @noRd
 calc.item.analysis <- function(dichot.matrix){
     try.item.analysis <- function(){
       item_full <- psych::alpha(dichot.matrix)
@@ -729,6 +732,8 @@ marks.summary <- function(marks, minp=0, add.const=0){
 # results: a data.frame with two columns, "MatrNo" and "Points"; ignored if NULL
 # partWHole: logical, wheter part-whole correction should be applied; since this is tricky to implement and
 #   interpret for scoring functions other than "NR" and "solved", it can be turned off
+#' @importFrom stats cor
+#' @noRd
 distrct.analysis <- function(answ, corr=NULL, points=NULL, results=NULL, partWhole=FALSE){
   # set MatrNo NULL to fulfill CRAN check's needs
   MatrNo <- NULL

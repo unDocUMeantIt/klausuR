@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -71,6 +71,7 @@ setGeneric("plot", function(x, y, ...) standardGeneric("plot"))
 #' @docType methods
 #' @aliases plot,klausuR,missing,ANY-method
 #' @rdname plot-methods
+#' @importFrom stats dnorm na.omit sd 
 setMethod("plot", signature(x="klausuR", y="missing"), function(x, marks=FALSE, sd.lines=FALSE, plot.normal=TRUE, na.rm=TRUE, ...){
 
   klsr <- x

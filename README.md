@@ -1,6 +1,6 @@
 # klausuR
 
-klausuR is an [R](https://r-project.org) package that contains a set of functions designed to quickly generate results of a multiple choice test. It generates detailed global results, lists for anonymous feedback and personalised result feedback (in LaTeX and/or PDF format), as well as item statistics like Cronbach's alpha or disciminatory power.
+klausuR is an [R](https://www.r-project.org) package that contains a set of functions designed to quickly generate results of a multiple choice test. It generates detailed global results, lists for anonymous feedback and personalised result feedback (in LaTeX and/or PDF format), as well as item statistics like Cronbach's alpha or disciminatory power.
 
 klausuR also includes a plugin for [RKWard](https://rkward.kde.org), a powerful GUI and
 IDE for R, providing graphical dialogs for its basic features. To make full use of this feature,
@@ -44,12 +44,11 @@ If you're running a Debian based operating system, you might be interested in th
 
 ### Installation via GitHub
 
-To install it directly from GitHub, you can use `install_github()` from the [devtools](https://github.com/hadley/devtools) package:
+To install it directly from GitHub, you can use `install_github()` from the [devtools](https://github.com/r-lib/devtools) package:
 
 ```
-library(devtools)
-install_github("unDocUMeantIt/klausuR") # stable release
-install_github("unDocUMeantIt/klausuR", ref="develop") # development release
+devtools::install_github("unDocUMeantIt/klausuR") # stable release
+devtools::install_github("unDocUMeantIt/klausuR", ref="develop") # development release
 ```
 
 ## Contributing
@@ -64,7 +63,7 @@ branch will be rejected, as it is reserved for the current stable release.
 
 ## Licence
 
-Copyright 2009-2018 Meik Michalke <meik.michalke@hhu.de>
+Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 
 klausuR is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

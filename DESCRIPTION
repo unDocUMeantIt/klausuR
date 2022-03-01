@@ -11,10 +11,8 @@ Description: A set of functions designed to quickly generate results of a multip
           feature, please install RKWard from https://rkward.kde.org (plugins are
           detected automatically). Due to some restrictions on CRAN, the full package
           sources are only available from the project homepage.
-Author: m.eik michalke [aut, cre]
-Maintainer: m.eik michalke <meik.michalke@hhu.de>
-Depends: R (>= 2.9.0), xtable, psych
-Imports: methods, graphics, tools
+Depends: R (>= 2.9.0), xtable
+Imports: methods, graphics, tools, utils, stats, grDevices, psych
 Enhances: rkward
 URL: https://reaktanz.de/?c=hacking&s=klausuR
 BugReports: https://github.com/unDocUMeantIt/klausuR/issues
@@ -24,7 +22,7 @@ LazyLoad: yes
 Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de",
           role=c("aut", "cre")))
 Version: 0.12-13
-Date: 2022-02-24
+Date: 2022-03-01
 RoxygenNote: 7.1.2
 Collate: 
     '00_class_01_klausuR.test.R'
@@ -37,7 +35,6 @@ Collate:
     'compare.R'
     'grand.table.R'
     'klausuR-internal.R'
-    'klausuR-internal.roxy.all.R'
     'klausuR-internal_LaTeX_report.R'
     'klausuR-package.R'
     'klausur.R'

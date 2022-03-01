@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -122,6 +122,9 @@ create.pdf <- function(file, path, path.orig=path, suppress=FALSE, save=FALSE){
 
 ## function tabellenbau()
 # this is the main function for individual reports
+#' @importFrom xtable xtable
+#' @importFrom utils capture.output
+#' @noRd
 tabellenbau <- function(matn, res.points, results, answers, correct, klsr, text, descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
   hist=list(points=FALSE, marks=FALSE), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf", NRET.legend=FALSE, print.digits=2, merge=FALSE,
   alt.candy=TRUE, table.size="auto", file.name="matn", save=FALSE, pdf=FALSE, path=tempdir(), path.orig=path, quiet=FALSE, fancyhdr=TRUE){
@@ -314,9 +317,11 @@ tabellenbau <- function(matn, res.points, results, answers, correct, klsr, text,
 
 
 ## function global.report()
-global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.file="anon.tex", print.digits=2, table.size="auto",
-  hist=list(points=FALSE, marks=FALSE), marks.info=list(points=FALSE, percent=FALSE), descr=list(title=NULL, name=NULL, date=NULL),
-  path=tempdir(), path.orig=path, quiet=FALSE, fancyhdr=TRUE){
+#' @importFrom xtable xtable
+#' @noRd
+global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.file="anon.tex", hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
+  print.digits=2, table.size="auto", hist=list(points=FALSE, marks=FALSE), marks.info=list(points=FALSE, percent=FALSE),
+  descr=list(title=NULL, name=NULL, date=NULL), path=tempdir(), path.orig=path, quiet=FALSE, fancyhdr=TRUE){
   # set the file name
   if((isTRUE(save) || isTRUE(pdf)) && is.character(anon.glob.file)){
     dateiname <- file.path(path, anon.glob.file)
@@ -380,11 +385,13 @@ global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.fil
   print(xtable(anon.glob.table, digits=anon.glob.digits,
   caption=paste(text$Ergebnisse,": ",latex.umlaute(descr$title)," (",latex.umlaute(descr$name),", ",descr$date,")", sep="")),
   file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, tabular.environment="longtable", floating=FALSE)
-  if(sum(unlist(marks.info)) > 0){
-    # summary on the defined marks
-    print(xtable(marks.information, caption=latex.umlaute(text$Notenschluessel)),
-    file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, floating=TRUE)
-  } else {}
+## TODO: move construction of marks.information from tabellenbau() to klausur.report() and provide it here
+## this code is broken as there is no object called marks.information to be used
+#   if(sum(unlist(marks.info)) > 0){
+#     # summary on the defined marks
+#     print(xtable(marks.information, caption=latex.umlaute(text$Notenschluessel)),
+#     file=dateiname, append=TRUE, sanitize.text.function=function(x){latex.umlaute(x)}, floating=TRUE)
+#   } else {}
   write(latex.foot, file=dateiname, append=TRUE)
 
   # check if PDF creation is demanded

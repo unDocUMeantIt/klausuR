@@ -137,7 +137,7 @@
 #'    \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
 #'    \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
 #' @keywords misc
-# @import polycor
+#' @importFrom stats na.omit sd
 #' @export
 #' @examples
 #' data(antworten)

@@ -1,6 +1,20 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-13 (2022-03-01)}{
+  \subsection{fixed}{
+    \itemize{
+      \item properly adjusted imports of functions/methods from other packages
+    }
+  }
+  \subsection{changed}{
+    \itemize{
+      \item dropped dependencies on polycor and psychometric, item analysis is now
+        bone using \code{psych::alpha()}
+      \item removed outdated internal klausuR-internal.roxy.all.R file
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-12 (2018-07-29)}{
   \subsection{fixed}{
     \itemize{

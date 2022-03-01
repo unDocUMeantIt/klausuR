@@ -1,11 +1,12 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-13 (2022-02-24)
-unreleased:
-  - this version is under development
+changes in version 0.12-13 (2022-03-01)
+fixed:
+  - properly adjusted imports of functions/methods from other packages
 changed:
-  - dropped dependencies to polycor (no longer used) and psychometric
-    (archived on CRAN), item analysis is now bone by psych::alpha()
+  - dropped dependencies on polycor and psychometric, item analysis is now
+    bone using psych::alpha()
+  - removed outdated internal klausuR-internal.roxy.all.R file
 
 changes in version 0.12-12 (2018-07-29)
 fixed:

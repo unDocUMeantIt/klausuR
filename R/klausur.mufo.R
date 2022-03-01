@@ -60,6 +60,7 @@
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[klausuR:klausur.data]{klausur.data}}
 #' @keywords misc
+#' @importFrom stats sd
 #' @export
 #' @examples
 #' # this will create the data.frame "antworten.mufo"

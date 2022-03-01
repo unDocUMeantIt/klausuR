@@ -1,4 +1,4 @@
-# Copyright 2009-2015 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -69,7 +69,8 @@
 #' @return One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}, \code{\link[xtable]{xtable}}, \code{\link[tools]{texi2dvi}}
-#' @import xtable graphics tools
+#' @import graphics tools
+#' @importFrom grDevices dev.off
 #' @export
 #' @examples
 #' data(antworten)
@@ -110,8 +111,6 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
           descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
           lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", decreasing=TRUE, sort.by="Points", NRET.legend=FALSE, table.size="auto",
           merge=FALSE, quiet=FALSE, fancyhdr=TRUE){
-  # to avoid NOTEs from R CMD check:
-  marks.information <- NULL
 
   # before we start let's look at klsr
   # if klsr is a list, iterate through it recusively
@@ -285,11 +284,13 @@ klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.na
       merge.reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
     } else {}
   } else if(identical(matn, "anon")){
-    global.report(form="anon", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, print.digits=print.digits, table.size=table.size,
-      hist=hist, marks.info=marks.info, descr=descr, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
+    global.report(form="anon", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, hist.points=hist.points, hist.marks=hist.marks,
+      print.digits=print.digits, table.size=table.size, hist=hist, marks.info=marks.info, descr=descr, path=path, path.orig=path.orig,
+      quiet=quiet, fancyhdr=fancyhdr)
   } else if(identical(matn, "glob")){
-    global.report(form="global", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, print.digits=print.digits, table.size=table.size,
-      hist=hist, marks.info=marks.info, descr=descr, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
+    global.report(form="global", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, hist.points=hist.points, hist.marks=hist.marks,
+      print.digits=print.digits, table.size=table.size, hist=hist, marks.info=marks.info, descr=descr, path=path, path.orig=path.orig,
+      quiet=quiet, fancyhdr=fancyhdr)
   } else {
     tabellenbau(matn=matn, res.points=res.points, results=results, answers=answers, correct=correct, klsr=klsr,
       text=text, descr=descr, marks.info=marks.info, hist=hist, hist.points=hist.points, hist.marks=hist.marks, NRET.legend=NRET.legend,

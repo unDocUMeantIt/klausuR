@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -38,6 +38,7 @@
 #' @return A data.frame.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @keywords misc
+#' @importFrom utils write.csv write.csv2
 #' @export
 
 grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL, rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...){
