@@ -267,7 +267,7 @@ ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
    \code{\link[klausuR:klausur.gen]{klausur.gen}},
       \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
    \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
-   \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
+   \code{\link[klausuR:plot]{plot}}
 }
 \author{
 m.eik michalke \email{meik.michalke@uni-duesseldorf.de}

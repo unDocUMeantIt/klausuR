@@ -1,6 +1,13 @@
 \name{NEWS}
 \title{News for Package 'klausuR'}
 \encoding{UTF-8}
+\section{Changes in klausuR version 0.12-14 (2022-04-04)}{
+  \subsection{fixed}{
+    \itemize{
+      \item \code{klausur()}: removed "see also" link to psychometric package
+    }
+  }
+}
 \section{Changes in klausuR version 0.12-13 (2022-03-01)}{
   \subsection{fixed}{
     \itemize{

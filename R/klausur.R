@@ -135,7 +135,7 @@
 #'    \code{\link[klausuR:compare]{compare}},
 #'    \code{\link[klausuR:klausur.gen]{klausur.gen}}, \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}},
 #'    \code{\link[klausuR:klausur.gen.corr]{klausur.gen.corr}},
-#'    \code{\link[klausuR:plot]{plot}}, \code{\link[psychometric]{psychometric}}
+#'    \code{\link[klausuR:plot]{plot}}
 #' @keywords misc
 #' @importFrom stats na.omit sd
 #' @export
