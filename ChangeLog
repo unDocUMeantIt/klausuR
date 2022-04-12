@@ -1,5 +1,9 @@
 ChangeLog for package klausuR
 
+changes in version 0.12-15 (2022-04-12)
+unreleased:
+  - this release is under development
+
 changes in version 0.12-14 (2022-04-04)
 fixed:
   - klausur(): removed "see also" link to psychometric package

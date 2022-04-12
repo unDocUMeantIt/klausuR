@@ -102,8 +102,7 @@ In combination with multiple (correct) answers for certain items you can specify
 If you set it to something othe than \code{"solved"},
       as the names may suggest you \strong{allow partially given answers} under the condition that the test subject didn't
 check more alternatives than there are correct ones (that is,
-      if you checked four alternatives where three correct ones were possible,
-      you're out):
+      if you checked four alternatives where three correct ones were possible, you're out):
 \itemize{
    \item{\code{"solved"}} {Multiple Choice: Check all correct alternatives. This is the default,
       which means that one will only get any points for an
@@ -113,8 +112,7 @@ check more alternatives than there are correct ones (that is,
    \item{\code{"liberal"}} {Multiple Choice: Check all correct alternatives,
       allow partially given answers, even distractors can be checked.}
    \item{\code{"pick-n"}} {Multiple Choice: Check all correct alternatives,
-      allow partially given answers,
-      even distractors can be checked. Difference to \code{"liberal"} is
+      allow partially given answers, even distractors can be checked. Difference to \code{"liberal"} is
      that you will also get points for unchecked distractors.}
    \item{\code{"ET"}} {Elimination Testing: In contrast to the usual MC procedure,
       eliminate/strike all \emph{wrong} alternatives.}
@@ -124,14 +122,12 @@ check more alternatives than there are correct ones (that is,
       but if more alternatives are checked right than there are right anwers,
      it will automatically yield to 0 points for that item.}
    \item{\code{"NR"}} {Number Right: The usual MC scoring,
-      but works with ET/NRET data. It was implemented for completeness,
-      e.g. to compare results
+      but works with ET/NRET data. It was implemented for completeness, e.g. to compare results
      of different scoring techniques.}
 }
 
 An example for \code{"solved"},
-      \code{"partial"} and \code{"liberal"}: If an item has five answer alternatives,
-      the correct answer is "134" and a subject checked "15",
+      \code{"partial"} and \code{"liberal"}: If an item has five answer alternatives, the correct answer is "134" and a subject checked "15",
 \code{"solved"} will give no point (because "15" is not equal to "134"),
       as will \code{"partial"} (because "5" is wrong),
       but \code{"liberal"} will give 1/3 (because "1" is correct),
@@ -161,13 +157,11 @@ the evaluated answer alternatives, with the following elements:
 An example: If we have an item with four alternatives, and the third one is right (i.e.,
       "\code{--+-}"), and a test subject considered the first alternative
 to be correct and eliminated all others (i.e., "\code{+---}"),
-      it would be evaluated as "\code{pNnN}", that is 0+1-3+1=-1 point,
-      not considering the constant.
+      it would be evaluated as "\code{pNnN}", that is 0+1-3+1=-1 point, not considering the constant.
 As you can see,
       it would be possible to end up with a negative sum of points. If you consider how in the end a mark will be assigned to the achieved points,
 this would be a problem,
-      because a vactor cannot have negative indices. To circumvent this issue,
-      klausuR automatically adds a constant to all results, so
+      because a vactor cannot have negative indices. To circumvent this issue, klausuR automatically adds a constant to all results, so
 that the worst possible result is not negative but 0. This constant is simply (alternatives-1),
       i.e. 3 for the example. In other words, if our test had 10
 such items,
@@ -194,8 +188,7 @@ Item analysis also includes item discrimination.
 \code{klausur} allows some tweaks that are probably not as useful as they seem. For instance,
       having items with more than one correct answer doesn't
 necessarily yield more diagnostic information,
-      allowing for those being answered partially adds to that,
-      and binding marks blindly to a normal distribution can
+      allowing for those being answered partially adds to that, and binding marks blindly to a normal distribution can
 give quite unfair test results! In addition,
       please do \strong{always check a sample of the results} to make sure no errors accurred.
 }

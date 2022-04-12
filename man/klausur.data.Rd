@@ -79,8 +79,7 @@ one correct answers,
 \item{keep.cases}{A vector of \code{MatrNo} values,
       if you want to prevent these cases from being dropped even if they contain missing data.
 If not \code{NULL},
-      missing values in all test items are replaced by the value given to \code{recode.na},
-      before \code{na.rm} is evaluated.}
+      missing values in all test items are replaced by the value given to \code{recode.na}, before \code{na.rm} is evaluated.}
 
 \item{recode.na}{A value to replace missing data with in all cases specified by \code{keep.cases}. Ignored if \code{keep.cases=NULL}.}
 }
@@ -107,24 +106,20 @@ it will only give that person a point if the correct answer was coded as "134" a
 If your test is to be evaluated according to elimination testing (ET),
       number right elimination testing (NRET) or number right (NR, which is actually
 multiple choice) scoring,
-      the data has to be in a different format: In contrast to the usual MC procedure,
-      ET items are answered
+      the data has to be in a different format: In contrast to the usual MC procedure, ET items are answered
 by eliminating all alternatives a subject considers \emph{wrong}; in an NRET test subjects are asked to eliminate all wrong alternatives
 \emph{and} mark the one they consider the correct answer. That is,
       for both scoring functions, you need to know for each answer alternative whether
 a subject saw it as right, wrong or was not sure and left it open.
 
 In this implementation,
-      these answers are to be coded as a plus sign "\code{+}" (right answer),
-      a minus sign "\code{-}" (wrong answer) or a zero
+      these answers are to be coded as a plus sign "\code{+}" (right answer), a minus sign "\code{-}" (wrong answer) or a zero
 "\code{0}" (missing). If you need to code errors (like both "right" and "wrong" have been marked),
      use the asterisk "\code{*}" for these cases.
 All answers to \strong{one item} belong into \strong{one column}. E.g.,
-      if you have four answer alternatives,
-      a subject thought the second one to be the correct
+      if you have four answer alternatives, a subject thought the second one to be the correct
 answer and eliminated the rest,
-      you'd have to code this item as "\code{-+--}". The same is true for the vector of correct answers,
-      of course.
+      you'd have to code this item as "\code{-+--}". The same is true for the vector of correct answers, of course.
 
 \strong{Marks}
 

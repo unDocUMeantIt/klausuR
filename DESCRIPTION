@@ -11,6 +11,8 @@ Description: A set of functions designed to quickly generate results of a multip
           feature, please install RKWard from <https://rkward.kde.org> (plugins are
           detected automatically). Due to some restrictions on CRAN, the full package
           sources are only available from the project homepage.
+Author: m.eik michalke [aut, cre]
+Maintainer: m.eik michalke <meik.michalke@hhu.de>
 Depends: R (>= 2.9.0), xtable
 Imports: methods, graphics, tools, utils, stats, grDevices, psych
 Enhances: rkward
@@ -21,8 +23,8 @@ Encoding: UTF-8
 LazyLoad: yes
 Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de",
           role=c("aut", "cre")))
-Version: 0.12-14
-Date: 2022-04-04
+Version: 0.12-15
+Date: 2022-04-12
 RoxygenNote: 7.1.2
 Collate: 
     '00_class_01_klausuR.test.R'

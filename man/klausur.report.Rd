@@ -74,8 +74,7 @@ how marks were assigned to points achieved and/or percent solved, respectively.}
 \item{lang}{Set to "de" for reports in German, English is the default.}
 
 \item{alt.candy}{If TRUE,
-      a comma will be inserted for items with multiple alternatives ("235" becomes "2, 3,
-      5" in the printout)}
+      a comma will be inserted for items with multiple alternatives ("235" becomes "2, 3, 5" in the printout)}
 
 \item{anon.glob.file}{If \code{matn="anon"} or \code{matn="glob"},
       you can specify a filename for this particular report.}
