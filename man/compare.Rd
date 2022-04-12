@@ -38,7 +38,8 @@ represent the variable names of the input data.}
 
 \item{id}{A named list of character vectors to help identify differing cases in the input data. The element names of this list will become column names in the
 generated output table,
-      their values define the respective column names of the input data. If a value has more than one element, they will be collapsed into
+      their values define the respective column names of the input data. If a value has more than one element,
+      they will be collapsed into
 one string for the output.}
 }
 \value{

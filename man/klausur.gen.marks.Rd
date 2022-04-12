@@ -32,7 +32,8 @@ assuming normal distribution. That is,
       "mean" and "sd" should be set to the corresponding values of the test's results.}
 
 \item{minp}{An integer value,
-      in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and
+      in case there is a minimum score no-one can fall below (which can happen, e.g.,
+      with ET/NRET scoring and
 different numbers of answer alternatives). Should be left as is in most cases.}
 }
 \value{
