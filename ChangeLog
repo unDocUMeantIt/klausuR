@@ -1,8 +1,13 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-15 (2022-04-12)
+changes in version 0.12-15 (2023-06-12)
 unreleased:
   - this release is under development
+added:
+  - klausur.gen.marks(): added two new elements to the "suggest" list,
+    "pass" and "best", to define the minimum number of points needed
+    for passing a test and getting the best mark, respectively.
+    suggested marks between these two have equal distance
 
 changes in version 0.12-14 (2022-04-04)
 fixed:

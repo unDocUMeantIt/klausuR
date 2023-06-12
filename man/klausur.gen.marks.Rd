@@ -5,10 +5,10 @@
 \title{Generate mark assignments}
 \usage{
 klausur.gen.marks(
-  mark.labels = NULL,
-  answ = NULL,
-  wght = NULL,
-  suggest = list(mean = NULL, sd = NULL),
+  mark.labels,
+  answ,
+  wght,
+  suggest = list(mean = NULL, sd = NULL, pass = NULL, best = NULL),
   minp = 0
 )
 }
@@ -26,10 +26,15 @@ be asked for the maximum score.}
       the number of items is used as maximum score, that is,
 each item gives a point.}
 
-\item{suggest}{A list with the elements \code{mean} and \code{sd}. If both are not NULL,
-      this function will suggest marks for achieved points
-assuming normal distribution. That is,
-      "mean" and "sd" should be set to the corresponding values of the test's results.}
+\item{suggest}{An optional list with either the elements \code{mean} and \code{sd},
+      or an element \code{pass}. If one of these options is present,
+this function will suggest marks for achieved points. In the case of \code{mean} and \code{sd},
+      both should be set to the corresponding values of the test's results
+to get suggestions assuming normal distribution. In the case of \code{pass},
+      that should be set to the passing limit in points to get suggestions
+computed by dividing the range above the passing limit by the number of marks,
+      resulting in equal distances between marks. With \code{pass} you can also provide
+the optional \code{best} to define the minimum number of points needed for the best mark.}
 
 \item{minp}{An integer value,
       in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and

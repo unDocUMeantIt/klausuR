@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -53,8 +53,11 @@
 #'        be asked for the maximum score.
 #' @param wght A vector with weights for each item. If NULL, the number of items is used as maximum score, that is,
 #'        each item gives a point.
-#' @param suggest A list with the elements \code{mean} and \code{sd}. If both are not NULL, this function will suggest marks for achieved points
-#'    assuming normal distribution. That is, "mean" and "sd" should be set to the corresponding values of the test's results.
+#' @param suggest An optional list with either the elements \code{mean} and \code{sd}, or an element \code{pass}. If one of these options is present,
+#'    this function will suggest marks for achieved points. In the case of \code{mean} and \code{sd}, both should be set to the corresponding values of the test's results
+#'    to get suggestions assuming normal distribution. In the case of \code{pass}, that should be set to the passing limit in points to get suggestions
+#'    computed by dividing the range above the passing limit by the number of marks, resulting in equal distances between marks. With \code{pass} you can also provide
+#'    the optional \code{best} to define the minimum number of points needed for the best mark.
 #' @param minp An integer value, in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and
 #'    different numbers of answer alternatives). Should be left as is in most cases.
 #' @return A character vector.
@@ -68,152 +71,7 @@
 #' notenschluessel <- klausur.gen.marks(mark.labels=11,answ=antworten)
 #' }
 
-klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=list(mean=NULL, sd=NULL), minp=0){
-
-  ## function max.score
-  # used to determine the maximum score
-  max.score <- function(answ, wght){
-    # if weights are given, use them to calculate maximum score:
-    if(!is.null(wght)){
-      maxp <- sum(wght)
-    } else {
-      # otherwise use the number of items
-      if(!is.null(answ)){
-        if(is.double(answ) && length(answ) == 1){
-          maxp <- answ
-        } else {
-          maxp <- as.numeric(length(grep("Item([[:digit:]]{1,3})",names(answ))))
-        }
-      } else {
-        maxp <- as.numeric(readline(paste("What is the maximum score achievable?")))
-      }
-    }
-    # stop if still not useful
-    if(length(maxp) != 1){
-      stop(simpleError(paste("Illegal value for maximum score: \"",maxp,"\"", sep="")))
-    } else {
-      cat("Maximum score:\t", maxp,"\n")
-      return(maxp)
-    }
-  } ## end function max.score
-
-  ## function label.marks
-  # setting label marks, what a surprise...
-  label.marks <- function(mark.labels){
-    if(is.null(mark.labels)){
-      mark.labels <- c()
-      markname <- "placeholder"
-      mark.labels[1] <- as.character(readline(paste("Please start with the worst mark you'll assign:")))
-      index <- 2
-      while(!identical(markname, "")){
-        markname <- as.character(readline(paste("Please name the next better mark (leave empty to finish!):")))
-        if(!identical(markname, "")){
-          mark.labels[index] <- markname
-          index <- index + 1
-        } else{}
-      }
-    } else {
-      # check if a preset of marks can be used
-      if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 16)){
-        mark.labels <- c("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15")
-      } else if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 11)){
-        mark.labels <- c("5.0","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1.3","1.0")
-      } else if(length(mark.labels) == 1 && (identical(as.numeric(mark.labels), 6) || identical(mark.labels, "DIHK"))){
-        mark.labels <- c(6:1)
-      } else if(length(mark.labels) == 1 && identical(mark.labels, "USA")){
-        mark.labels <- c("F","D","C","B","A")
-      } else if(length(mark.labels) == 1 && identical(mark.labels, "UK")){
-        mark.labels <- c("E","D","C","B","A")
-      } else if(length(mark.labels) == 1 && identical(mark.labels, "A")) {
-        mark.labels <- c("F","E","D","C","B","A")
-      } else{}
-    }
-    # stop if still not useful
-    if(is.null(mark.labels) || length(mark.labels) == 1){
-      stop(simpleError(paste("Illegal value for mark labels: \"",mark.labels,"\"", sep="")))
-    } else {
-      cat("Mark labels:\t", mark.labels,"\n")
-      return(mark.labels)
-    }
-  } ## end function label.marks
-
-  ## function read.points
-  # this function is called to ask for the assigned points
-  read.points <- function(markname, maxp){
-    points <- ""
-    while(identical(points, "")){
-      points <- readline(paste("Please input the minimum score for mark ",as.character(markname),":", sep=""))
-      if(!identical(points, "")){
-        if(points <= maxp){
-          if(points > points.assigned) {
-            marks[points:maxp] <<- as.character(markname)
-            cat("OK: Assigned mark \"",markname,"\" to a minimum score of ",points," points.\n", sep="")
-            points.assigned <<- points
-          } else {
-            cat("Illegal: Point value (",points,") already assigned to mark \"",marks[as.numeric(points)],"\"!\n", sep="")
-            points <- ""
-          }
-        } else {
-          cat("Illegal: Point value (",points,") exceeding maximum score!\n", sep="")
-          points <- ""
-        }
-      } else{}
-    }
-  } ## end function read.points
-
-    ## function suggestion
-    # this function takes information un mean and standard deviation of test results,
-    # and suggests marks according to normal distribution
-    suggestion <- function(mark.labels, maxp, mean, sd, minp){
-      # so, which quantiles do we need? obviously, one less that we have marks
-      # we take one more than the number of marks, because the first and last will be 0 and 1,
-      # so we drop the last one again and keep the rest
-      quants <- seq(from=0, to=1, by=(1/length(mark.labels))) [c(-(length(mark.labels)+1))]
-
-      # now have a look at the normal distribution,
-      # get the quantiles for mean and sd of our test results
-      lapply(mark.labels[-1], function(x){
-        # using max() to make sure min.points can't fall below 1!
-        min.points <- max(max(1, minp), ceiling(qnorm(quants[which(mark.labels == x)], mean=mean, sd=sd)))
-        # in case results are odd, let's at least not have unrealistic points values:
-        if(min.points > maxp){
-          min.points <- maxp
-        } else {}
-          marks[min.points:maxp] <<- x
-        }
-      )
-      return(marks)
-    } ## end function suggestion
-
-  ## function scheme.calc
-  scheme.calc <- function(scheme, maxp, mark.labels.set, marks){
-    if(identical(scheme, "DIHK")){
-      quants <- c(0, .30, .50, .67, .81, .92)
-    } else if(identical(scheme, "USA")){
-      quants <- c(0, .60, .70, .80, .90)
-    } else if(identical(scheme, "UK")){
-      quants <- c(0, .10, .35, .65, .90)
-    } else {
-      return(NA)
-    }
-
-    # calculate threshold values, beginning with 1 point, ending with maximum
-    mark.thresholds <- ceiling(maxp * quants)
-    mark.thresholds[1] <- 1
-    mark.thresholds <- append(mark.thresholds, maxp)
-    # fill the mark vector
-    marks <- lapply(c(1:length(quants)), function(x){
-      lower.lim <- mark.thresholds[x]
-      upper.lim <- mark.thresholds[x+1]
-      marks[lower.lim:upper.lim] <<- mark.labels.set[x]
-      return(marks)
-    })
-
-    return(unlist(marks[1]))
-  }  ## end function scheme.calc
-
-
-  ## now let's do it!!!
+klausur.gen.marks <- function(mark.labels, answ, wght, suggest=list(mean=NULL, sd=NULL, pass=NULL, best=NULL), minp=0){
   # call max.score() to calculate maximum score
   maxp <- max.score(answ, wght)
   # rename the marks
@@ -225,16 +83,187 @@ klausur.gen.marks <- function(mark.labels=NULL, answ=NULL, wght=NULL, suggest=li
   marks[1:maxp] <- as.character(mark.labels.set[1])
 
   # now read it all in!
-  if(identical(mark.labels, "DIHK") || identical(mark.labels, "USA") || identical(mark.labels, "UK")){
+  if(mark.labels %in% c("DIHK", "USA", "UK")){
     marks <- scheme.calc(mark.labels, maxp, mark.labels.set, marks)
-  } else if(!is.numeric(suggest[["mean"]]) || !is.numeric(suggest[["sd"]])) {
-    # set counter to zero
-    points.assigned <- 0
-    # then call the function that uses it
-    mapply(read.points, mark.labels.set[-1], MoreArgs=list(maxp=maxp))
+  } else if(all(!is.numeric(suggest[["mean"]]) || !is.numeric(suggest[["sd"]]), !is.numeric(suggest[["pass"]]))) {
+    for (markname in mark.labels.set[-1]){
+      points <- ""
+      points.assigned <- 0
+      while(identical(points, "")){
+        points <- readline(paste("Please input the minimum score for mark ",as.character(markname),":", sep=""))
+        if(!identical(points, "")){
+          if(points <= maxp){
+            if(points > points.assigned) {
+              marks[points:maxp] <- as.character(markname)
+              cat("OK: Assigned mark \"",markname,"\" to a minimum score of ",points," points.\n", sep="")
+              points.assigned <- points
+            } else {
+              cat("Illegal: Point value (",points,") already assigned to mark \"",marks[as.numeric(points)],"\"!\n", sep="")
+              points <- ""
+            }
+          } else {
+            cat("Illegal: Point value (",points,") exceeding maximum score!\n", sep="")
+            points <- ""
+          }
+        } else{}
+      }
+    }
   } else {
-    marks <- suggestion(mark.labels.set, maxp, mean=suggest[["mean"]], sd=suggest[["sd"]], minp=minp)
+    marks <- suggestion(
+      mark.labels.set,
+      maxp=maxp,
+      mean=suggest[["mean"]],
+      sd=suggest[["sd"]],
+      pass=suggest[["pass"]],
+      best=suggest[["best"]],
+      minp=minp,
+      marks=marks
+    )
   }
 
   return(marks)
 }
+
+
+## function max.score
+# used to determine the maximum score
+max.score <- function(answ, wght){
+  # if weights are given, use them to calculate maximum score:
+  if(!missing(wght)){
+    maxp <- sum(wght)
+  } else {
+    # otherwise use the number of items
+    if(!missing(answ)){
+      if(is.double(answ) && length(answ) == 1){
+        maxp <- answ
+      } else {
+        maxp <- as.numeric(length(grep("Item([[:digit:]]{1,3})",names(answ))))
+      }
+    } else {
+      maxp <- as.numeric(readline(paste("What is the maximum score achievable?")))
+    }
+  }
+  # stop if still not useful
+  if(length(maxp) != 1){
+    stop(simpleError(paste("Illegal value for maximum score: \"",maxp,"\"", sep="")))
+  } else {
+    cat("Maximum score:\t", maxp,"\n")
+    return(maxp)
+  }
+} ## end function max.score
+
+
+## function label.marks
+# setting label marks, what a surprise...
+label.marks <- function(mark.labels){
+  if(is.null(mark.labels)){
+    mark.labels <- c()
+    markname <- "placeholder"
+    mark.labels[1] <- as.character(readline(paste("Please start with the worst mark you'll assign:")))
+    index <- 2
+    while(!identical(markname, "")){
+      markname <- as.character(readline(paste("Please name the next better mark (leave empty to finish!):")))
+      if(!identical(markname, "")){
+        mark.labels[index] <- markname
+        index <- index + 1
+      } else{}
+    }
+  } else {
+    # check if a preset of marks can be used
+    if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 16)){
+      mark.labels <- c("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15")
+    } else if(length(mark.labels) == 1 && identical(as.numeric(mark.labels), 11)){
+      mark.labels <- c("5.0","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1.3","1.0")
+    } else if(length(mark.labels) == 1 && (identical(as.numeric(mark.labels), 6) || identical(mark.labels, "DIHK"))){
+      mark.labels <- c(6:1)
+    } else if(length(mark.labels) == 1 && identical(mark.labels, "USA")){
+      mark.labels <- c("F","D","C","B","A")
+    } else if(length(mark.labels) == 1 && identical(mark.labels, "UK")){
+      mark.labels <- c("E","D","C","B","A")
+    } else if(length(mark.labels) == 1 && identical(mark.labels, "A")) {
+      mark.labels <- c("F","E","D","C","B","A")
+    } else{}
+  }
+  # stop if still not useful
+  if(is.null(mark.labels) || length(mark.labels) == 1){
+    stop(simpleError(paste("Illegal value for mark labels: \"",mark.labels,"\"", sep="")))
+  } else {
+    cat("Mark labels:\t", mark.labels,"\n")
+    return(mark.labels)
+  }
+} ## end function label.marks
+
+
+## function scheme.calc
+scheme.calc <- function(scheme, maxp, mark.labels.set, marks){
+  if(identical(scheme, "DIHK")){
+    quants <- c(0, .30, .50, .67, .81, .92)
+  } else if(identical(scheme, "USA")){
+    quants <- c(0, .60, .70, .80, .90)
+  } else if(identical(scheme, "UK")){
+    quants <- c(0, .10, .35, .65, .90)
+  } else {
+    return(NA)
+  }
+
+  # calculate threshold values, beginning with 1 point, ending with maximum
+  mark.thresholds <- ceiling(maxp * quants)
+  mark.thresholds[1] <- 1
+  mark.thresholds <- append(mark.thresholds, maxp)
+  # fill the mark vector
+  marks <- lapply(c(1:length(quants)), function(x){
+    lower.lim <- mark.thresholds[x]
+    upper.lim <- mark.thresholds[x+1]
+    marks[lower.lim:upper.lim] <<- mark.labels.set[x]
+    return(marks)
+  })
+
+  return(unlist(marks[1]))
+}  ## end function scheme.calc
+
+
+## function suggestion
+# this function takes information on mean and standard deviation of test results,
+# and suggests marks according to normal distribution
+suggestion <- function(mark.labels, maxp, mean, sd, pass, best, minp, marks){
+  # detect whether to suggest by mean/sd or by pass
+  if(missing(pass)){
+    # so, which quantiles do we need? obviously, one less that we have marks
+    # we take one more than the number of marks, because the first and last will be 0 and 1,
+    # so we drop the last one again and keep the rest
+    quants <- seq(from=0, to=1, by=(1/length(mark.labels))) [-(length(mark.labels)+1)]
+
+    # now have a look at the normal distribution,
+    # get the quantiles for mean and sd of our test results
+    lapply(mark.labels[-1], function(x){
+      # using max() to make sure min.points can't fall below 1!
+      min.points <- max(max(1, minp), ceiling(qnorm(quants[which(mark.labels == x)], mean=mean, sd=sd)))
+      # in case results are odd, let's at least not have unrealistic points values:
+      if(min.points > maxp){
+        min.points <- maxp
+      } else {}
+        marks[min.points:maxp] <<- x
+      }
+    )
+  } else {
+    min_quant <- pass/maxp
+    if(is.numeric(best)){
+      max_quant <- best/maxp
+      quants <- seq(from=min_quant, to=max_quant, by=((max_quant-min_quant)/(length(mark.labels) - 2)))
+    } else {
+      max_quant <- 1
+      quants <- seq(from=min_quant, to=max_quant, by=((max_quant-min_quant)/(length(mark.labels) - 1))) [-length(mark.labels)]
+    }
+    lapply(mark.labels[-1], function(x){
+      # using max() to make sure min.points can't fall below 1!
+      min.points <- max(max(1, minp), ceiling(quants[which(mark.labels == x) - 1] * maxp))
+      # in case results are odd, let's at least not have unrealistic points values:
+      if(min.points > maxp){
+        min.points <- maxp
+      } else {}
+        marks[min.points:maxp] <<- x
+      }
+    )
+  }
+  return(marks)
+} ## end function suggestion
