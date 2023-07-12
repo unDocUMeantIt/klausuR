@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -18,7 +18,7 @@
 
 #' A function to create data objects with given and correct answers to a test.
 #'
-#' \code{klausur.data} automatically parses the variable names in \code{answ}to decide \strong{which variables are actual test items},
+#' \code{klausur.data} automatically parses the variable names in \code{answ} to decide \strong{which variables are actual test items},
 #' if they are named according to the given scheme \code{Item###}. To help in constructing a data.frame with correct column names one can call the
 #' \code{\link[klausuR:klausur.gen]{klausur.gen}} utility to generate an empty data object of a given number of items and test subjects.
 #'
