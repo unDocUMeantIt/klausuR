@@ -1,0 +1,83 @@
+---
+title: "Multiple Choice Test Evaluation with klausuR"
+author: "m.eik michalke"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+abstract: >
+  vignette: >
+  %\VignetteIndexEntry{Multiple Choice Test Evaluation with klausuR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE, cache=FALSE}
+library(klausuR)
+```
+
+```{r, set-options, echo=FALSE, cache=FALSE}
+options(width=85)
+```
+
+# What do you use klausuR for?
+
+The package is intended for people or institutions that have multiple choice tests prepared and then want to report the results back to all test participants. It can deliver as results:
+
+* Output of the overall results for all participants, including with
+    * Score
+    * Percent correct answers
+    * Mark according to given grading scale
+* Anonymous feedback (e.g. for posting the results)
+* Detailed individual results for each person
+    * Tabular listing of given answer, correct answer and points received for each test item
+    * Both on screen and as a LaTeX report
+    * Direct creation of PDF reports
+    * Report can optionally include distribution graphs of results (by points and/or marks)
+* Analysis of the test items, e.g.
+    * Cronbach's alpha
+    * Discriminatory power (part-whole-corrected)
+    * Difficulty
+    * Selection parameter (Lienert)
+* Automatic suggestions for grading scales (e.g. according to the DIHK standard)
+* Consideration of partially correct answers
+* Processing tests with multiple parallel forms
+
+Not much data is needed for these calculations either: A data set with the given answers and an answer key (correct answers for all questions). A grading scale would also be practical (which mark should be given from which number of points), but you can also have a suggestion for grading submitted, such as normal distribution of the point results or according to the DIHK standard (based on the percentage of items solved). Questions with several correct answer alternatives are possible. To get this information in the expected format, `klausuR` contains some small help functions. so ask e.g. `klausur.gen.corr()` the correct answer for each test question one after the other in order to build the answer vector from it. Optionally, questions can be weighted differently (default: one point for each question).
+
+Another feature is help with error correction: If the test data is not already available in digital form (which is rarely the case with exams), the answers must first be typed. typos here are of course fatal. We therefore recommend typing twice independently of each other and then comparing both data sets with the function `klausur.compare()`. If it finds differences, it throws out a table with the names of the exams in question and lists the questions for which the answers differ. You can then check the exam again and eliminate the differences.
+
+Theoretically, of course, both of them could have made the same typo by accident, so that they would not be noticed here. The individual reports are intended for this purpose (here is an [example PDF file](https://reaktanz.de/R/pckg/klausuR/ergebnisse-klausuR.pdf)), since they list in full which (typed) answers were used for the evaluation. You can attach this report to the exam and, in case of doubt, go through it question by question years later, whether something was entered incorrectly or whether there was an error in the point calculation elsewhere -- the reports make the entire evaluation completely transparent. At the same time you save the manual correction of each exam, which is certainly also associated with a risk of error.
+
+
+# The workflow
+
+The work for `klausuR` begins when your students have finished their exams and you have already transfered all answers given into digital form, i.e., a table with one row per test and one column per item and some additional meta data. This table can include as many columns as you wish, but in addition to the actual test items, it must provide the following columns for a test evaluation with this package:
+
+* A unique number for each test
+* The participant's family name
+* The participant's first name
+* A unique pseudonym or codeword (for anonymous feedback)
+* Matriculation number
+
+You should keep this in mind when preparing your table template.
+
+## Preparing data for evaluation
+
+## Preparing a grading scale
+
+### Manual definition
+
+### Calculate suggestions
+
+## Evaluate test results
+
+## Generate reports
+
+### Individual reports
+
+### Anonymous feedback reports
+
+## Test item analysis
+
+## Alternative test item formats
