@@ -1,4 +1,4 @@
-# Copyright 2009-2014 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -43,6 +43,8 @@
 #' @param id A named list of character vectors to help identify differing cases in the input data. The element names of this list will become column names in the
 #'    generated output table, their values define the respective column names of the input data. If a value has more than one element, they will be collapsed into
 #'    one string for the output.
+#' @param meta An optional list containing the named entries used by \code{compare}, see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+#'    a function that helps to create it.
 #' @return If \code{new.set=FALSE}, a data.frame of the differences, if found (if not, just a message is returned). Otherwise returns a combined data.frame (see details).
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @keywords utilities
@@ -68,7 +70,22 @@
 #' antworten.comp <- compare(antworten, antworten2, select=-c(3:8), new.set=TRUE)
 #' }
 
-compare <- function(set1, set2, select=NULL, ignore=NULL, new.set=FALSE, rename=c(), trim=FALSE, id=list(No="No", Name=c("FirstName", "Name"))){
+compare <- function(
+  set1,
+  set2,
+  select=NULL,
+  ignore=meta[["ignore"]],
+  new.set=FALSE,
+  rename=meta[["rename"]],
+  trim=FALSE,
+  id=list(
+    No="No",
+    Name=c("FirstName", "Name")
+  ),
+  meta=list(
+    rename=c()
+  )
+){
   # to avoid NOTEs from R CMD check:
   MatrNo <- NULL
 

@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -64,6 +64,8 @@
 #'    and only useful if \code{pdf=TRUE} as well.
 #' @param quiet Logical, if \code{TRUE} no feedback messages on the current status are given.
 #' @param fancyhdr Logical, if \code{TRUE} additional information is printed in the header and footer of the LaTeX/PDF files.
+#' @param meta An optional list containing the named entries used by \code{klausur.report}, see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+#'    a function that helps to create it.
 #' @aliases klausur.report
 #' @keywords IO file
 #' @return One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.
@@ -106,11 +108,41 @@
 #'   name="Dr. T. Aeter", date="24.09.2010"))
 #' }
 
-klausur.report <- function(klsr, matn, save=FALSE, pdf=FALSE, path=NULL, file.name="matn",
-          hist=list(points=FALSE, marks=FALSE), hist.merge=list(), hist.points="hist_points.pdf", hist.marks="hist_marks.pdf",
-          descr=list(title=NULL, name=NULL, date=NULL), marks.info=list(points=FALSE, percent=FALSE),
-          lang="en", alt.candy=TRUE, anon.glob.file="anon.tex", decreasing=TRUE, sort.by="Points", NRET.legend=FALSE, table.size="auto",
-          merge=FALSE, quiet=FALSE, fancyhdr=TRUE){
+klausur.report <- function(
+  klsr,
+  matn,
+  save=FALSE,
+  pdf=FALSE,
+  path=meta[["out_dir"]],
+  file.name="matn",
+  hist=list(
+    points=FALSE,
+    marks=FALSE
+  ),
+  hist.merge=list(),
+  hist.points="hist_points.pdf",
+  hist.marks="hist_marks.pdf",
+  descr=list(
+    title=meta[["title"]],
+    name=meta[["name"]],
+    date=meta[["date_print"]]
+  ),
+  marks.info=list(
+    points=FALSE,
+    percent=FALSE
+  ),
+  lang="en",
+  alt.candy=TRUE,
+  anon.glob.file="anon.tex",
+  decreasing=TRUE,
+  sort.by="Points",
+  NRET.legend=FALSE,
+  table.size="auto",
+  merge=FALSE,
+  quiet=FALSE,
+  fancyhdr=TRUE,
+  meta=list()
+){
 
   # before we start let's look at klsr
   # if klsr is a list, iterate through it recusively

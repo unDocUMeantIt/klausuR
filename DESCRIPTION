@@ -18,7 +18,7 @@ Encoding: UTF-8
 LazyLoad: yes
 Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-15
-Date: 2023-06-12
+Date: 2023-07-27
 RoxygenNote: 7.2.2
 Collate: 
     '00_class_01_klausuR.test.R'
@@ -40,5 +40,6 @@ Collate:
     'klausur.gen.marks.R'
     'klausur.mufo.R'
     'klausur.report.R'
+    'klausur_meta.R'
     'nret.rescale.R'
     'nret.translator.R'

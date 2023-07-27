@@ -82,14 +82,16 @@ value.
 
 Another feature can be toggled with the parameter \code{suggest}. If you feed it with the mean and standard deviation values of your test's
 results,
-      marks are automatically assigned to the achieved score under the assumption of normal distribution. Please understand that
+      marks are automatically assigned to the achieved score under the assumption of normal distribution. You can also use \code{pass}
+to define the minimum number of points for passing the test and have marks suggested with even distances. Please understand that
 the naming "suggest" is not an accident! This is only a suggestion, please review it,
       tweak it, revise it, until it fits your needs.
 However, this feature can directly be called by \code{\link[klausuR:klausur]{klausur}}.
 }
 \examples{
+notenschluessel_ED <- klausur.gen.marks(mark.labels=11, answ=50, suggest=list(pass=25))
 \dontrun{
-notenschluessel <- klausur.gen.marks(mark.labels=11,answ=antworten)
+notenschluessel <- klausur.gen.marks(mark.labels=11, answ=antworten)
 }
 }
 \seealso{

@@ -6,15 +6,17 @@
 \usage{
 klausur.mufo(
   data,
-  marks = NULL,
-  mark.labels = NULL,
-  items = NULL,
-  wght = NULL,
+  marks = meta[["marks"]],
+  mark.labels = meta[["mark.labels"]],
+  items = meta[["items"]],
+  wght = meta[["wght"]],
   score = "solved",
   matn = NULL,
   na.rm = TRUE,
   cronbach = TRUE,
-  item.analysis = TRUE
+  item.analysis = TRUE,
+  meta = list(),
+  ...
 )
 }
 \arguments{
@@ -49,6 +51,12 @@ will be used.}
       some usual item statistics like difficulty and discriminatory power will be calculated.
 If \code{cronbach} is TRUE, too,
       it will include the alpha values if each item was deleted.}
+
+\item{meta}{An optional list containing the named entries used by \code{klausur.mufo},
+      see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+a function that helps to create it.}
+
+\item{...}{Additional arguments to be passed through to \code{\link[klausuR:klausur]{klausur}}.}
 }
 \value{
 An object of class \code{\link[klausuR]{klausuR.mult-class}} with the following slots.

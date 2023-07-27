@@ -8,11 +8,12 @@ compare(
   set1,
   set2,
   select = NULL,
-  ignore = NULL,
+  ignore = meta[["ignore"]],
   new.set = FALSE,
-  rename = c(),
+  rename = meta[["rename"]],
   trim = FALSE,
-  id = list(No = "No", Name = c("FirstName", "Name"))
+  id = list(No = "No", Name = c("FirstName", "Name")),
+  meta = list(rename = c())
 )
 }
 \arguments{
@@ -40,6 +41,10 @@ represent the variable names of the input data.}
 generated output table,
       their values define the respective column names of the input data. If a value has more than one element, they will be collapsed into
 one string for the output.}
+
+\item{meta}{An optional list containing the named entries used by \code{compare},
+      see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+a function that helps to create it.}
 }
 \value{
 If \code{new.set=FALSE}, a data.frame of the differences, if found (if not,

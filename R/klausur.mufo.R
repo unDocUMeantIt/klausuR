@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -52,6 +52,9 @@
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty and discriminatory power will be calculated.
 #'  If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
+#' @param meta An optional list containing the named entries used by \code{klausur.mufo}, see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+#'    a function that helps to create it.
+#' @param ... Additional arguments to be passed through to \code{\link[klausuR:klausur]{klausur}}.
 #' @return An object of class \code{\link[klausuR]{klausuR.mult-class}} with the following slots.
 #'  \item{forms}{A character vector naming all test forms}
 #'  \item{results.part}{A list of objects of class \code{klausuR}, holding all partial results}
@@ -96,7 +99,20 @@
 #' # in their subtest results, hence item analysis fails on them
 #' klsr.mufo.obj <- klausur.mufo(mufo.data.obj)
 
-klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved", matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE){
+klausur.mufo <- function(
+  data,
+  marks=meta[["marks"]],
+  mark.labels=meta[["mark.labels"]],
+  items=meta[["items"]],
+  wght=meta[["wght"]],
+  score="solved",
+  matn=NULL,
+  na.rm=TRUE,
+  cronbach=TRUE,
+  item.analysis=TRUE,
+  meta=list(),
+  ...
+){
   # to avoid NOTEs from R CMD check:
   MatrNo <- NULL
 
@@ -141,9 +157,19 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
   # we'll just hand it over and return the results
   if(length(test.forms.answ) == 1){
     warning("Only one test form was supplied. Called klausur() instead.")
-    klausur.mufo.results <- klausur(data=data, marks=marks,
-            mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
-            na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
+    klausur.mufo.results <- klausur(
+      data=data,
+      marks=marks,
+      mark.labels=mark.labels,
+      items=items,
+      wght=wght,
+      score=score,
+      matn=matn,
+      na.rm=na.rm,
+      cronbach=cronbach,
+      item.analysis=item.analysis,
+      ...
+    )
     ## calculation would end here if only one form was submitted
   } else {
     ## separate forms and calculate partial results
@@ -165,9 +191,19 @@ klausur.mufo <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NU
         items=subset(slot(data, "items"), subj.in.test),
         score=list(marks=marks, wght=wght),
         misc=subset(slot(data, "misc"), subj.in.test))
-      klausur.part.results <- klausur(data=data.part, marks=marks,
-              mark.labels=mark.labels, items=items, wght=wght, score=score, matn=matn,
-              na.rm=na.rm, cronbach=cronbach, item.analysis=item.analysis)
+      klausur.part.results <- klausur(
+        data=data.part,
+        marks=marks,
+        mark.labels=mark.labels,
+        items=items,
+        wght=wght,
+        score=score,
+        matn=matn,
+        na.rm=na.rm,
+        cronbach=cronbach,
+        item.analysis=item.analysis,
+        ...
+      )
       result.part <- list(Form=single.test, Results=klausur.part.results)
       slot(klausur.mufo.results, "results.part")[[single.test]] <- result.part
       # append partial results to global results

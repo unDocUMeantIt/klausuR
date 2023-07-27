@@ -9,13 +9,14 @@ klausur.report(
   matn,
   save = FALSE,
   pdf = FALSE,
-  path = NULL,
+  path = meta[["out_dir"]],
   file.name = "matn",
   hist = list(points = FALSE, marks = FALSE),
   hist.merge = list(),
   hist.points = "hist_points.pdf",
   hist.marks = "hist_marks.pdf",
-  descr = list(title = NULL, name = NULL, date = NULL),
+  descr = list(title = meta[["title"]], name = meta[["name"]], date =
+    meta[["date_print"]]),
   marks.info = list(points = FALSE, percent = FALSE),
   lang = "en",
   alt.candy = TRUE,
@@ -26,7 +27,8 @@ klausur.report(
   table.size = "auto",
   merge = FALSE,
   quiet = FALSE,
-  fancyhdr = TRUE
+  fancyhdr = TRUE,
+  meta = list()
 )
 }
 \arguments{
@@ -105,6 +107,10 @@ and only useful if \code{pdf=TRUE} as well.}
 
 \item{fancyhdr}{Logical,
       if \code{TRUE} additional information is printed in the header and footer of the LaTeX/PDF files.}
+
+\item{meta}{An optional list containing the named entries used by \code{klausur.report},
+      see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+a function that helps to create it.}
 }
 \value{
 One or several LaTeX and/or PDF documents. If defined two histograms will be plotted.

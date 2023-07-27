@@ -2,25 +2,27 @@
 % Please edit documentation in R/klausur.data.R
 \name{klausur.data}
 \alias{klausur.data}
-\title{A function to create data objects with given and correct answers to a test.}
+\title{Create data objects with given and correct answers to a test.}
 \usage{
 klausur.data(
   answ,
-  corr,
-  items = NULL,
-  marks = NULL,
-  wght = NULL,
-  corr.key = NULL,
-  rename = c(),
-  dummies = c(),
-  disc.misc = FALSE,
-  na.rm = TRUE,
-  item.prefix = c(),
+  corr = meta[["corr"]],
+  items = meta[["items"]],
+  marks = meta[["marks"]],
+  wght = meta[["wght"]],
+  corr.key = meta[["corr.key"]],
+  rename = meta[["rename"]],
+  dummies = meta[["dummies"]],
+  disc.misc = meta[["disc.misc"]],
+  na.rm = meta[["na.rm"]],
+  item.prefix = meta[["item.prefix"]],
   sort.by = "Name",
-  maxp = NULL,
-  wrong = NULL,
-  keep.cases = NULL,
-  recode.na = 0
+  maxp = meta[["maxp"]],
+  wrong = meta[["wrong"]],
+  keep.cases = meta[["keep.cases"]],
+  recode.na = 0,
+  meta = list(rename = c(), dummies = c(), disc.misc = FALSE, na.rm = TRUE, item.prefix =
+    c())
 )
 }
 \arguments{
@@ -82,12 +84,16 @@ If not \code{NULL},
       missing values in all test items are replaced by the value given to \code{recode.na}, before \code{na.rm} is evaluated.}
 
 \item{recode.na}{A value to replace missing data with in all cases specified by \code{keep.cases}. Ignored if \code{keep.cases=NULL}.}
+
+\item{meta}{An optional list containing the named entries used by \code{klausur.data},
+      see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+a function that helps to create it.}
 }
 \value{
 An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 }
 \description{
-\code{klausur.data} automatically parses the variable names in \code{answ}to decide \strong{which variables are actual test items},
+\code{klausur.data} automatically parses the variable names in \code{answ} to decide \strong{which variables are actual test items},
 if they are named according to the given scheme \code{Item###}. To help in constructing a data.frame with correct column names one can call the
 \code{\link[klausuR:klausur.gen]{klausur.gen}} utility to generate an empty data object of a given number of items and test subjects.
 }

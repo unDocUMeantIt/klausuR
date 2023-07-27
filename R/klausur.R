@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -107,11 +107,13 @@
 #' @param na.rm Logical, whether cases with NAs should be ignored in \code{data}. Defaults to TRUE.
 #' @param cronbach Logical. If TRUE, Cronbach's alpha will be calculated.
 #' @param item.analysis Logical. If TRUE, some usual item statistics like difficulty, discriminatory power and distractor analysis will be calculated.
+#'    If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @param sort.by A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
-#'  If \code{cronbach} is TRUE, too, it will include the alpha values if each item was deleted.
 #' @param maxp Optional numeric value, if set will be forced as the maximum number of points achievable. This should actually not be needed,
 #'    if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
 #'    one correct answers, this option can become handy in combination with "partial" scoring and item weights.
+#' @param meta An optional list containing the named entries used by \code{klausur}, see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+#'    a function that helps to create it.
 #' @return An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.
 #'  \item{results}{A data.frame with global results}
 #'  \item{answ}{A data.frame with all given answers}
@@ -206,8 +208,21 @@
 #' NR.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="NR")
 #' ET.results <- klausur(data.obj, marks="suggest", mark.labels=11, score="ET")
 
-klausur <- function(data, marks=NULL, mark.labels=NULL, items=NULL, wght=NULL, score="solved",
-    matn=NULL, na.rm=TRUE, cronbach=TRUE, item.analysis=TRUE, sort.by="Name", maxp=NULL){
+klausur <- function(
+    data,
+    marks=meta[["marks"]],
+    mark.labels=meta[["mark.labels"]],
+    items=meta[["items"]],
+    wght=meta[["wght"]],
+    score="solved",
+    matn=NULL,
+    na.rm=TRUE,
+    cronbach=TRUE,
+    item.analysis=TRUE,
+    sort.by="Name",
+    maxp=meta[["maxp"]],
+    meta=list()
+){
     ## whenever these options/arguments should change, update klausur.mufo() accordingly!
 
     if(!inherits(data, "klausuR.answ")){

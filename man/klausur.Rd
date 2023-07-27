@@ -6,17 +6,18 @@
 \usage{
 klausur(
   data,
-  marks = NULL,
-  mark.labels = NULL,
-  items = NULL,
-  wght = NULL,
+  marks = meta[["marks"]],
+  mark.labels = meta[["mark.labels"]],
+  items = meta[["items"]],
+  wght = meta[["wght"]],
   score = "solved",
   matn = NULL,
   na.rm = TRUE,
   cronbach = TRUE,
   item.analysis = TRUE,
   sort.by = "Name",
-  maxp = NULL
+  maxp = meta[["maxp"]],
+  meta = list()
 )
 }
 \arguments{
@@ -48,17 +49,21 @@ will be used.}
 \item{cronbach}{Logical. If TRUE, Cronbach's alpha will be calculated.}
 
 \item{item.analysis}{Logical. If TRUE, some usual item statistics like difficulty,
-      discriminatory power and distractor analysis will be calculated.}
-
-\item{sort.by}{A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.
+      discriminatory power and distractor analysis will be calculated.
 If \code{cronbach} is TRUE, too,
       it will include the alpha values if each item was deleted.}
+
+\item{sort.by}{A character string naming the variable to sort the results by. Set to \code{c()} to skip any re-ordering.}
 
 \item{maxp}{Optional numeric value,
       if set will be forced as the maximum number of points achievable. This should actually not be needed,
 if your test has no strange errors. But if for example it later turns out you need to adjust one item because it has two instead of
 one correct answers,
       this option can become handy in combination with "partial" scoring and item weights.}
+
+\item{meta}{An optional list containing the named entries used by \code{klausur},
+      see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+a function that helps to create it.}
 }
 \value{
 An object of class \code{\link[klausuR]{klausuR-class}} with the following slots.

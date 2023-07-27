@@ -16,7 +16,7 @@
 # along with klausuR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#' A function to create data objects with given and correct answers to a test.
+#' Create data objects with given and correct answers to a test.
 #'
 #' \code{klausur.data} automatically parses the variable names in \code{answ} to decide \strong{which variables are actual test items},
 #' if they are named according to the given scheme \code{Item###}. To help in constructing a data.frame with correct column names one can call the
@@ -79,6 +79,8 @@
 #' @param keep.cases A vector of \code{MatrNo} values, if you want to prevent these cases from being dropped even if they contain missing data.
 #'    If not \code{NULL}, missing values in all test items are replaced by the value given to \code{recode.na}, before \code{na.rm} is evaluated.
 #' @param recode.na A value to replace missing data with in all cases specified by \code{keep.cases}. Ignored if \code{keep.cases=NULL}.
+#' @param meta An optional list containing the named entries used by \code{klausur.data}, see \code{\link[klausuR:klausur_meta]{klausur_meta}} for
+#'    a function that helps to create it.
 #' @return An object of class \code{\link[klausuR]{klausuR.answ-class}}.
 #' @export
 #' @examples
@@ -113,8 +115,31 @@
 #' # if that went well, get the test results
 #' klsr.obj <- klausur(data.obj)
 
-klausur.data <- function(answ, corr, items=NULL, marks=NULL, wght=NULL, corr.key=NULL, rename=c(), dummies=c(),
-  disc.misc=FALSE, na.rm=TRUE, item.prefix=c(), sort.by="Name", maxp=NULL, wrong=NULL, keep.cases=NULL, recode.na=0){
+klausur.data <- function(
+  answ,
+  corr=meta[["corr"]],
+  items=meta[["items"]],
+  marks=meta[["marks"]],
+  wght=meta[["wght"]],
+  corr.key=meta[["corr.key"]],
+  rename=meta[["rename"]],
+  dummies=meta[["dummies"]],
+  disc.misc=meta[["disc.misc"]],
+  na.rm=meta[["na.rm"]],
+  item.prefix=meta[["item.prefix"]],
+  sort.by="Name",
+  maxp=meta[["maxp"]],
+  wrong=meta[["wrong"]],
+  keep.cases=meta[["keep.cases"]],
+  recode.na=0,
+  meta=list(
+    rename=c(),
+    dummies=c(),
+    disc.misc=FALSE,
+    na.rm=TRUE,
+    item.prefix=c()
+  )
+){
 
   # check for var names to use
   item.prefix <- check.prefixes(prefixes=item.prefix, package="klausuR")
