@@ -52,7 +52,7 @@ Theoretically, of course, both of them could have made the same typo by accident
 
 # The workflow
 
-The work for `klausuR` begins when your students have finished their exams and you have already transfered all answers given into digital form, i.e., a table with one row per test and one column per item and some additional meta data. This table can include as many columns as you wish, but in addition to the actual test items, it must provide the following columns for a test evaluation with this package:
+The work for `klausuR` begins when your students have finished their exams and you have already transferred all answers given into digital form, i.e., a table with one row per test and one column per item and some additional meta data. This table can include as many columns as you wish, but in addition to the actual test items, it must provide at least the following columns for a test evaluation with this package:
 
 * A unique number for each test
 * The participant's family name
@@ -60,15 +60,35 @@ The work for `klausuR` begins when your students have finished their exams and y
 * A unique pseudonym or codeword (for anonymous feedback)
 * Matriculation number
 
-You should keep this in mind when preparing your table template.
+You should keep this in mind when preparing your table template. `klausuR` expects a data frame with the test data, so it's not important whether you store your data in a CSV, excel or SPSS file, as long as it can be imported in R. Also, the names of the columns aren't predetermined by `klausuR`, you can tell it which column is what.
 
 ## Preparing data for evaluation
+
+Evaluating a test is done in the following steps:
+
+#. Prepare a grading scale (marks)
+#. Combine all your test meta data into one list using `klausur_meta()`
+  * This includes a title and date for the test, the name of the lecturer (probably you), the correct answers etc.
+#. Create formatted data object from the test data
+  * Import the test data (anwsers) into a data frame
+  * If you typed in all answers twice, you can use `compare()` find differences between two data frames and check back with the actual test
+  * Call `klausur.data()` with the final data frame and meta data to bring everything into shape
+#. Call `klausur()` on the created data object to calculate test results
+#. Call `klausur.report()` on the calculated results
+  * One call each for individual reports, anonymous feedback (public notice) and global results in a table
+#. Optionally export the data frame with calculation results using `grand.table()`
 
 ## Preparing a grading scale
 
 ### Manual definition
 
 ### Calculate suggestions
+
+## Combine test meta data
+
+This step simply is more convenient, you can actually skip it and fill in all needed information to each function manually. But you will see that some information is used repeatedly, so it is a good idea to put everything into one object and use that.
+
+The most straight forward way to achieve this is the function `klausur_meta()`. For the most part, it just returns your input in a list, but it also generates some new variables with combined or formatted input.
 
 ## Evaluate test results
 
