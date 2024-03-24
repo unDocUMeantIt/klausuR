@@ -153,19 +153,20 @@
 #'  Item30=4, Item31=13, Item32=234)
 #' 
 #' # vector with assignement of marks:
-#' notenschluessel <- c()
-#' # scheme of assignments: marks[points_from:to] <- mark
-#' notenschluessel[0:12]  <- 5.0
-#' notenschluessel[13:15] <- 4.0
-#' notenschluessel[16:18] <- 3.7
-#' notenschluessel[19:20] <- 3.3
-#' notenschluessel[21]    <- 3.0
-#' notenschluessel[22]    <- 2.7
-#' notenschluessel[23]    <- 2.3
-#' notenschluessel[24]    <- 2.0
-#' notenschluessel[25:26] <- 1.7
-#' notenschluessel[27:29] <- 1.3
-#' notenschluessel[30:32] <- 1.0
+#' # scheme of assignments: "mark" = max points
+#' notenschluessel <- c(
+#'   "5.0"=12,
+#'   "4.0"=15,
+#'   "3.7"=18,
+#'   "3.3"=20,
+#'   "3.0"=21,
+#'   "2.7"=22,
+#'   "2.3"=23,
+#'   "2.0"=24,
+#'   "1.7"=26,
+#'   "1.3"=29,
+#'   "1.0"=32
+#' )
 #' 
 #' # now combine all test data into one object of class klausur.answ
 #' data.obj <- klausur.data(answ=antworten, corr=richtig, marks=notenschluessel)
