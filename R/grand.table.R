@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2024 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -31,35 +31,44 @@
 #' @param NRETp.res An object of class \code{klausuR} which was evaluated according to the NRET+ scoring policy.
 #' @param ET.res An object of class \code{klausuR} which was evaluated according to the ET scoring policy.
 #' @param rescale Logical, whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.
-#' @param file A character string giving a file name to save to. If \code{NULL}, no file will be written.
-#' @param csv2 Logical. If \code{FALSE}, \code{write.csv} will be used instead of \code{write.csv2}.
-#' @param encoding Encoding of the exported table.
-#' @param ... Additional options for \code{write.csv}/\code{write.csv2}.
-#' @return A data.frame.
+#' @param file Path to a file to save to, using \code{\link[rio:export]{rio::export}}. If missing, no file will be written
+#'    but only the data frame returned.
+#' @param ... Additional options for \code{\link[rio:export]{rio::export}}.
+#' @return A data frame.
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @keywords misc
 #' @importFrom utils write.csv write.csv2
+#' @importFrom rio export
 #' @export
 
-grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL, rescale=TRUE, file=NULL, csv2=TRUE, encoding="CP1252", ...){
+grand.table <- function(
+  NR.res,
+  NRET.res,
+  NRETp.res,
+  ET.res,
+  rescale=TRUE,
+  file,
+  ...
+){
+
   # to avoid NOTEs from R CMD check:
   MatrNo <- NULL
 
-  if(is.null(c(NR.res, NRET.res, NRETp.res, ET.res))){
+  if(all(missing(NR.res), missing(NRET.res), missing(NRETp.res), missing(ET.res))){
     stop(simpleError("At least one of 'NR.res', 'NRET.res', 'NRETp.res' or 'ET.res' must be specified!"))
   }  else {}
 
   given.obj <- list()
-  if(!is.null(NR.res)) {
+  if(!missing(NR.res)) {
     given.obj$NR <- NR.res
   } else {}
-  if(!is.null(NRET.res)) {
+  if(!missing(NRET.res)) {
     given.obj$NRET <- NRET.res
   } else {}
-  if(!is.null(NRETp.res)) {
+  if(!missing(NRETp.res)) {
     given.obj$NRETp <- NRETp.res
   } else {}
-  if(!is.null(ET.res)) {
+  if(!missing(ET.res)) {
     given.obj$ET <- ET.res
   } else {}
   obj.names <-  names(given.obj)
@@ -96,19 +105,27 @@ grand.table <- function(NR.res=NULL, NRET.res=NULL, NRETp.res=NULL, ET.res=NULL,
     }
   }
 
-  new.table <- cbind(new.table, kansw=subset(given.obj[[1]]@answ, select=-MatrNo), ktrfls=subset(given.obj[[1]]@trfls, select=-MatrNo), kpoints=subset(given.obj[[1]]@points, select=-MatrNo))
+  new.table <- cbind(
+    new.table,
+    kansw=subset(slot(given.obj[[1]], "answ"), select=-MatrNo),
+    ktrfls=subset(slot(given.obj[[1]], "trfls"), select=-MatrNo),
+    kpoints=subset(slot(given.obj[[1]], "points"), select=-MatrNo)
+  )
   # include misc if values present
-  if(dim(given.obj[[1]]@misc)[[2]] > 1){
-    new.table <- cbind(new.table, subset(given.obj[[1]]@misc, select=-MatrNo))
+  if(dim(slot(given.obj[[1]], "misc"))[[2]] > 1){
+    new.table <- cbind(
+      new.table,
+      subset(slot(given.obj[[1]], "misc"), select=-MatrNo)
+    )
   } else {}
 
   # write to disk?
-  if(!is.null(file)){
-    if(isTRUE(csv2)){
-      write.csv2(new.table, file=file, row.names=FALSE, fileEncoding=encoding, ...)
-    } else {
-      write.csv(new.table, file=file, row.names=FALSE, fileEncoding=encoding, ...)
-    }
+  if(!missing(file)){
+    rio::export(
+      x=new.table,
+      file=file,
+      ...
+    )
   } else {}
 
   return(new.table)
