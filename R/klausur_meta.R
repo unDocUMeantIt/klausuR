@@ -1,4 +1,4 @@
-# Copyright 2023 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2023-2024 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -22,6 +22,9 @@
 #' @param title Character string, title of the test.
 #' @param name Character string, name of the lecturer applying the test.
 #' @param data_dir Character string, root directory for test data.
+#' @param data_file File name of the test raw data. Use a path releative to \code{data_dir}. If this argument
+#'    is defined,  \code{\link[klausuR:klausur.data]{klausur.data}} will try to import this file using
+#'    \code{\link[rio:import]{rio::import}}.
 #' @param corr Named vector, see \code{corr} argument of \code{\link[klausuR:klausur.data]{klausur.data}}.
 #' @param marks Character vector, see \code{marks} argument of \code{\link[klausuR:klausur.data]{klausur.data}}, and
 #'    \code{\link[klausuR:klausur.gen.marks]{klausur.gen.marks}}.
@@ -41,8 +44,9 @@
 #'    Use something like \code{strptime("YYYY-MM-DD", format="%Y-%m-%d")} (with "YYYY-MM-DD" replaced) to set a
 #'    different date.
 #' @param date_print Character string, defines the date format used in generated PDF documents.
-#' @param gt_suffix Character string, suggests a file name so save to grant table in CSV format.
-#' @param ... Optional additional arguments will be kept as they are in the resulting list.
+#' @param gt_suffix Character string, suggests a file name for saving the \code{\link[klausuR:grand.table]{grand.table}} in a format supported by \code{\link[rio:export]{rio::export}}.
+#' @param create_out_dir Logical, if \code{TRUE} and \code{out_dir} is missing, it will automatically be created.
+#' @param ... Optional additional arguments will be kept as-is in the resulting list.
 #' @return A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir}, \code{out_dir}, \code{subdir}, \code{corr}, 
 #'    \code{date}, \code{date_ISO}, \code{date_print}, \code{rename}, \code{dummies}, \code{marks}, and \code{gt_file}.
 #' @export
@@ -51,6 +55,7 @@ klausur_meta <- function(
   title,
   name,
   data_dir,
+  data_file,
   corr,
   marks,
   ignore,
@@ -63,7 +68,8 @@ klausur_meta <- function(
   out_dir=data_dir,
   date=Sys.Date(),
   date_print="%d.%m.%Y",
-  gt_suffix="all.csv",
+  gt_suffix="all.xlsx",
+  create_out_dir=FALSE,
   ...
 ){
   date_ISO <- format(date, "%F")
@@ -74,22 +80,24 @@ klausur_meta <- function(
   } else {
     subdir <- NULL
   }
+  if(missing(data_file)){
+    data_file <- NULL
+  } else {
+    data_file_path <- file.path(data_dir, data_file)
+    if(!file.exists(data_file_path)){
+      stop(simpleError(paste0("The data file specified cannot be found:\n  ", data_file_path)))
+    } else {}
+  }
+
   # check if we need to generate mark assignments first
-  if (length(names(marks)) > 0 & is.numeric(marks)){
-    marks <- unlist(sapply(
-      seq_along(marks), function(x){
-        if(x > 1){
-          rep(names(marks)[x], marks[x] - marks[x - 1])
-        } else {
-          rep(names(marks)[x], marks[x])}
-        }
-    ))
-  } else {}
+  marks <- convert_mark_assignments(marks=marks)
+
   result <- list(
     title=title,
     name=name,
     date=date,
     data_dir=data_dir,
+    data_file=data_file,
     out_dir=out_dir,
     subdir=subdir,
     corr=corr,
@@ -115,6 +123,11 @@ klausur_meta <- function(
   } else {
     result[["gt_file"]] <- file.path(out_dir, paste0(date_ISO, "_", gt_suffix))
   }
+
+  if(isTRUE(create_out_dir) & !file_test("-d", file.path(result[["out_dir"]]))){
+    message(paste0("Creating missing output directory:\n  ", result[["out_dir"]]))
+    dir.create(file.path(result[["out_dir"]]), recursive=TRUE)
+  } else {}
 
   return(result)
 }

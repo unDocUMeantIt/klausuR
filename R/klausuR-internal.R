@@ -725,6 +725,25 @@ marks.summary <- function(marks, minp=0, add.const=0){
 } ## end marks.summary()
 
 
+## convert_mark_assignments()
+# checks if we need to generate mark assignments first
+# that is probably the case if marks is a named numeric vector
+convert_mark_assignments <- function(marks){
+  if (length(names(marks)) > 0 & is.numeric(marks)){
+    marks <- unlist(sapply(
+      seq_along(marks), function(x){
+        if(x > 1){
+          rep(names(marks)[x], marks[x] - marks[x - 1])
+        } else {
+          rep(names(marks)[x], marks[x])}
+        }
+      )
+    )
+  } else {}
+  return(marks)
+} ## end convert_mark_assignments()
+
+
 ## function distrct.analysis()
 # answ: a data.frame containing all items in columns and all answers in its rows
 # corr: named vector with the correct answers (names indicate items); ignored if NULL
