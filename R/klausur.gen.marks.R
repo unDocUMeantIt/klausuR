@@ -1,4 +1,4 @@
-# Copyright 2009-2023 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2024 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -61,7 +61,7 @@
 #'    the optional \code{best} to define the minimum number of points needed for the best mark.
 #' @param minp An integer value, in case there is a minimum score no-one can fall below (which can happen, e.g., with ET/NRET scoring and
 #'    different numbers of answer alternatives). Should be left as is in most cases.
-#' @return A character vector.
+#' @return An (invisible) character vector.
 #' @keywords utilities
 #' @author m.eik michalke \email{meik.michalke@@uni-duesseldorf.de}
 #' @seealso \code{\link[klausuR:klausur]{klausur}}
@@ -92,19 +92,19 @@ klausur.gen.marks <- function(mark.labels, answ, wght, suggest=list(mean=NULL, s
       points <- ""
       points.assigned <- 0
       while(identical(points, "")){
-        points <- readline(paste("Please input the minimum score for mark ",as.character(markname),":", sep=""))
+        points <- readline(paste0("Please input the minimum score for mark ", as.character(markname), ":"))
         if(!identical(points, "")){
           if(points <= maxp){
             if(points > points.assigned) {
               marks[points:maxp] <- as.character(markname)
-              cat("OK: Assigned mark \"",markname,"\" to a minimum score of ",points," points.\n", sep="")
+              message(paste0("OK: Assigned mark \"", markname, "\" to a minimum score of ", points, " points.\n"))
               points.assigned <- points
             } else {
-              cat("Illegal: Point value (",points,") already assigned to mark \"",marks[as.numeric(points)],"\"!\n", sep="")
+              warning(paste0("Illegal: Point value (", points, ") already assigned to mark \"", marks[as.numeric(points)], "\"!\n"), call.=FALSE)
               points <- ""
             }
           } else {
-            cat("Illegal: Point value (",points,") exceeding maximum score!\n", sep="")
+            warning(paste0("Illegal: Point value (", points, ") exceeding maximum score!\n"), call.=FALSE)
             points <- ""
           }
         } else{}
@@ -123,7 +123,12 @@ klausur.gen.marks <- function(mark.labels, answ, wght, suggest=list(mean=NULL, s
     )
   }
 
-  return(marks)
+  marks_table <- table(marks)
+  message("Maximum points assigned:")
+  print(cumsum(marks_table[sort(names(marks_table), decreasing=TRUE)]))
+  message("\n")
+
+  return(invisible(marks))
 }
 
 
@@ -147,9 +152,9 @@ max.score <- function(answ, wght){
   }
   # stop if still not useful
   if(length(maxp) != 1){
-    stop(simpleError(paste("Illegal value for maximum score: \"",maxp,"\"", sep="")))
+    stop(simpleError(paste0("Illegal value for maximum score: \"", maxp, "\"")))
   } else {
-    cat("Maximum score:\t", maxp,"\n")
+    message("Maximum score:\n  ", maxp, "\n")
     return(maxp)
   }
 } ## end function max.score
@@ -188,9 +193,9 @@ label.marks <- function(mark.labels){
   }
   # stop if still not useful
   if(is.null(mark.labels) || length(mark.labels) == 1){
-    stop(simpleError(paste("Illegal value for mark labels: \"",mark.labels,"\"", sep="")))
+    stop(simpleError(paste0("Illegal value for mark labels: \"", mark.labels, "\"")))
   } else {
-    cat("Mark labels:\t", mark.labels,"\n")
+    message("Mark labels:\n  ", paste0(mark.labels, collapse=" "), "\n")
     return(mark.labels)
   }
 } ## end function label.marks
