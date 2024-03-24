@@ -70,7 +70,7 @@ Evaluating a test is done in the following steps:
 #. Combine all your test meta data into one list using `klausur_meta()`
   * This includes a title and date for the test, the name of the lecturer (probably you), the correct answers etc.
 #. Create formatted data object from the test data
-  * Import the test data (anwsers) into a data frame
+  * Import the test data (anwsers) into a data frame; this can be omitted if your data file can be imported for evaluation directly, e.g. no further modifications are necessary
   * If you typed in all answers twice, you can use `compare()` find differences between two data frames and check back with the actual test
   * Call `klausur.data()` with the final data frame and meta data to bring everything into shape
 #. Call `klausur()` on the created data object to calculate test results
@@ -80,15 +80,60 @@ Evaluating a test is done in the following steps:
 
 ## Preparing a grading scale
 
+The grading scale describes which sum of points results in which mark. Currently `klausuR` does only recognize integer values as points, so you can't define half points or similar.
+
+The format `klausuR` expects is a simple character vector with as many items as there are points to achieve. Each item is simply a string of the resulting mark. As an example, if 37 points would grand a 2.0 in your text, the 37th element of the vector would need to be `"2.0"`. Both `klausur_meta()` and `klausur.data()` also accept a simpler format and convert it automatically, see section [Manual definition] for an example.
+
 ### Manual definition
 
+If you have already decided on a grading scale or want to re-use one from an earlier test, you can define the vector manually.
+
+Create a named integer vector, with the item names representing the mark names and the numeric values the maximum points associated with that mark, starting with the worst mark:
+
+```r
+my_marks <- c(
+  "5.0"=20,
+  "4.0"=22,
+  "3.7"=24,
+  "3.3"=26,
+  "3.0"=28,
+  "2.7"=31,
+  "2.3"=33,
+  "2.0"=37,
+  "1.7"=39,
+  "1.3"=42,
+  "1.0"=45
+)
+```
+
+In this example, if a test subject achieved 29 points in total, that would result in mark 2.7.
+
+
 ### Calculate suggestions
+
+The function `klausur.gen.marks()` can also suggest grading scales. It supports multiple formats and alorithms to calculate scales (see the manual page for more details).
+
+Our example above uses eleven marks from 5.0 to 1.0, you would need at least 21 points to pass the test (as up to 20 points you would get a 5.0 and fail), at least 43 points for the best mark, and there's a maximum of 45 points you could achieve. Let's call `klausur.gen.marks()` to get a grading scale with roughly equal distances for this:
+
+```r
+my_marks <- klausur.gen.marks(
+  mark.labels=11,
+  answ=45,
+  suggest=list(
+    pass=21,
+    best=43
+  )
+)
+```
 
 ## Combine test meta data
 
 This step simply is more convenient, you can actually skip it and fill in all needed information to each function manually. But you will see that some information is used repeatedly, so it is a good idea to put everything into one object and use that.
 
 The most straight forward way to achieve this is the function `klausur_meta()`. For the most part, it just returns your input in a list, but it also generates some new variables with combined or formatted input.
+
+`klausur_meta()` can also create the output directory if it is missing, and if `data_dir` and `data_file` are defined, it checks whether the given file can be found.
+
 
 ## Evaluate test results
 
