@@ -184,8 +184,8 @@ klausur.report <- function(
   } else {}
   # PDF creation will be done in an temporal directory if "save" is FALSE
   # we'll make "path" "path.orig" and override it with that tempdir internally
+  path.orig <- path
   if(!isTRUE(save) && isTRUE(pdf)){
-    path.orig <- path
     path <- tempfile("klausuR")
     if(!dir.create(path, recursive=TRUE)){
       stop(simpleError("Couldn't create temporary directory! Try with save=TRUE"))

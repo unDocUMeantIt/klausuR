@@ -20,18 +20,18 @@ latex.head <- function(text, one.file=FALSE, individual=TRUE, hist.and.marks=FAL
   descr=list(title=NULL, name=NULL, date=NULL), fancyhdr=TRUE, landscape=FALSE){
   # use paste to create the LaTeX head, that is up to the table
   full.head <- paste0("\\documentclass[a4paper,ngerman", ifelse(isTRUE(landscape), ",landscape", ""),"]{scrartcl}\n",
-    ifelse(isTRUE(hist.and.marks), "      \\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}\n", ""),
-    "      \\usepackage{longtable}
+    ifelse(isTRUE(hist.and.marks), "    \\usepackage[a4paper,hmargin={2cm,2cm}]{geometry}\n", ""),
+    "    \\usepackage{longtable}
     \\usepackage{mathptmx}
     \\usepackage{helvet}
     \\usepackage{courier}
     \\usepackage[T1]{fontenc}
     \\usepackage[latin9]{inputenc}
       \\setlength{\\parskip}{\\medskipamount}
-      \\setlength{\\parindent}{0pt}",
+      \\setlength{\\parindent}{0pt}\n",
     if(isTRUE(fancyhdr)){
       paste0(
-        "      \\usepackage{fancyhdr}\n",
+        "    \\usepackage{fancyhdr}\n",
         "      \\pagestyle{fancy}\n",
         "      \\fancyhf{} % clean headers\n",
         "      \\fancyfoot[EC,OC]{\\thepage}\n",
@@ -50,10 +50,10 @@ latex.head <- function(text, one.file=FALSE, individual=TRUE, hist.and.marks=FAL
         "      \\renewcommand{\\headrulewidth}{0pt}\n"
       )
     } else {},
-    "      \\usepackage{amsmath}
+    "    \\usepackage{amsmath}
     \\usepackage{graphicx}\n",
-    ifelse(isTRUE(one.file), "      \\usepackage{pdfpages}\n", ""),
-    "      \\usepackage{amssymb}
+    ifelse(isTRUE(one.file), "    \\usepackage{pdfpages}\n", ""),
+    "    \\usepackage{amssymb}
     \\usepackage{thumbpdf}
     \\usepackage{color}
       \\definecolor{dunkelgrau}{gray}{.5}
@@ -73,18 +73,18 @@ latex.head <- function(text, one.file=FALSE, individual=TRUE, hist.and.marks=FAL
     \\title{",latex.umlaute(descr$title),"}\n",
     if(isTRUE(individual)){
       # this is for individual reports, so each subject's name is printed
-      paste0("      \\date{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"\\\\",text$Datum,": ",descr$date,"}
+      paste0("    \\date{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"\\\\",text$Datum,": ",descr$date,"}
     \\author{",person$vorname," ",person$name,",\\\\",text$MatrikelNr," ",person$matn,"}\n")
     } else {
       # anonymous or global results
-      paste0("      \\date{",text$Datum,": ",descr$date,"}
+      paste0("    \\date{",text$Datum,": ",descr$date,"}
     \\author{",latex.umlaute(text$DozentIn),": ",latex.umlaute(descr$name),"}\n")
     },
     if(isTRUE(individual)){
       # this is for individual reports
       paste0("\\begin{document}\n\\maketitle\n\\section*{",text$Ergebnisse,"}\n",
-      text$Erreicht,": \\textbf{",person$punkte,"} (\\textbf{",person$prozent,"\\%}",text$Prozent,").
-      \\\\",text$Note,": ",format(person$note, nsmall=1),"}
+      text$Erreicht,": \\textbf{",person$punkte,"} (\\textbf{",person$prozent,"\\%}",text$Prozent,").\\\\
+      ",text$Note,": ",format(person$note, nsmall=1),"}
       ",
       marks.hist.stuff,"
         \\newpage\n")
