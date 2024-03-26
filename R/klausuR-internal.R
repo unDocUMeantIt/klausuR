@@ -90,7 +90,9 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c(), keep.case
           return(which(is.na(answ[,na.var])))
         }))))
       invalid.cases <- unlist(sapply(invalid.cases.row, function(this.case){
-          case.summary <- paste("  MatrNo ", answ[this.case, "MatrNo"], " (", paste(names(answ)[is.na(answ[this.case,])], collapse=", "), ")", sep="")
+          n_missing <- sum(is.na(answ[this.case,]))
+          case.summary <- paste0("  MatrNo ", answ[this.case, "MatrNo"], " (", n_missing, ifelse(n_missing > 1, paste0(" items"), paste0(" item")), ")")
+          return(case.summary)
         }))
       if(isTRUE(na.rm)){
         warning(paste("NAs were present in '",deparse(substitute(answ)),"' and cases have been removed:\n",

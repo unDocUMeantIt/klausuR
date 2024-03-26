@@ -70,7 +70,8 @@
 #'    directly.
 #' @param corr A vector with the correct answers to all items in \code{answ} (named also according to
 #'    \code{Item###}).
-#' @param items Indices of a subset of variables in \code{answ} to be taken as items.
+#' @param items Indices of a subset of variables in \code{answ} to be taken as items. If missing, all
+#'    columns which names match \code{corr} are used automatically.
 #' @param marks A vector assigning marks to points achieved (see details). Leave \code{NULL} if not
 #'    available.
 #' @param wght A vector with weights for each item (named also according to \code{Item###}). Leave
@@ -192,8 +193,9 @@ klausur.data <- function(
 
   # in case no items were specified, take variables of names "Item##" as items
   if(is.null(items)){
-    items <- grep(paste("^(", item.prefix[["item"]], ")([[:digit:]]{1,3})$", sep=""), names(answ), ignore.case=TRUE)
+    items <- which(tolower(colnames(answ)) %in% tolower(names(corr)))
   } else{}
+
   # we just allowed lowercase names, force these into expected diction
   names(answ)[items] <- gsub("item", item.prefix[["item"]], names(answ)[items], ignore.case=TRUE)
   names(corr) <- gsub("item", item.prefix[["corr"]], names(corr), ignore.case=TRUE)
