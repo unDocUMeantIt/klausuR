@@ -8,6 +8,7 @@ klausur_meta(
   title,
   name,
   data_dir,
+  data_file,
   corr,
   marks,
   ignore,
@@ -20,7 +21,8 @@ klausur_meta(
   out_dir = data_dir,
   date = Sys.Date(),
   date_print = "\%d.\%m.\%Y",
-  gt_suffix = "all.csv",
+  gt_suffix = "all.xlsx",
+  create_out_dir = FALSE,
   ...
 )
 }
@@ -30,6 +32,11 @@ klausur_meta(
 \item{name}{Character string, name of the lecturer applying the test.}
 
 \item{data_dir}{Character string, root directory for test data.}
+
+\item{data_file}{File name of the test raw data. Use a path releative to \code{data_dir}. If this argument
+is defined,
+       \code{\link[klausuR:klausur.data]{klausur.data}} will try to import this file using
+\code{\link[rio:import]{rio::import}}.}
 
 \item{corr}{Named vector,
       see \code{corr} argument of \code{\link[klausuR:klausur.data]{klausur.data}}.}
@@ -70,9 +77,12 @@ is the same as \code{data_dir}, it will have this subdirectory added twice recur
       defines the date format used in generated PDF documents.}
 
 \item{gt_suffix}{Character string,
-      suggests a file name so save to grant table in CSV format.}
+      suggests a file name for saving the \code{\link[klausuR:grand.table]{grand.table}} in a format supported by \code{\link[rio:export]{rio::export}}.}
 
-\item{...}{Optional additional arguments will be kept as they are in the resulting list.}
+\item{create_out_dir}{Logical, if \code{TRUE} and \code{out_dir} is missing,
+      it will automatically be created.}
+
+\item{...}{Optional additional arguments will be kept as-is in the resulting list.}
 }
 \value{
 A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir},

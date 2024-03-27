@@ -41,7 +41,7 @@ the optional \code{best} to define the minimum number of points needed for the b
 different numbers of answer alternatives). Should be left as is in most cases.}
 }
 \value{
-A character vector.
+An (invisible) character vector.
 }
 \description{
 Create a vector of marks to be used by \code{\link[klausuR:klausur]{klausur}}.

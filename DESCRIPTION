@@ -9,7 +9,7 @@ Description: A set of functions designed to quickly generate results of a multip
 Author: m.eik michalke [aut, cre]
 Maintainer: m.eik michalke <meik.michalke@hhu.de>
 Depends: R (>= 2.9.0), xtable
-Imports: methods, graphics, tools, utils, stats, grDevices, psych
+Imports: methods, graphics, tools, utils, stats, grDevices, psych, rio, yaml
 Enhances: rkward
 URL: https://reaktanz.de/?c=hacking&s=klausuR
 BugReports: https://github.com/unDocUMeantIt/klausuR/issues
@@ -18,20 +18,22 @@ Encoding: UTF-8
 LazyLoad: yes
 Authors@R: c(person(given="m.eik", family="michalke", email="meik.michalke@hhu.de", role=c("aut", "cre")))
 Version: 0.12-15
-Date: 2023-07-27
-RoxygenNote: 7.2.2
+Date: 2024-03-27
+RoxygenNote: 7.3.1
 Collate: 
     '00_class_01_klausuR.test.R'
     '00_class_02_klausuR.R'
     '00_class_03_klausuR.answ.R'
     '00_class_04_klausuR.mult.R'
     '01_method_plot.klausuR.R'
+    '01_method_report.klausuR.R'
     '01_method_show.klausuR.R'
     '01_method_sort.klausuR.R'
     'compare.R'
     'grand.table.R'
     'klausuR-internal.R'
     'klausuR-internal_LaTeX_report.R'
+    'klausuR-internal_markdown_report.R'
     'klausuR-package.R'
     'klausur.R'
     'klausur.data.R'

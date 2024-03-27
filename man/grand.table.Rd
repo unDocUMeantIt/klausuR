@@ -4,17 +4,7 @@
 \alias{grand.table}
 \title{Export results to a table}
 \usage{
-grand.table(
-  NR.res = NULL,
-  NRET.res = NULL,
-  NRETp.res = NULL,
-  ET.res = NULL,
-  rescale = TRUE,
-  file = NULL,
-  csv2 = TRUE,
-  encoding = "CP1252",
-  ...
-)
+grand.table(NR.res, NRET.res, NRETp.res, ET.res, rescale = TRUE, file, ...)
 }
 \arguments{
 \item{NR.res}{An object of class \code{klausuR} which was evaluated according to the NR scoring policy.
@@ -29,18 +19,14 @@ Usual MC tests must be given as \code{NR.res}, too.}
 \item{rescale}{Logical,
       whether ET/NRET scaled results should be rescaled by \code{\link[klausuR]{nret.rescale}}.}
 
-\item{file}{A character string giving a file name to save to. If \code{NULL},
-      no file will be written.}
+\item{file}{Path to a file to save to,
+      using \code{\link[rio:export]{rio::export}}. If missing, no file will be written
+but only the data frame returned.}
 
-\item{csv2}{Logical. If \code{FALSE},
-      \code{write.csv} will be used instead of \code{write.csv2}.}
-
-\item{encoding}{Encoding of the exported table.}
-
-\item{...}{Additional options for \code{write.csv}/\code{write.csv2}.}
+\item{...}{Additional options for \code{\link[rio:export]{rio::export}}.}
 }
 \value{
-A data.frame.
+A data frame.
 }
 \description{
 Try this function to combine results from an evaluated test into a matrix and export it to a table,
