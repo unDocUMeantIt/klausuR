@@ -17,6 +17,7 @@ write_markdown <- function(
     )
   , save = FALSE
   , pdf = FALSE
+  , use_files = c()
 ){
 
   document_body <- paste0(
@@ -54,25 +55,34 @@ write_markdown <- function(
     cat(content, file=tmp_file)
 
     if(isTRUE(pdf)){
+      # fetch files we might need
+      if(length(use_files) > 0){
+        sapply(
+            use_files
+          , file.copy
+          , to=tmp_path
+          , overwrite=TRUE
+        )
+      } else {}
       tmp_pdf <- rmarkdown::render(
-        tmp_file,
-        rmarkdown::pdf_document(
-          template=template
-        ),
-        quiet=TRUE
+          tmp_file
+        , rmarkdown::pdf_document(
+            template=template
+          )
+        , quiet=TRUE
       )
       file.copy(
-        from=tmp_pdf,
-        to=path,
-        overwrite=TRUE
+          from=tmp_pdf
+        , to=path
+        , overwrite=TRUE
       )
     } else {}
 
     if(isTRUE(save)){
       file.copy(
-        from=tmp_file,
-        to=path,
-        overwrite=TRUE
+          from=tmp_file
+        , to=path
+        , overwrite=TRUE
       )
     } else {}
 

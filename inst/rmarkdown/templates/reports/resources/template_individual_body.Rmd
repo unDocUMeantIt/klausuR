@@ -4,5 +4,12 @@
 \small
 
 ```{r, echo=FALSE}
-kableExtra::kbl(results_df, booktabs = T)
+results_table <- kableExtra::kbl(
+    results_df
+  , booktabs = TRUE
+)
+kableExtra::kable_styling(
+    results_table
+  , position = "center"
+)
 ```
