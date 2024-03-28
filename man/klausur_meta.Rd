@@ -22,6 +22,8 @@ klausur_meta(
   date = Sys.Date(),
   date_print = "\%d.\%m.\%Y",
   gt_suffix = "all.xlsx",
+  lang = "en",
+  labels = list(),
   create_out_dir = FALSE,
   ...
 )
@@ -73,11 +75,22 @@ is the same as \code{data_dir}, it will have this subdirectory added twice recur
 
 \item{out_dir}{Character string, root directory for test results.}
 
+\item{date}{Date of the test in \code{POSIXct} or \code{POSIXlt} format. Defaults to the current date if not set.
+Use something like \code{strptime("YYYY-MM-DD",
+      format="\%Y-\%m-\%d")} (with "YYYY-MM-DD" replaced) to set a
+different date.}
+
 \item{date_print}{Character string,
       defines the date format used in generated PDF documents.}
 
 \item{gt_suffix}{Character string,
       suggests a file name for saving the \code{\link[klausuR:grand.table]{grand.table}} in a format supported by \code{\link[rio:export]{rio::export}}.}
+
+\item{lang}{Character string,
+      language to set internal defaults for \code{labels} (see below). Set to "de" for reports in German, English is the default.}
+
+\item{labels}{Optional list of labels to customize the defaults used by other functions,
+      see \code{\link[klausuR:report]{report}} for details on supported labels.}
 
 \item{create_out_dir}{Logical, if \code{TRUE} and \code{out_dir} is missing,
       it will automatically be created.}

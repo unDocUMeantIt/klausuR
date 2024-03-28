@@ -8,8 +8,8 @@
 #' \tabular{ll}{
 #' Package: \tab klausuR\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.12-15\cr
-#' Date: \tab 2024-03-27\cr
+#' Version: \tab 0.13-1\cr
+#' Date: \tab 2024-03-28\cr
 #' Depends: \tab R (>= 2.9.0), xtable\cr
 #' Enhances: \tab rkward\cr
 #' Encoding: \tab UTF-8\cr

@@ -74,10 +74,10 @@
 #' }
 
 klausur.gen.marks <- function(mark.labels, answ, wght, suggest=list(mean=NULL, sd=NULL, pass=NULL, best=NULL), minp=0){
-  # call max.score() to calculate maximum score
-  maxp <- max.score(answ, wght)
+  # call max_score() to calculate maximum score
+  maxp <- max_score(answ, wght)
   # rename the marks
-  mark.labels.set <- label.marks(mark.labels)
+  mark.labels.set <- label_marks(mark.labels)
 
   # create empty object for the assignments
   marks <- c()
@@ -132,9 +132,9 @@ klausur.gen.marks <- function(mark.labels, answ, wght, suggest=list(mean=NULL, s
 }
 
 
-## function max.score
+## function max_score
 # used to determine the maximum score
-max.score <- function(answ, wght){
+max_score <- function(answ, wght){
   # if weights are given, use them to calculate maximum score:
   if(!missing(wght)){
     maxp <- sum(wght)
@@ -157,12 +157,12 @@ max.score <- function(answ, wght){
     message("Maximum score:\n  ", maxp, "\n")
     return(maxp)
   }
-} ## end function max.score
+} ## end function max_score
 
 
-## function label.marks
+## function label_marks
 # setting label marks, what a surprise...
-label.marks <- function(mark.labels){
+label_marks <- function(mark.labels){
   if(is.null(mark.labels)){
     mark.labels <- c()
     markname <- "placeholder"
@@ -198,7 +198,7 @@ label.marks <- function(mark.labels){
     message("Mark labels:\n  ", paste0(mark.labels, collapse=" "), "\n")
     return(mark.labels)
   }
-} ## end function label.marks
+} ## end function label_marks
 
 
 ## function scheme.calc

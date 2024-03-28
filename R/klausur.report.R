@@ -226,7 +226,7 @@ klausur.report <- function(
         Name="Name",
         Vorname="Vorname",
         Notenschluessel="Notenschl\"ussel",
-         NRET.expl=". \\emph{Erl\"auterung:} >>+<< -- richtig; >>-<< -- falsch; >>0<< -- keine Angabe; >>*<< -- fehlerhafte Angabe."
+        NRET.expl=". \\emph{Erl\"auterung:} >>+<< -- richtig; >>-<< -- falsch; >>0<< -- keine Angabe; >>*<< -- fehlerhafte Angabe."
     )
     # ... and that of the plots
     hist.text <- list(P.xlab="Punkte",P.ylab="H\u00e4ufigkeit",P.main="Verteilung nach Punkten",
@@ -313,7 +313,7 @@ klausur.report <- function(
         save=save, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
     }
     if(isTRUE(merge) & isTRUE(pdf)){
-      merge.reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
+      merge_reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
     } else {}
   } else if(identical(matn, "anon")){
     global.report(form="anon", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, hist.points=hist.points, hist.marks=hist.marks,

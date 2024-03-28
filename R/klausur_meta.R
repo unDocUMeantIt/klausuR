@@ -41,10 +41,12 @@
 #' @param item.prefix Character, see \code{\link[klausuR:klausur.data]{klausur.data}}.
 #' @param out_dir Character string, root directory for test results.
 #' @param date Date of the test in \code{POSIXct} or \code{POSIXlt} format. Defaults to the current date if not set.
-#'    Use something like \code{strptime("YYYY-MM-DD", format="%Y-%m-%d")} (with "YYYY-MM-DD" replaced) to set a
+#'    Use something like \code{strptime("YYYY-MM-DD", format="\%Y-\%m-\%d")} (with "YYYY-MM-DD" replaced) to set a
 #'    different date.
 #' @param date_print Character string, defines the date format used in generated PDF documents.
 #' @param gt_suffix Character string, suggests a file name for saving the \code{\link[klausuR:grand.table]{grand.table}} in a format supported by \code{\link[rio:export]{rio::export}}.
+#' @param lang Character string, language to set internal defaults for \code{labels} (see below). Set to "de" for reports in German, English is the default.
+#' @param labels Optional list of labels to customize the defaults used by other functions, see \code{\link[klausuR:report]{report}} for details on supported labels.
 #' @param create_out_dir Logical, if \code{TRUE} and \code{out_dir} is missing, it will automatically be created.
 #' @param ... Optional additional arguments will be kept as-is in the resulting list.
 #' @return A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir}, \code{out_dir}, \code{subdir}, \code{corr}, 
@@ -52,25 +54,27 @@
 #' @export
 
 klausur_meta <- function(
-  title,
-  name,
-  data_dir,
-  data_file,
-  corr,
-  marks,
-  ignore,
-  subdir_prefix,
-  rename=c(),
-  dummies=c(),
-  disc.misc=FALSE,
-  na.rm=TRUE,
-  item.prefix=c(),
-  out_dir=data_dir,
-  date=Sys.Date(),
-  date_print="%d.%m.%Y",
-  gt_suffix="all.xlsx",
-  create_out_dir=FALSE,
-  ...
+    title
+  , name
+  , data_dir
+  , data_file
+  , corr
+  , marks
+  , ignore
+  , subdir_prefix
+  , rename = c()
+  , dummies = c()
+  , disc.misc = FALSE
+  , na.rm = TRUE
+  , item.prefix = c()
+  , out_dir = data_dir
+  , date = Sys.Date()
+  , date_print = "%d.%m.%Y"
+  , gt_suffix = "all.xlsx"
+  , lang = "en"
+  , labels = list()
+  , create_out_dir = FALSE
+  , ...
 ){
   date_ISO <- format(date, "%F")
   if(!missing(subdir_prefix)){
@@ -93,23 +97,25 @@ klausur_meta <- function(
   marks <- convert_mark_assignments(marks=marks)
 
   result <- list(
-    title=title,
-    name=name,
-    date=date,
-    data_dir=data_dir,
-    data_file=data_file,
-    out_dir=out_dir,
-    subdir=subdir,
-    corr=corr,
-    date=date,
-    date_ISO=date_ISO,
-    date_print=format(date, date_print),
-    rename=rename,
-    dummies=dummies,
-    disc.misc=disc.misc,
-    na.rm=na.rm,
-    item.prefix=item.prefix,
-    ...
+      title = title
+    , name = name
+    , date = date
+    , data_dir = data_dir
+    , data_file = data_file
+    , out_dir = out_dir
+    , subdir = subdir
+    , corr = corr
+    , date = date
+    , date_ISO = date_ISO
+    , date_print = format(date, date_print)
+    , rename = rename
+    , dummies = dummies
+    , disc.misc = disc.misc
+    , na.rm = na.rm
+    , item.prefix = item.prefix
+    , lang = lang
+    , labels = labels
+    , ...
   )
 
   if(!missing(marks)){

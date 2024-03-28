@@ -1,6 +1,6 @@
 ChangeLog for package klausuR
 
-changes in version 0.12-15 (2024-03-24)
+changes in version 0.13-1 (2024-03-28)
 unreleased:
   - this release is under development
 added:
@@ -8,18 +8,22 @@ added:
     "pass" and "best", to define the minimum number of points needed
     for passing a test and getting the best mark, respectively.
     suggested marks between these two have equal distance.
-  - klausur.data(): can now directly import raw data files using the
-    rio package, if "meta" includes both "data_dir" and "data_file".
   - klausur.data(): new argument "debug" to stepwise examine the raw
     data frame before internal checks are done.
   - klausur_meta(): new function to help collecting all necessary meta
     data for a test. the resulting list can be used with klausur(),
     klausur.data(), klausur.report() and compare().
+  - report(): new method to generate test reports, basically a rewrite
+    of klausur.report() using RMarkdown instead of LaTeX and with
+    more flexibility. for instance, custom templates are now possible
+  - a vignette, finally!
+changed:
+  - klausur.data(): can now directly import raw data files using the
+    rio package, if "meta" includes both "data_dir" and "data_file".
   - grand.table(): now uses rio::export() instead of write.csv() and
     write.csv2(). formals were simplified accordingly, i.e., "csv2" and
     "encoding" were dropped. arguments also don't use NULL as default
     values any more.
-  - a vignette, finally!
 
 changes in version 0.12-14 (2022-04-04)
 fixed:
