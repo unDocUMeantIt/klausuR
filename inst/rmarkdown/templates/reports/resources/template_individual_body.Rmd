@@ -1,0 +1,8 @@
+<!-- TODO: include histograms and grading scale here -->
+
+\newpage
+\small
+
+```{r, echo=FALSE}
+kableExtra::kbl(results_df, booktabs = T)
+```
