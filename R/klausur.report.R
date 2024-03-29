@@ -313,7 +313,7 @@ klausur.report <- function(
         save=save, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
     }
     if(isTRUE(merge) & isTRUE(pdf)){
-      merge_reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
+      merge_reports_LaTeX(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
     } else {}
   } else if(identical(matn, "anon")){
     global.report(form="anon", klsr=klsr, text=text, save=save, pdf=pdf, anon.glob.file=anon.glob.file, hist.points=hist.points, hist.marks=hist.marks,

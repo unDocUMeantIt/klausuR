@@ -401,9 +401,9 @@ global.report <- function(form, klsr, text, save=FALSE, pdf=FALSE, anon.glob.fil
 } ## end function global.report()
 
 
-## function merge_reports()
+## function merge_reports_LaTeX()
 # creates one PDF file from the individual reports
-merge_reports <- function(results, text, descr, file.name="matn", pdf=FALSE, path=tempdir(), path.orig=path, quiet=FALSE, fancyhdr=FALSE){
+merge_reports_LaTeX <- function(results, text, descr, file.name="matn", pdf=FALSE, path=tempdir(), path.orig=path, quiet=FALSE, fancyhdr=FALSE){
   merge.file <-  file.path(path, "individual_reports.tex")
   if(identical(file.name, "name")){
     name.scheme <- sapply(results$MatrNo, function(matn){
@@ -439,4 +439,4 @@ merge_reports <- function(results, text, descr, file.name="matn", pdf=FALSE, pat
   if(isTRUE(pdf)){
     create.pdf(file="individual_reports.tex", path=path, path.orig=path.orig, suppress=FALSE, save=save)
   } else {}
-} ## end function merge_reports()
+} ## end function merge_reports_LaTeX()
