@@ -44,6 +44,7 @@
     \newcommand{\familyname}{$results.Name$}
     \newcommand{\labelmatno}{$labels.matno$}
     \newcommand{\matno}{$results.MatrNo$}
+    \newcommand{\tablesize}{\$tablesize$}
     $if(highlighting-macros)$
     $highlighting-macros$
     $endif$

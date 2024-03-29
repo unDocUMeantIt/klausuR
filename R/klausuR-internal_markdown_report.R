@@ -211,3 +211,73 @@ default_labels <- function(
 
   return(labels)
 } ## end function default_labels()
+
+
+## function merge_reports()
+# TODO: rewrite using RMarkdown
+# creates one PDF file from the individual reports
+merge_reports <- function(
+    results
+  , labels
+  , descr
+  , file_name = "matn"
+  , pdf = FALSE
+  , path = tempdir()
+  , path.orig = path
+  , quiet = FALSE
+  , fancyhdr = FALSE
+){
+  merge.file <-  file.path(path, "individual_reports.tex")
+# TODO: use new file naming scheme
+#   this_file <- filename_from_df(
+#       matn = matn
+#     , file_name = file_name
+#     , also_valid = also_valid
+#     , df=klsr_results
+#   )
+
+  if(identical(file.name, "name")){
+    name.scheme <- sapply(results$MatrNo, function(matn){
+        einzelergebnis <- results[results$MatrNo==matn,]
+        paste(file.umlaute(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName))),".pdf", sep="")
+      })
+  } else {
+    name.scheme <- paste(results$MatrNo,".pdf", sep="")
+  }
+  # create filename from name scheme
+  all.pdf.files <- file.path(path, name.scheme)
+
+  # here comes the foot
+  latex.foot <- paste("
+    \\end{document}\n",
+  sep="")
+
+  # combine parts to a document
+  write(
+      paste0(
+          latex.head(
+              text=lables
+            , one.file=TRUE
+            , individual=FALSE
+            , hist.and.marks=FALSE
+            , marks.hist.stuff=NULL
+            , descr=descr
+            , fancyhdr=FALSE
+          )
+        , paste("      \\includepdf[pages=-]{", all.pdf.files, "}", sep="", collapse="\n")
+        , "\n"
+        , latex.foot
+      )
+    , file=merge.file
+  )
+
+  if (!isTRUE(quiet)){
+    # give some feedback on current status
+    message(paste("Merging individual reports into one file...", sep=""))
+  } else {}
+
+  # check if PDF creation is demanded
+  if(isTRUE(pdf)){
+    create.pdf(file="individual_reports.tex", path=path, path.orig=path.orig, suppress=FALSE, save=save)
+  } else {}
+} ## end function merge_reports()

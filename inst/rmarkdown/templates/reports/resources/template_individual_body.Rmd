@@ -1,7 +1,7 @@
 <!-- TODO: include histograms and grading scale here -->
 
 \newpage
-\small
+\tablesize
 
 ```{r, echo=FALSE}
 results_table <- kableExtra::kbl(

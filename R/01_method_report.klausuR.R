@@ -27,7 +27,7 @@
 #'    distribution of points and marks or a table showing the marks grading scale should be included, including points, percent, or both. Missing elements default to \code{FALSE}.
 #'    Histograms are also saved to \code{path} in PDF format.
 #' @param plot_names Character vector with recognized entries \code{hist_points} and \code{hist_marks}, defining the file names for the histogram of points and marks respectively.
-#' @param table_size Character string to shrink the tables, must be one of \code{"auto"} (default), \code{"normalsize"}, \code{"small"},
+#' @param tablesize Character string to shrink the tables, must be one of \code{"auto"} (default), \code{"normalsize"}, \code{"small"},
 #'    \code{"footnotesize"}, \code{"scriptsize"} or \code{"tiny"}. The default tries to decide between \code{"normalsize"} and \code{"footnotesize"}
 #'    to avoid pages with only one or two rows. If that fails, try to manually set the size.
 #' @param decreasing Logical, whether sorting of output should be done increasing or decreasing (only relevant for \code{matn = "anon"} or
@@ -74,9 +74,10 @@ setGeneric(
           hist_points = "hist_points.pdf"
         , hist_marks = "hist_marks.pdf"
       )
-    , table_size = c("auto", "normalsize", "small", "footnotesize", "scriptsize", "tiny")
+    , tablesize = c("auto", "normalsize", "small", "footnotesize", "scriptsize", "tiny")
     , decreasing = TRUE
     , sort_by = "Points"
+    , merge = FALSE
     , quiet = FALSE
     , meta
     , ...
@@ -113,13 +114,16 @@ setMethod(
           hist_points = "hist_points.pdf"
         , hist_marks = "hist_marks.pdf"
       )
-    , table_size = c("auto", "normalsize", "small", "footnotesize", "scriptsize", "tiny")
+    , tablesize = c("auto", "normalsize", "small", "footnotesize", "scriptsize", "tiny")
     , decreasing = TRUE
     , sort_by = "Points"
+    , merge = FALSE
     , quiet = FALSE
     , meta
     , ...
   ){
+
+    dot_vars <- list(...)
 
     if(all(!is.numeric(matn), !identical(matn, "all"), !identical(matn, "anon"), !identical(matn, "glob"))){
       stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
@@ -129,7 +133,7 @@ setMethod(
       stop(simpleError(paste0("Output directory not found:\n  ", path)))
     } else {}
 
-    table_size <- match.arg(table_size)
+    tablesize <- match.arg(tablesize)
 
     if(matn %in% c("anon", "glob")){
       klsr <- sort(klsr, decreasing=decreasing, sort.by=sort_by)
@@ -140,6 +144,7 @@ setMethod(
     klsr_answ     <- slot(klsr, "answ")
     klsr_anon     <- slot(klsr, "anon")
     klsr_corr     <- slot(klsr, "corr")
+    klsr_items    <- sort(names(klsr_corr))
 
     # for a nice printout, check number of needed digits for points.
     # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
@@ -163,14 +168,14 @@ setMethod(
 
     use_files <- c()
 
-    if(missing(rendered_plots)){
-      rendered_plots <- c()
+    if(!"rendered_plots" %in% names(dot_vars)){
+      dot_vars[["rendered_plots"]] <- c()
       if(isTRUE(statistics[["hist_points"]])) {
         if(is.null(plot_names[["hist_points"]])){
           plot_names[["hist_points"]] <- "hist_points.pdf"
         } else {}
         use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
-        rendered_plots <- plot_names[["hist_points"]]
+        dot_vars[["rendered_plots"]][["hist_points"]] <- plot_names[["hist_points"]]
         pdf(
             file=use_files[["hist_points"]]
           , width=10
@@ -192,7 +197,7 @@ setMethod(
           plot_names[["hist_marks"]] <- "hist_marks.pdf"
         } else {}
         use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
-        rendered_plots <- plot_names[["hist_marks"]]
+        dot_vars[["rendered_plots"]][["hist_marks"]] <- plot_names[["hist_marks"]]
         pdf(
             file=use_files[["hist_marks"]]
           , width=10
@@ -268,32 +273,48 @@ setMethod(
       } else {}
 
       if(identical(matn, "all")) {
-        for(i in results[["MatrNo"]]){
-          report(
-              klsr = klsr
-            , matn = i
-            , path = path
+        # for(i in klsr_results[["MatrNo"]]){
+        sapply(
+            klsr_results[["MatrNo"]]
+          , function(this_matn){
+              report(
+                  klsr = klsr
+                , matn = this_matn
+                , path = path
+                , file_name = file_name
+                , also_valid = also_valid
+                , save = save
+                , pdf = pdf
+                , body = body
+                , template = template
+                , header = header
+                , statistics = statistics
+                , plot_names = plot_names
+                , tablesize = tablesize
+                , decreasing = decreasing
+                , sort_by = sort_by
+                , merge = merge
+                , quiet = quiet
+                , meta = meta
+                , rendered_plots = dot_vars[["rendered_plots"]]
+                , ...
+              )
+            }
+        )
+        if(all(isTRUE(merge), isTRUE(pdf))){
+          merge_reports(
+              results = klsr_results
+            , text = text
+            , descr = descr
             , file_name = file_name
-            , also_valid = also_valid
-            , save = save
             , pdf = pdf
-            , body = body
-            , template = template
-            , header = header
-            , statistics = statistics
-            , plot_names = plot_names
-            , table_size = table_size
-            , decreasing = decreasing
-            , sort_by = sort_by
+            , path = path
+            , path.orig = path.orig
             , quiet = quiet
-            , meta = meta
-            , rendered_plots = rendered_plots
-            , ...
+            , fancyhdr = fancyhdr
           )
-        }
-        if(isTRUE(merge) & isTRUE(pdf)){
-          merge_reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
         } else {}
+        return("done.")
       } else {
         this_file <- filename_from_df(
             matn = matn
@@ -310,12 +331,26 @@ setMethod(
           message(paste0("Processing: ", header[["results"]][["FirstName"]], " ", header[["results"]][["Name"]], " (", matn, ")"))
         } else {}
 
+        # define table size
+        if(identical(tablesize, "auto")){
+          if(length(klsr_items) > 37 & length(klsr_items) <= 45){
+            # to avoid ugly tables with few lines on one page, shrink by heuristics
+            header[["tablesize"]] <- "small"
+          } else if(length(klsr_items) > 45 & length(klsr_items) < 50){
+            header[["tablesize"]] <- "footnotesize"
+          } else {
+            header[["tablesize"]] <- "normalsize"
+          }
+        } else {
+          header[["tablesize"]] <- tablesize
+        }
+
         pre_body <- paste(
             "```{r setup, include=FALSE, echo=FALSE}"
           , paste0("results <- ", paste0(deparse(header[["results"]]), collapse="\n"), collapse="\n")
           , paste0("correct <- ", paste0(deparse(klsr_corr), collapse="\n"), collapse="\n")
-          , paste0("answers <- ", paste0(deparse(unlist(klsr_answ[klsr_answ[["MatrNo"]] == matn, names(klsr_corr)])), collapse="\n"), collapse="\n")
-          , paste0("points <- ", paste0(deparse(unlist(klsr_points[klsr_points[["MatrNo"]] == matn, names(klsr_corr)])), collapse="\n"), collapse="\n")
+          , paste0("answers <- ", paste0(deparse(unlist(klsr_answ[klsr_answ[["MatrNo"]] == matn, klsr_items])), collapse="\n"), collapse="\n")
+          , paste0("points <- ", paste0(deparse(unlist(klsr_points[klsr_points[["MatrNo"]] == matn, klsr_items])), collapse="\n"), collapse="\n")
           , "all_items <- sort(names(correct))"
           , paste0(
                 "results_df <- data.frame(\""
