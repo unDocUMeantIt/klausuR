@@ -141,6 +141,16 @@ setMethod(
     klsr_anon     <- slot(klsr, "anon")
     klsr_corr     <- slot(klsr, "corr")
 
+    # for a nice printout, check number of needed digits for points.
+    # e.g, if you can get 1/2 points, you'd need one digit. but we won't allow more than two!
+    if(identical(round(klsr_points[,-1], digits=0), klsr_points[,-1])){
+      print_digits <- 0
+    } else if(identical(round(klsr_points[,-1], digits=1), klsr_points[,-1])){
+      print_digits <- 1
+    } else {
+      print_digits <- 2
+    }
+
     labels <- default_labels(
         labels = meta[["labels"]]
       , lang = meta[["lang"]]
@@ -153,47 +163,52 @@ setMethod(
 
     use_files <- c()
 
-    if(isTRUE(statistics[["hist_points"]])) {
-      if(is.null(plot_names[["hist_points"]])){
-        plot_names[["hist_points"]] <- "hist_points.pdf"
+    if(missing(rendered_plots)){
+      rendered_plots <- c()
+      if(isTRUE(statistics[["hist_points"]])) {
+        if(is.null(plot_names[["hist_points"]])){
+          plot_names[["hist_points"]] <- "hist_points.pdf"
+        } else {}
+        use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
+        rendered_plots <- plot_names[["hist_points"]]
+        pdf(
+            file=use_files[["hist_points"]]
+          , width=10
+          , height=10
+          , pointsize=22
+          , bg="white"
+        )
+        plot(
+            klsr
+          , xlab=labels[["p_xlab"]]
+          , ylab=labels[["p_ylab"]]
+          , main=labels[["p_main"]]
+        )
+        dev.off()
       } else {}
-      use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
-      pdf(
-          file=use_files[["hist_points"]]
-        , width=10
-        , height=10
-        , pointsize=22
-        , bg="white"
-      )
-      plot(
-          klsr
-        , xlab=labels[["p_xlab"]]
-        , ylab=labels[["p_ylab"]]
-        , main=labels[["p_main"]]
-      )
-      dev.off()
-    } else {}
 
-    if(isTRUE(statistics[["hist_marks"]])) {
-      if(is.null(plot_names[["hist_marks"]])){
-        plot_names[["hist_marks"]] <- "hist_marks.pdf"
+      if(isTRUE(statistics[["hist_marks"]])) {
+        if(is.null(plot_names[["hist_marks"]])){
+          plot_names[["hist_marks"]] <- "hist_marks.pdf"
+        } else {}
+        use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
+        rendered_plots <- plot_names[["hist_marks"]]
+        pdf(
+            file=use_files[["hist_marks"]]
+          , width=10
+          , height=10
+          , pointsize=22
+          , bg="white"
+        )
+        plot(
+            klsr
+          , marks=TRUE
+          , xlab=labels[["m_xlab"]]
+          , ylab=labels[["m_ylab"]]
+          , main=labels[["m_main"]]
+        )
+        dev.off()
       } else {}
-      use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
-      pdf(
-          file=use_files[["hist_marks"]]
-        , width=10
-        , height=10
-        , pointsize=22
-        , bg="white"
-      )
-      plot(
-          klsr
-        , marks=TRUE
-        , xlab=labels[["m_xlab"]]
-        , ylab=labels[["m_ylab"]]
-        , main=labels[["m_main"]]
-      )
-      dev.off()
     } else {}
 
     if(identical(matn, "glob")){
@@ -252,15 +267,34 @@ setMethod(
         )
       } else {}
 
-#       if(identical(matn, "all")) {
-#         for(i in results[["MatrNo"]]){
-#           ## loop
-#         }
-#         if(isTRUE(merge) & isTRUE(pdf)){
-#           merge_reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
-#         } else {}
-#       } else {
-
+      if(identical(matn, "all")) {
+        for(i in results[["MatrNo"]]){
+          report(
+              klsr = klsr
+            , matn = i
+            , path = path
+            , file_name = file_name
+            , also_valid = also_valid
+            , save = save
+            , pdf = pdf
+            , body = body
+            , template = template
+            , header = header
+            , statistics = statistics
+            , plot_names = plot_names
+            , table_size = table_size
+            , decreasing = decreasing
+            , sort_by = sort_by
+            , quiet = quiet
+            , meta = meta
+            , rendered_plots = rendered_plots
+            , ...
+          )
+        }
+        if(isTRUE(merge) & isTRUE(pdf)){
+          merge_reports(results=results, text=text, descr=descr, file.name=file.name, pdf=pdf, path=path, path.orig=path.orig, quiet=quiet, fancyhdr=fancyhdr)
+        } else {}
+      } else {
         this_file <- filename_from_df(
             matn = matn
           , file_name = file_name
@@ -298,7 +332,7 @@ setMethod(
           , "```\n\n"
           , sep = "\n"
         )
-#       }
+      }
     }
 
     write_markdown(
