@@ -48,6 +48,7 @@
 #' @param lang Character string, language to set internal defaults for \code{labels} (see below). Set to "de" for reports in German, English is the default.
 #' @param labels Optional list of labels to customize the defaults used by other functions, see \code{\link[klausuR:report]{report}} for details on supported labels.
 #' @param create_out_dir Logical, if \code{TRUE} and \code{out_dir} is missing, it will automatically be created.
+#' @param data_dir_unprefixed Logical, if \code{TRUE} \code{subdir_prefix} will not be added to \code{data_dir}.
 #' @param ... Optional additional arguments will be kept as-is in the resulting list.
 #' @return A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir}, \code{out_dir}, \code{subdir}, \code{corr}, 
 #'    \code{date}, \code{date_ISO}, \code{date_print}, \code{rename}, \code{dummies}, \code{marks}, and \code{gt_file}.
@@ -74,13 +75,16 @@ klausur_meta <- function(
   , lang = "en"
   , labels = list()
   , create_out_dir = FALSE
+  , data_dir_unprefixed = FALSE
   , ...
 ){
   date_ISO <- format(date, "%F")
   if(!missing(subdir_prefix)){
     subdir <- paste0(subdir_prefix, "_", date_ISO)
-    data_dir <- file.path(data_dir, subdir)
     out_dir <- file.path(out_dir, subdir)
+    if(!isTRUE(data_dir_unprefixed)){
+      data_dir <- file.path(data_dir, subdir)
+    } else {}
   } else {
     subdir <- NULL
   }

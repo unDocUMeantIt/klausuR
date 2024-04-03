@@ -7,7 +7,7 @@
 #' @param klsr An object of class \code{klausuR}.
 #' @param matn Either a single matriculation number (numeric), "all" (produces individuall documents for all subjects), "anon" (produces anonymous feedback)
 #'    or "glob" (produces a global results document).
-#' @param path Directory path for generated files, see \code{save}, \code{pdf} and \code{statistics}.
+#' @param path Directory path for generated files, see \code{save}, \code{pdf} and \code{statistics}. Defaults to \code{meta[["out_dir"]]} if missing.
 #' @param file_name Character vector, either defining the output file name directly (if \code{matn="anon"} or \code{matn="glob"}), or defining the column names of the results slot in \code{klsr} whose
 #'    values should be used to create individual file names.
 #' @param also_valid Character vector, values for \code{file_name} that should also be considered valid even if not column names of the results slot in \code{klsr}. They will be used as-is.
@@ -129,6 +129,10 @@ setMethod(
       stop(simpleError("Value assigned to matn must be numeric, \"all\", \"anon\" or \"glob\"!"))
     } else {}
 
+    if(all(missing(path), !missing(meta))){
+      path <- meta[["out_dir"]]
+    } else {}
+
     if(!dir.exists(path)){
       stop(simpleError(paste0("Output directory not found:\n  ", path)))
     } else {}
@@ -144,6 +148,7 @@ setMethod(
     klsr_answ     <- slot(klsr, "answ")
     klsr_anon     <- slot(klsr, "anon")
     klsr_corr     <- slot(klsr, "corr")
+    klsr_marks    <- slot(klsr, "marks.sum")
     klsr_items    <- sort(names(klsr_corr))
 
     # for a nice printout, check number of needed digits for points.
@@ -165,6 +170,12 @@ setMethod(
       header[["lang"]] <- meta[["lang"]]
     } else {}
     header[["labels"]] <- labels
+
+    klsr_marks_colnames <- c(
+        "Points" = ifelse(is.null(header[["labels"]][["points"]]), "Points", header[["labels"]][["points"]])
+      , "Percent" = ifelse(is.null(header[["labels"]][["percent"]]), "Percent", header[["labels"]][["percent"]])
+    )
+    colnames(klsr_marks) <- klsr_marks_colnames[colnames(klsr_marks)]
 
     use_files <- c()
 
@@ -351,6 +362,7 @@ setMethod(
           , paste0("correct <- ", paste0(deparse(klsr_corr), collapse="\n"), collapse="\n")
           , paste0("answers <- ", paste0(deparse(unlist(klsr_answ[klsr_answ[["MatrNo"]] == matn, klsr_items])), collapse="\n"), collapse="\n")
           , paste0("points <- ", paste0(deparse(unlist(klsr_points[klsr_points[["MatrNo"]] == matn, klsr_items])), collapse="\n"), collapse="\n")
+          , paste0("marks <- ", paste0(deparse(klsr_marks), collapse="\n"), collapse="\n")
           , "all_items <- sort(names(correct))"
           , paste0(
                 "results_df <- data.frame(\""

@@ -3,6 +3,7 @@
     \usepackage{booktabs}
     \usepackage{makecell}
     \usepackage{longtable}
+    \usepackage{multicol}
     \usepackage{mathptmx}
     \usepackage{helvet}
     \usepackage{courier}
