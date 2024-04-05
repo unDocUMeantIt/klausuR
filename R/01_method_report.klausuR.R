@@ -179,12 +179,24 @@ setMethod(
 
     use_files <- c()
 
+    header[["plot_names"]] <- list()
+
+    if(isTRUE(statistics[["hist_points"]])) {
+      if(is.null(plot_names[["hist_points"]])){
+        plot_names[["hist_points"]] <- "hist_points.pdf"
+      } else {}
+      header[["plot_names"]][["hist_points"]] <- plot_names[["hist_points"]]
+    } else {}
+    if(isTRUE(statistics[["hist_marks"]])) {
+      if(is.null(plot_names[["hist_marks"]])){
+        plot_names[["hist_marks"]] <- "hist_marks.pdf"
+      } else {}
+      header[["plot_names"]][["hist_marks"]] <- plot_names[["hist_marks"]]
+    } else {}
+
     if(!"rendered_plots" %in% names(dot_vars)){
       dot_vars[["rendered_plots"]] <- c()
       if(isTRUE(statistics[["hist_points"]])) {
-        if(is.null(plot_names[["hist_points"]])){
-          plot_names[["hist_points"]] <- "hist_points.pdf"
-        } else {}
         use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
         dot_vars[["rendered_plots"]][["hist_points"]] <- plot_names[["hist_points"]]
         pdf(
@@ -204,9 +216,6 @@ setMethod(
       } else {}
 
       if(isTRUE(statistics[["hist_marks"]])) {
-        if(is.null(plot_names[["hist_marks"]])){
-          plot_names[["hist_marks"]] <- "hist_marks.pdf"
-        } else {}
         use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
         dot_vars[["rendered_plots"]][["hist_marks"]] <- plot_names[["hist_marks"]]
         pdf(
@@ -373,8 +382,8 @@ setMethod(
             )
           , ifelse(
               length(names(use_files)) > 0,
-              paste0("hist_files <- c(", paste0(names(use_files), "=\"", plot_names[names(use_files)],  collapse="\", "), "\")", collapse="\n"),
-              paste0("hist_files <- c()")
+              paste0("plot_names <- c(", paste0(names(use_files), "=\"", plot_names[names(use_files)],  collapse="\", "), "\")", collapse="\n"),
+              paste0("plot_names <- c()")
             )
           , "```\n\n"
           , sep = "\n"
