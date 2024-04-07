@@ -3,7 +3,6 @@
     \usepackage{booktabs}
     \usepackage{makecell}
     \usepackage{longtable}
-    \usepackage{multicol}
     \usepackage{mathptmx}
     \usepackage{helvet}
     \usepackage{courier}
@@ -49,6 +48,37 @@
     $if(highlighting-macros)$
     $highlighting-macros$
     $endif$
+    \newcommand{\histhisttblBegin}{%
+      \begin{table}[ht]%
+        \begin{minipage}[b]{0.55\linewidth}%
+          \centering%
+          \begin{tabular}{c@{\hskip 0cm}c}%
+            \includegraphics[width=0.6\linewidth]{hist_points.pdf}&\includegraphics[width=0.6\linewidth]{hist_marks.pdf}%
+          \end{tabular}%
+        \end{minipage}%
+        \hspace{0.8cm}%
+        \begin{minipage}[t]{0.35\linewidth}%
+        \footnotesize%
+        \centering%
+    }
+    \newcommand{\histtblBegin}{%
+      \begin{table}[ht]%
+        \begin{minipage}[b]{0.45\linewidth}%
+        \centering%
+        \begin{tabular}{c}%
+          \includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}%
+        \end{tabular}%
+        \end{minipage}%
+        \hspace{0.8cm}%
+        \begin{minipage}[t]{0.45\linewidth}%
+          \small%
+          \centering%
+    }
+    \newcommand{\histhisttblEnd}{%
+        \end{minipage}%
+        \caption{$if(statistics.hist_points)$$labels.dist$$elseif(statistics.hist_marks)$$labels.dist$$if(statistics.marks_points)$, $elseif(statistics.marks_percent)$, $endif$$endif$$if(statistics.marks_points)$$lables.m_scale$$elseif(statistics.marks_percent)$$lables.m_scale$$endif$}%
+      \end{table}%
+    }
 \begin{document}
 \maketitle
 \section*{$labels.results$}
