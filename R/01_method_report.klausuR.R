@@ -181,6 +181,10 @@ setMethod(
 
     header[["plot_names"]] <- list()
 
+    if(any(statistics)){
+      header[["statistics"]] <- as.list(statistics[statistics])
+    } else {}
+
     if(isTRUE(statistics[["hist_points"]])) {
       if(is.null(plot_names[["hist_points"]])){
         plot_names[["hist_points"]] <- "hist_points.pdf"
