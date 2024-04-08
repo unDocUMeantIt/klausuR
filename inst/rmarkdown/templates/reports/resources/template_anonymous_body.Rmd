@@ -1,0 +1,8 @@
+```{r, echo=FALSE}
+anonymous_table <- kableExtra::kbl(
+    anonymous_df
+  , booktabs = TRUE
+  , longtable = TRUE
+)
+anonymous_table
+```

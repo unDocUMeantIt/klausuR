@@ -1,0 +1,57 @@
+\documentclass[a4paper,$if(lang)$$babel-lang$$else$english$endif$]{scrartcl}
+    \usepackage[a4paper,hmargin={2cm,2cm}]{geometry}
+    \usepackage{booktabs}
+    \usepackage{makecell}
+    \usepackage{longtable}
+    \usepackage{mathptmx}
+    \usepackage{helvet}
+    \usepackage{courier}
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+      \setlength{\parskip}{\medskipamount}
+      \setlength{\parindent}{0pt}
+    \usepackage{fancyhdr}
+      \pagestyle{fancy}
+      \fancyhf{} % clean headers
+      \fancyfoot[C]{\thepage}
+      \fancyfoot[R]{$test.docent$}
+      \fancyfoot[L]{$test.date$}
+      \fancyhead[C]{$title$}
+      \renewcommand{\headrulewidth}{0pt}
+    \usepackage{amsmath}
+    \usepackage{graphicx}
+    \usepackage{amssymb}
+    \usepackage{thumbpdf}
+    \usepackage{color}
+      \definecolor{dunkelgrau}{gray}{.5}
+      \definecolor{hellgrau}{gray}{.7}
+      \definecolor{dunkelblau}{rgb}{.1,.1,.6}
+    \usepackage[
+      a4paper,
+      pdftex,
+      bookmarksopen,
+      bookmarksopenlevel=1,
+      colorlinks,
+      anchorcolor=dunkelgrau,
+      linkcolor=dunkelgrau,
+      urlcolor=hellgrau,
+      citecolor=dunkelblau]{hyperref}
+    \usepackage{babel}
+    \title{$title$}
+    \date{$labels.dateoftest$: $test.date$}
+    \author{$labels.docent$: $test.docent$}
+    \newcommand{\firstname}{$results.FirstName$}
+    \newcommand{\familyname}{$results.Name$}
+    \newcommand{\labelmatno}{$labels.matno$}
+    \newcommand{\matno}{$results.MatrNo$}
+    \newcommand{\tablesize}{\$tablesize$}
+    $if(highlighting-macros)$
+    $highlighting-macros$
+    $endif$
+
+\begin{document}
+\maketitle
+\section*{$labels.results$}
+
+$body$
+\end{document}

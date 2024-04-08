@@ -1,0 +1,8 @@
+```{r, echo=FALSE}
+global_table <- kableExtra::kbl(
+    global_df
+  , booktabs = TRUE
+  , longtable = TRUE
+)
+global_table
+```

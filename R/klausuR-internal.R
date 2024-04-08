@@ -886,7 +886,7 @@ latex.umlaute <- function(input){
 ## function file.umlaute()
 # this function will replace German umlauts and other special chars
 # for filenames it's used in tabellenbau() of klausur.report()
-file.umlaute <- function(input){
+file.umlaute <- function(input, keep_space=TRUE, space_replace="_"){
   output <- gsub("\u00C0|\u00C1|\u00C2|\u00C3|\u00C5","A",as.character(input)) # À Á Â Ã Å
   output <- gsub("\u00C4|\u00C6","Ae",as.character(output)) # Ä Æ
   output <- gsub("\u00C7","C",as.character(output)) # Ç  c3 87  LATIN CAPITAL LETTER C WITH CEDILLA
@@ -913,6 +913,9 @@ file.umlaute <- function(input){
   output <- gsub("\u00FD|\u00FF","y",as.character(output)) # ý ÿ
   output <- gsub("\u00FE","th",as.character(output)) # þ
   output <- gsub("\\(|\\)|\\[|\\]|\\.|\\*|\\#|\\'|\\%", "", as.character(output))
+  if(!isTRUE(keep_space)){
+    output <- gsub("[[:space:]]",space_replace,as.character(output))
+  } else {}
   return(output)
 } ## end function file.umlaute()
 

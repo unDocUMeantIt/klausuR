@@ -21,8 +21,10 @@
 #'    the installed package will be used, depending on the value of \code{matn}.
 #' @param header A list of variables to be defined in the YAML header of each RMarkdown file to be available for use in \code{template}.
 #'    Lists of lists are supported, see \code{\link[yaml:as_yaml]{yaml::as_yaml}} for details.
+#'    All headers automatically include the \code{meta} values named \code{title}, \code{lang} and \code{labels}, as well as a nested variable \code{test}
+#'    includeing the variables \code{docent} (\code{meta}[["name"]]) and \code{date} (formatted \code{meta}[["date"]]).
 #'    For individual reports, \code{header} will get a nested variable named \code{results} including all variables/columns of the results slot in \code{klsr} with their respective values
-#'    of the row matching \code{matn}. It will also include the \code{meta} values named \code{lang} and \code{labels}.
+#'    of the row matching \code{matn}.
 #' @param statistics Logical vector with recognized elements \code{hist_points}, \code{hist_marks}, \code{marks_points}, and \code{marks_percent}, indicating whether history plots for the
 #'    distribution of points and marks or a table showing the marks grading scale should be included, including points, percent, or both. Missing elements default to \code{FALSE}.
 #'    Histograms are also saved to \code{path} in PDF format.
@@ -45,6 +47,7 @@
 #'        defining the labels to use for points, percent, marks grading scale and distribution of test results}
 #'    }
 #' @param ... Additional arguments, currently unused.
+#' @importFrom parallel makeCluster parSapply stopCluster
 #' @docType methods
 #' @rdname report-methods
 #' @export
@@ -79,6 +82,7 @@ setGeneric(
     , sort_by = "Points"
     , merge = FALSE
     , quiet = FALSE
+    , cores = getOption("cl.cores", 1)
     , meta
     , ...
   ) standardGeneric("report")
@@ -119,6 +123,7 @@ setMethod(
     , sort_by = "Points"
     , merge = FALSE
     , quiet = FALSE
+    , cores = getOption("cl.cores", 1)
     , meta
     , ...
   ){
@@ -165,10 +170,26 @@ setMethod(
       , lang = meta[["lang"]]
     )
 
+    if(missing(header)){
+      header <- list()
+    } else {}
     if(!is.null(meta[["lang"]])){
       header[["lang"]] <- meta[["lang"]]
     } else {}
     header[["labels"]] <- labels
+
+    if(all(is.null(header[["title"]]), !is.null(meta[["title"]]))){
+      header[["title"]] <- meta[["title"]]
+    } else {}
+    if(is.null(header[["test"]])){
+      header[["test"]] <- list()
+    } else {}
+    if(all(is.null(header[["test"]][["docent"]]), !is.null(meta[["name"]]))){
+      header[["test"]][["docent"]] <- meta[["name"]]
+    } else {}
+    if(all(is.null(header[["test"]][["date"]]), !is.null(meta[["date_print"]]))){
+      header[["test"]][["date"]] <- meta[["date_print"]]
+    } else {}
 
     use_marks_cols <- c(
         "Points" = isTRUE(statistics[["marks_points"]])
@@ -273,9 +294,20 @@ setMethod(
         )
         dev.off()
       } else {}
-    } else {}
+    } else {
+      if(!is.null(dot_vars[["rendered_plots"]][["hist_marks"]])){
+        use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
+      } else {}
+      if(!is.null(dot_vars[["rendered_plots"]][["hist_points"]])){
+        use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
+      } else {}
+    }
 
     if(identical(matn, "glob")){
+      if (!isTRUE(quiet)){
+        message(paste0("Processing: Global results"))
+      } else {}
+
       this_file <- paste(file_name, sep="", collapse="")
       if(missing(template)){
         template <- system.file(
@@ -289,14 +321,48 @@ setMethod(
           , package="klausuR"
         )
       } else {}
+
+      # define table size
+      if(identical(tablesize, "auto")){
+        if(nrow(klsr_results) > 37 & nrow(klsr_results) <= 45){
+          # to avoid ugly tables with few lines on one page, shrink by heuristics
+          header[["tablesize"]] <- "small"
+        } else if(nrow(klsr_results) > 45 & nrow(klsr_results) < 50){
+          header[["tablesize"]] <- "footnotesize"
+        } else {
+          header[["tablesize"]] <- "normalsize"
+        }
+      } else {
+        header[["tablesize"]] <- tablesize
+      }
+
       pre_body <- paste(
           "<!--"
         , "```{r setup, include=FALSE, echo=FALSE}"
+        , paste0("global_df <- ", paste0(deparse(klsr_results), collapse="\n"), collapse="\n")
+        , paste(
+              "colnames_global <- c("
+            , "    No = \"",        ifelse(is.null(header[["labels"]][["testno"]]),     "No",         header[["labels"]][["testno"]]), "\""
+            , "  , Name = \"",      ifelse(is.null(header[["labels"]][["familyname"]]), "Name",       header[["labels"]][["familyname"]]), "\""
+            , "  , FirstName = \"", ifelse(is.null(header[["labels"]][["firstname"]]),  "FirstName",  header[["labels"]][["firstname"]]), "\""
+            , "  , MatrNo = \"",    ifelse(is.null(header[["labels"]][["matno_abbr"]]), "MatrNo",     header[["labels"]][["matno_abbr"]]), "\""
+            , "  , Points = \"",    ifelse(is.null(header[["labels"]][["points"]]),     "Points",     header[["labels"]][["points"]]), "\""
+            , "  , Percent = \"",   ifelse(is.null(header[["labels"]][["percent"]]),    "Percent",    header[["labels"]][["percent"]]), "\""
+            , "  , Mark = \"",      ifelse(is.null(header[["labels"]][["mark"]]),       "Mark",       header[["labels"]][["mark"]]), "\""
+            , "  , Pseudonym = \"", ifelse(is.null(header[["labels"]][["pseudonym"]]),  "Pseudonym",  header[["labels"]][["pseudonym"]]), "\""
+            , ")"
+            , sep="\n"
+          )
+          , paste0("colnames(global_df) <- colnames_global[colnames(global_df)]")
         , "```"
         , "-->\n\n"
         , sep = "\n"
       )
     } else if(identical(matn, "anon")) {
+      if (!isTRUE(quiet)){
+        message(paste0("Processing: Anonymous feedback"))
+      } else {}
+
       this_file <- paste(file_name, sep="", collapse="")
       if(missing(template)){
         template <- system.file(
@@ -310,9 +376,38 @@ setMethod(
           , package="klausuR"
         )
       } else {}
+
+      # define table size
+      if(identical(tablesize, "auto")){
+        if(nrow(klsr_anon) > 37 & nrow(klsr_anon) <= 45){
+          # to avoid ugly tables with few lines on one page, shrink by heuristics
+          header[["tablesize"]] <- "small"
+        } else if(nrow(klsr_anon) > 45 & nrow(klsr_anon) < 50){
+          header[["tablesize"]] <- "footnotesize"
+        } else {
+          header[["tablesize"]] <- "normalsize"
+        }
+      } else {
+        header[["tablesize"]] <- tablesize
+      }
+
+      # remove rownames in case someone has memory of the running number of other students
+      rownames(klsr_anon) <- NULL
+
       pre_body <- paste(
           "<!--"
         , "```{r setup, include=FALSE, echo=FALSE}"
+        , paste0("anonymous_df <- ", paste0(deparse(klsr_anon), collapse="\n"), collapse="\n")
+        , paste(
+              "colnames_anon <- c("
+            , "    Pseudonym = \"", ifelse(is.null(header[["labels"]][["pseudonym"]]),  "Pseudonym",  header[["labels"]][["pseudonym"]]), "\""
+            , "  , Points = \"",    ifelse(is.null(header[["labels"]][["points"]]),     "Points",     header[["labels"]][["points"]]), "\""
+            , "  , Percent = \"",   ifelse(is.null(header[["labels"]][["percent"]]),    "Percent",    header[["labels"]][["percent"]]), "\""
+            , "  , Mark = \"",      ifelse(is.null(header[["labels"]][["mark"]]),       "Mark",       header[["labels"]][["mark"]]), "\""
+            , ")"
+            , sep="\n"
+          )
+          , paste0("colnames(anonymous_df) <- colnames_anon[colnames(anonymous_df)]")
         , "```"
         , "-->\n\n"
         , sep = "\n"
@@ -332,43 +427,81 @@ setMethod(
       } else {}
 
       if(identical(matn, "all")) {
-        # for(i in klsr_results[["MatrNo"]]){
-        sapply(
-            klsr_results[["MatrNo"]]
-          , function(this_matn){
-              report(
-                  klsr = klsr
-                , matn = this_matn
-                , path = path
-                , file_name = file_name
-                , also_valid = also_valid
-                , save = save
-                , pdf = pdf
-                , body = body
-                , template = template
-                , header = header
-                , statistics = statistics
-                , plot_names = plot_names
-                , tablesize = tablesize
-                , decreasing = decreasing
-                , sort_by = sort_by
-                , merge = merge
-                , quiet = quiet
-                , meta = meta
-                , rendered_plots = dot_vars[["rendered_plots"]]
-                , ...
-              )
-            }
-        )
+        if(cores > 1){
+          cl <- parallel::makeCluster(cores)
+          if (!isTRUE(quiet)){
+            message(paste0("Processing: Individual results (using ", cores, " cores)"))
+          } else {}
+          parallel::parSapply(
+              cl = cl
+            , klsr_results[["MatrNo"]]
+            , function(this_matn){
+                report(
+                    klsr = klsr
+                  , matn = this_matn
+                  , path = path
+                  , file_name = file_name
+                  , also_valid = also_valid
+                  , save = save
+                  , pdf = pdf
+                  , body = body
+                  , template = template
+                  , header = header
+                  , statistics = statistics
+                  , plot_names = plot_names
+                  , tablesize = tablesize
+                  , decreasing = decreasing
+                  , sort_by = sort_by
+                  , merge = merge
+                  , quiet = quiet
+                  , cores = 1
+                  , meta = meta
+                  , rendered_plots = dot_vars[["rendered_plots"]]
+                  , ...
+                )
+              }
+          )
+          parallel::stopCluster(cl = cl)
+        } else {
+          sapply(
+              klsr_results[["MatrNo"]]
+            , function(this_matn){
+                report(
+                    klsr = klsr
+                  , matn = this_matn
+                  , path = path
+                  , file_name = file_name
+                  , also_valid = also_valid
+                  , save = save
+                  , pdf = pdf
+                  , body = body
+                  , template = template
+                  , header = header
+                  , statistics = statistics
+                  , plot_names = plot_names
+                  , tablesize = tablesize
+                  , decreasing = decreasing
+                  , sort_by = sort_by
+                  , merge = merge
+                  , quiet = quiet
+                  , cores = 1
+                  , meta = meta
+                  , rendered_plots = dot_vars[["rendered_plots"]]
+                  , ...
+                )
+              }
+          )
+        }
         if(all(isTRUE(merge), isTRUE(pdf))){
           merge_reports(
               results = klsr_results
-            , text = text
-            , descr = descr
+            , labels = labels
+            , descr = list(title=header[["title"]], name=header[["test"]][["docent"]], date=header[["test"]][["date"]])
             , file_name = file_name
+            , also_valid = also_valid
             , pdf = pdf
             , path = path
-            , path.orig = path.orig
+            , save = save
             , quiet = quiet
             , fancyhdr = fancyhdr
           )

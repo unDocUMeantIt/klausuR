@@ -72,12 +72,15 @@ write_markdown <- function(
           , overwrite=TRUE
         )
       } else {}
+
       tmp_pdf <- rmarkdown::render(
           tmp_file
         , rmarkdown::pdf_document(
             template=template
           )
+        , output_dir=tmp_path
         , quiet=TRUE
+        , knit_root_dir=tmp_path
       )
       file.copy(
           from=tmp_pdf
@@ -122,7 +125,7 @@ filename_from_df <- function(
         # it will not fail if "several.ok" is TRUE and at least one match is valid
         # since we loop through individually anyway, check this here
         if(col %in% colnames(this_result)){
-          return(file.umlaute(this_result[[col]]))
+          return(file.umlaute(this_result[[col]], keep_space=FALSE, space_replace=also_valid[1]))
         } else {
           stop(simpleError(paste0("Invalid column name:\n  ", col)))
         }
@@ -220,64 +223,84 @@ merge_reports <- function(
     results
   , labels
   , descr
-  , file_name = "matn"
+  , file_name = "MatrNo"
+  , also_valid = c("_", "-")
   , pdf = FALSE
+  , save = FALSE
   , path = tempdir()
-  , path.orig = path
   , quiet = FALSE
   , fancyhdr = FALSE
 ){
-  merge.file <-  file.path(path, "individual_reports.tex")
-# TODO: use new file naming scheme
-#   this_file <- filename_from_df(
-#       matn = matn
-#     , file_name = file_name
-#     , also_valid = also_valid
-#     , df=klsr_results
-#   )
 
-  if(identical(file.name, "name")){
-    name.scheme <- sapply(results$MatrNo, function(matn){
-        einzelergebnis <- results[results$MatrNo==matn,]
-        paste(file.umlaute(gsub("[[:space:]]", "_", paste(einzelergebnis$Name, einzelergebnis$FirstName))),".pdf", sep="")
-      })
-  } else {
-    name.scheme <- paste(results$MatrNo,".pdf", sep="")
-  }
-  # create filename from name scheme
-  all.pdf.files <- file.path(path, name.scheme)
+  merge_file <-  file.path(path, "individual_reports.tex")
 
-  # here comes the foot
-  latex.foot <- paste("
-    \\end{document}\n",
-  sep="")
+  if(any(isTRUE(save), isTRUE(pdf))){
+    tmp_path <- tempfile("klausuR")
+    if(!dir.create(tmp_path, recursive=TRUE)){
+      stop(simpleError("Couldn't create temporary directory!"))
+    } else {}
 
-  # combine parts to a document
-  write(
-      paste0(
-          latex.head(
-              text=lables
-            , one.file=TRUE
-            , individual=FALSE
-            , hist.and.marks=FALSE
-            , marks.hist.stuff=NULL
-            , descr=descr
-            , fancyhdr=FALSE
-          )
-        , paste("      \\includepdf[pages=-]{", all.pdf.files, "}", sep="", collapse="\n")
-        , "\n"
-        , latex.foot
-      )
-    , file=merge.file
-  )
+    # if the function is done, remove the tempdir
+    on.exit(
+      if(!identical(path, tmp_path)){
+        unlink(tmp_path, recursive=TRUE)
+      } else {}
+    )
 
-  if (!isTRUE(quiet)){
-    # give some feedback on current status
-    message(paste("Merging individual reports into one file...", sep=""))
-  } else {}
+    tmp_file <- file.path(tmp_path, "individual_reports.tex")
 
-  # check if PDF creation is demanded
-  if(isTRUE(pdf)){
-    create.pdf(file="individual_reports.tex", path=path, path.orig=path.orig, suppress=FALSE, save=save)
+    name_scheme <- sapply(
+        results[["MatrNo"]]
+      , function(matn){
+          return(filename_from_df(
+              matn = matn
+            , file_name = file_name
+            , also_valid = also_valid
+            , df= results
+          ))
+        }
+    )
+    # create filename from name scheme
+    all_pdf_files <- file.path(path, name_scheme)
+
+    # here comes the foot
+    latex_foot <- paste("
+      \\end{document}\n",
+    sep="")
+
+    header_text <- list(
+        DozentIn = labels[["docent"]]
+      , Datum = labels[["dateoftest"]]
+    )
+    # combine parts to a document
+    write(
+        paste0(
+            latex.head(
+                text=header_text
+              , one.file=TRUE
+              , individual=FALSE
+              , hist.and.marks=FALSE
+              , marks.hist.stuff=NULL
+              , descr=descr
+              , fancyhdr=FALSE
+            )
+          , paste("      \\includepdf[pages=-]{", all_pdf_files, "}", sep="", collapse="\n")
+          , "\n"
+          , latex_foot
+        )
+      , file=tmp_file
+    )
+
+    if (!isTRUE(quiet)){
+      # give some feedback on current status
+      message(paste("Merging individual reports into one file", sep=""))
+    } else {}
+
+    # check if PDF creation is demanded
+    if(isTRUE(pdf)){
+      create.pdf(file="individual_reports.tex", path=tmp_path, path.orig=path, suppress=FALSE, save=save)
+    } else {}
+
+    return(invisible(NULL))
   } else {}
 } ## end function merge_reports()
