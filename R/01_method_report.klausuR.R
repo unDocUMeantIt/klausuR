@@ -148,7 +148,6 @@ setMethod(
     klsr_answ     <- slot(klsr, "answ")
     klsr_anon     <- slot(klsr, "anon")
     klsr_corr     <- slot(klsr, "corr")
-    klsr_marks    <- slot(klsr, "marks.sum")
     klsr_items    <- sort(names(klsr_corr))
 
     # for a nice printout, check number of needed digits for points.
@@ -171,18 +170,54 @@ setMethod(
     } else {}
     header[["labels"]] <- labels
 
-    klsr_marks_colnames <- c(
-        "Points" = ifelse(is.null(header[["labels"]][["points"]]), "Points", header[["labels"]][["points"]])
-      , "Percent" = ifelse(is.null(header[["labels"]][["percent"]]), "Percent", header[["labels"]][["percent"]])
+    use_marks_cols <- c(
+        "Points" = isTRUE(statistics[["marks_points"]])
+      , "Percent" = isTRUE(statistics[["marks_percent"]])
     )
-    colnames(klsr_marks) <- klsr_marks_colnames[colnames(klsr_marks)]
+    if(any(use_marks_cols)){
+      klsr_marks <- slot(klsr, "marks.sum")[, names(use_marks_cols)[use_marks_cols], drop = FALSE]
+      klsr_marks_colnames <- c(
+          "Points" = ifelse(is.null(header[["labels"]][["points"]]), "Points", header[["labels"]][["points"]])
+        , "Percent" = ifelse(is.null(header[["labels"]][["percent"]]), "Percent", header[["labels"]][["percent"]])
+      )
+      colnames(klsr_marks) <- klsr_marks_colnames[colnames(klsr_marks)][names(use_marks_cols)[use_marks_cols]]
+    } else {
+      klsr_marks <- NULL
+    }
 
     use_files <- c()
 
     header[["plot_names"]] <- list()
 
     if(any(statistics)){
-      header[["statistics"]] <- as.list(statistics[statistics])
+      use_statistics <- statistics[statistics]
+      header[["statistics"]] <- list()
+      show_hist <- grepl("^hist_.*", names(use_statistics))
+      show_marks <- grepl("^marks_.*", names(use_statistics))
+      if(any(show_hist)){
+        header[["statistics"]][["hist"]] <- as.list(use_statistics[show_hist])
+      } else {}
+      if(any(show_marks)){
+        header[["statistics"]][["marks"]] <- as.list(use_statistics[show_marks])
+      } else {}
+
+      # the stat_cols variable will be added to make templating easier
+      # it includes one nested logical variable encoding the columns needed for the statistics:
+      # - "h" for only one histogram
+      # - "hh" for two histograms
+      # - "hhm" for two histograms and a table (marks)
+      # - "hm" for one histogram and a table
+      # - "m" for only the table
+      header[["stat_cols"]] <- list()
+      stat_cols_varname <- paste0(
+          paste0(
+              rep("h", sum(show_hist))
+            , collapse=""
+          )
+        , ifelse(any(show_marks), "m", "")
+        , collapse=""
+      )
+      header[["stat_cols"]][[stat_cols_varname]] <- TRUE
     } else {}
 
     if(isTRUE(statistics[["hist_points"]])) {
@@ -389,6 +424,7 @@ setMethod(
               paste0("plot_names <- c(", paste0(names(use_files), "=\"", plot_names[names(use_files)],  collapse="\", "), "\")", collapse="\n"),
               paste0("plot_names <- c()")
             )
+          , paste0("statistics <- ", paste0(deparse(statistics), collapse="\n"), collapse="\n")
           , "```\n\n"
           , sep = "\n"
         )

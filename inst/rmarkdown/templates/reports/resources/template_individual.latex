@@ -48,20 +48,21 @@
     $if(highlighting-macros)$
     $highlighting-macros$
     $endif$
+
     \newcommand{\histhisttblBegin}{%
+      $if(stat_cols.hhm)$
       \begin{table}[ht]%
-        \begin{minipage}[b]{0.55\linewidth}%
+        \begin{minipage}[b]{0.57\linewidth}%
           \centering%
           \begin{tabular}{c@{\hskip 0cm}c}%
             \includegraphics[width=0.6\linewidth]{hist_points.pdf}&\includegraphics[width=0.6\linewidth]{hist_marks.pdf}%
           \end{tabular}%
         \end{minipage}%
         \hspace{0.8cm}%
-        \begin{minipage}[t]{0.35\linewidth}%
+        \begin{minipage}[t]{0.37\linewidth}%
         \footnotesize%
         \centering%
-    }
-    \newcommand{\histtblBegin}{%
+      $elseif(stat_cols.hm)$
       \begin{table}[ht]%
         \begin{minipage}[b]{0.45\linewidth}%
         \centering%
@@ -73,11 +74,32 @@
         \begin{minipage}[t]{0.45\linewidth}%
           \small%
           \centering%
+      $elseif(stat_cols.m)$
+      \begin{table}[ht]%
+      $elseif(stat_cols.hh)$
+      \begin{figure}[h]%
+        \centerline{\mbox{\includegraphics[width=9cm]{hist_points.pdf}}\mbox{\includegraphics[width=9cm]{hist_marks.pdf}}}%
+      $elseif(stat_cols.h)$
+      \begin{figure}[h]%
+        \centerline{\mbox{\includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}}}%
+      $endif$
     }
     \newcommand{\histhisttblEnd}{%
+      $if(stat_cols.hhm)$
         \end{minipage}%
-        \caption{$if(statistics.hist_points)$$labels.dist$$elseif(statistics.hist_marks)$$labels.dist$$if(statistics.marks_points)$, $elseif(statistics.marks_percent)$, $endif$$endif$$if(statistics.marks_points)$$lables.m_scale$$elseif(statistics.marks_percent)$$lables.m_scale$$endif$}%
+        \caption{$labels.dist$, $labels.m_scale$}%
       \end{table}%
+      $elseif(stat_cols.hm)$
+        \end{minipage}%
+        \caption{$labels.dist$, $labels.m_scale$}%
+      \end{table}%
+      $elseif(stat_cols.m)$
+        \caption{$labels.m_scale$}%
+      \end{table}%
+      $else$
+        \caption{$labels.dist$}%
+      \end{figure}%
+      $endif$
     }
 \begin{document}
 \maketitle

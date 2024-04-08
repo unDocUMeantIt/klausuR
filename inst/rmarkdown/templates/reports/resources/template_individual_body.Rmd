@@ -1,4 +1,21 @@
-<!-- TODO: include histograms and grading scale here -->
+\histhisttblBegin
+
+```{r, echo=FALSE}
+if(any(isTRUE(statistics[["marks_points"]]), isTRUE(statistics[["marks_percent"]]))){
+  marks_table <- kableExtra::kbl(
+      marks
+    , align = c("r", rep("l", sum(c(statistics[["marks_points"]], statistics[["marks_percent"]]))))
+    , booktabs = TRUE
+    , valign = ""
+    , linesep = ""
+  )
+  marks_table
+} else {
+  invisible(NULL)
+}
+```
+
+\histhisttblEnd
 
 \newpage
 \tablesize
@@ -7,9 +24,7 @@
 results_table <- kableExtra::kbl(
     results_df
   , booktabs = TRUE
+  , longtable = TRUE
 )
-kableExtra::kable_styling(
-    results_table
-  , position = "center"
-)
+results_table
 ```

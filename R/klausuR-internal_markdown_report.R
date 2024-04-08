@@ -54,6 +54,14 @@ write_markdown <- function(
 
     cat(content, file=tmp_file)
 
+    if(isTRUE(save)){
+      file.copy(
+          from=tmp_file
+        , to=path
+        , overwrite=TRUE
+      )
+    } else {}
+
     if(isTRUE(pdf)){
       # fetch files we might need
       if(length(use_files) > 0){
@@ -73,14 +81,6 @@ write_markdown <- function(
       )
       file.copy(
           from=tmp_pdf
-        , to=path
-        , overwrite=TRUE
-      )
-    } else {}
-
-    if(isTRUE(save)){
-      file.copy(
-          from=tmp_file
         , to=path
         , overwrite=TRUE
       )
