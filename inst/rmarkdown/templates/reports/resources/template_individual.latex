@@ -50,56 +50,62 @@
     $endif$
 
     \newcommand{\histhisttblBegin}{%
-      $if(stat_cols.hhm)$
-      \begin{table}[ht]%
-        \begin{minipage}[b]{0.57\linewidth}%
+      $if(stat_cols)$
+        $if(stat_cols.hhm)$
+        \begin{table}[ht]%
+          \begin{minipage}[b]{0.57\linewidth}%
+            \centering%
+            \begin{tabular}{c@{\hskip 0cm}c}%
+              \includegraphics[width=0.6\linewidth]{hist_points.pdf}&\includegraphics[width=0.6\linewidth]{hist_marks.pdf}%
+            \end{tabular}%
+          \end{minipage}%
+          \hspace{0.8cm}%
+          \begin{minipage}[t]{0.37\linewidth}%
+          \footnotesize%
           \centering%
-          \begin{tabular}{c@{\hskip 0cm}c}%
-            \includegraphics[width=0.6\linewidth]{hist_points.pdf}&\includegraphics[width=0.6\linewidth]{hist_marks.pdf}%
+        $elseif(stat_cols.hm)$
+        \begin{table}[ht]%
+          \begin{minipage}[b]{0.45\linewidth}%
+          \centering%
+          \begin{tabular}{c}%
+            \includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}%
           \end{tabular}%
-        \end{minipage}%
-        \hspace{0.8cm}%
-        \begin{minipage}[t]{0.37\linewidth}%
-        \footnotesize%
-        \centering%
-      $elseif(stat_cols.hm)$
-      \begin{table}[ht]%
-        \begin{minipage}[b]{0.45\linewidth}%
-        \centering%
-        \begin{tabular}{c}%
-          \includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}%
-        \end{tabular}%
-        \end{minipage}%
-        \hspace{0.8cm}%
-        \begin{minipage}[t]{0.45\linewidth}%
-          \small%
-          \centering%
-      $elseif(stat_cols.m)$
-      \begin{table}[ht]%
-      $elseif(stat_cols.hh)$
-      \begin{figure}[h]%
-        \centerline{\mbox{\includegraphics[width=9cm]{hist_points.pdf}}\mbox{\includegraphics[width=9cm]{hist_marks.pdf}}}%
-      $elseif(stat_cols.h)$
-      \begin{figure}[h]%
-        \centerline{\mbox{\includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}}}%
+          \end{minipage}%
+          \hspace{0.8cm}%
+          \begin{minipage}[t]{0.45\linewidth}%
+            \small%
+            \centering%
+        $elseif(stat_cols.m)$
+        \begin{table}[ht]%
+        $elseif(stat_cols.hh)$
+        \begin{figure}[h]%
+          \centerline{\mbox{\includegraphics[width=9cm]{hist_points.pdf}}\mbox{\includegraphics[width=9cm]{hist_marks.pdf}}}%
+        $elseif(stat_cols.h)$
+        \begin{figure}[h]%
+          \centerline{\mbox{\includegraphics[width=9cm]{$if(plot_names.hist_points)$$plot_names.hist_points$$else$$plot_names.hist_marks$$endif$}}}%
+        $endif$
       $endif$
     }
     \newcommand{\histhisttblEnd}{%
-      $if(stat_cols.hhm)$
-        \end{minipage}%
-        \caption{$labels.dist$, $labels.m_scale$}%
-      \end{table}%
-      $elseif(stat_cols.hm)$
-        \end{minipage}%
-        \caption{$labels.dist$, $labels.m_scale$}%
-      \end{table}%
-      $elseif(stat_cols.m)$
-        \caption{$labels.m_scale$}%
-      \end{table}%
-      $else$
-        \caption{$labels.dist$}%
-      \end{figure}%
+      $if(stat_cols)$
+        $if(stat_cols.hhm)$
+          \end{minipage}%
+          \caption{$labels.dist$, $labels.m_scale$}%
+        \end{table}%
+        $elseif(stat_cols.hm)$
+          \end{minipage}%
+          \caption{$labels.dist$, $labels.m_scale$}%
+        \end{table}%
+        $elseif(stat_cols.m)$
+          \caption{$labels.m_scale$}%
+        \end{table}%
+        $else$
+          \caption{$labels.dist$}%
+        \end{figure}%
+        $endif$
       $endif$
+      % always begin table on a new page for individuals
+      \newpage
     }
 \begin{document}
 \maketitle

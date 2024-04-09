@@ -1,5 +1,15 @@
 ## function write_markdown()
 # takes data from an evaluated test and formats it into an rmarkdown file
+#  - file: TODO
+#  - path: TODO
+#  - header: TODO
+#  - pre_body: TODO
+#  - body: TODO
+#  - template: TODO
+#  - save: TODO
+#  - pdf: TODO
+#  - use_files: TODO
+#  - tmp_path: used for merging, if provided no individual tempdir will be created
 #' @importFrom yaml as.yaml
 #' @importFrom rmarkdown render pdf_document
 write_markdown <- function(
@@ -18,6 +28,7 @@ write_markdown <- function(
   , save = FALSE
   , pdf = FALSE
   , use_files = c()
+  , tmp_path
 ){
 
   document_body <- paste0(
@@ -38,17 +49,23 @@ write_markdown <- function(
   )
 
   if(any(isTRUE(save), isTRUE(pdf))){
-    tmp_path <- tempfile("klausuR")
-    if(!dir.create(tmp_path, recursive=TRUE)){
-      stop(simpleError("Couldn't create temporary directory!"))
-    } else {}
-
-    # if the function is done, remove the tempdir
-    on.exit(
-      if(!identical(path, tmp_path)){
-        unlink(tmp_path, recursive=TRUE)
+    if(missing(tmp_path)){
+      tmp_path <- tempfile("klausuR")
+      if(!dir.create(tmp_path, recursive=TRUE)){
+        stop(simpleError("Couldn't create temporary directory!"))
       } else {}
-    )
+
+      # if the function is done, remove the tempdir
+      on.exit(
+        if(!identical(path, tmp_path)){
+          unlink(tmp_path, recursive=TRUE)
+        } else {}
+      )
+    } else {
+      if(!dir.exists(tmp_path)){
+        stop(simpleError(paste0("Temporary directory does not exist:\n  ", tmp_path)))
+      } else {}
+    }
 
     tmp_file <- file.path(tmp_path, file)
 
@@ -230,6 +247,7 @@ merge_reports <- function(
   , path = tempdir()
   , quiet = FALSE
   , fancyhdr = FALSE
+  , extra_blank_page = FALSE
 ){
 
   merge_file <-  file.path(path, "individual_reports.tex")
@@ -268,6 +286,12 @@ merge_reports <- function(
       \\end{document}\n",
     sep="")
 
+    if(isTRUE(extra_blank_page)){
+      newpage <- "\\null\\thispagestyle{empty}\\newpage"
+    } else {
+      newpage <- ""
+    }
+
     header_text <- list(
         DozentIn = labels[["docent"]]
       , Datum = labels[["dateoftest"]]
@@ -284,7 +308,7 @@ merge_reports <- function(
               , descr=descr
               , fancyhdr=FALSE
             )
-          , paste("      \\includepdf[pages=-]{", all_pdf_files, "}", sep="", collapse="\n")
+          , paste("      \\includepdf[pages=-]{", all_pdf_files, "}", newpage, sep="", collapse="\n")
           , "\n"
           , latex_foot
         )

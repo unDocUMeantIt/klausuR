@@ -17,7 +17,6 @@ if(any(isTRUE(statistics[["marks_points"]]), isTRUE(statistics[["marks_percent"]
 
 \histhisttblEnd
 
-\newpage
 \tablesize
 
 ```{r, echo=FALSE}

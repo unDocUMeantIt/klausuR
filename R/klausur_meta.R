@@ -49,6 +49,7 @@
 #' @param labels Optional list of labels to customize the defaults used by other functions, see \code{\link[klausuR:report]{report}} for details on supported labels.
 #' @param create_out_dir Logical, if \code{TRUE} and \code{out_dir} is missing, it will automatically be created.
 #' @param data_dir_unprefixed Logical, if \code{TRUE} \code{subdir_prefix} will not be added to \code{data_dir}.
+#' @param body_vars Optional R object to be added to the available objects in generated RMarkdown bodies. If you provide this, you can use it in the RMarkdown body of custom templates.
 #' @param ... Optional additional arguments will be kept as-is in the resulting list.
 #' @return A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir}, \code{out_dir}, \code{subdir}, \code{corr}, 
 #'    \code{date}, \code{date_ISO}, \code{date_print}, \code{rename}, \code{dummies}, \code{marks}, and \code{gt_file}.
@@ -76,6 +77,7 @@ klausur_meta <- function(
   , labels = list()
   , create_out_dir = FALSE
   , data_dir_unprefixed = FALSE
+  , body_vars = list()
   , ...
 ){
   date_ISO <- format(date, "%F")
@@ -119,6 +121,7 @@ klausur_meta <- function(
     , item.prefix = item.prefix
     , lang = lang
     , labels = labels
+    , body_vars = body_vars
     , ...
   )
 
