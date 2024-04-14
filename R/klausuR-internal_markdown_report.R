@@ -244,23 +244,21 @@ merge_reports <- function(
   , also_valid = c("_", "-")
   , pdf = FALSE
   , save = FALSE
-  , path = tempdir()
+  , source_path = tempdir()
+  , target_path = source_path
   , quiet = FALSE
   , fancyhdr = FALSE
   , extra_blank_page = FALSE
 ){
-
-  merge_file <-  file.path(path, "individual_reports.tex")
-
   if(any(isTRUE(save), isTRUE(pdf))){
-    tmp_path <- tempfile("klausuR")
+    tmp_path <- tempfile("klausuR_merge_reports_tmp_path")
     if(!dir.create(tmp_path, recursive=TRUE)){
       stop(simpleError("Couldn't create temporary directory!"))
     } else {}
 
     # if the function is done, remove the tempdir
     on.exit(
-      if(!identical(path, tmp_path)){
+      if(!identical(target_path, tmp_path)){
         unlink(tmp_path, recursive=TRUE)
       } else {}
     )
@@ -279,7 +277,7 @@ merge_reports <- function(
         }
     )
     # create filename from name scheme
-    all_pdf_files <- file.path(path, name_scheme)
+    all_pdf_files <- file.path(source_path, name_scheme)
 
     # here comes the foot
     latex_foot <- paste("
@@ -322,7 +320,22 @@ merge_reports <- function(
 
     # check if PDF creation is demanded
     if(isTRUE(pdf)){
-      create.pdf(file="individual_reports.tex", path=tmp_path, path.orig=path, suppress=FALSE, save=save)
+      # create.pdf(file="individual_reports.tex", path=tmp_path, path.orig=path, suppress=FALSE, save=save)
+      # save current working directory; unfortuneately, texi2dvi() doesn't seem to be able
+      # to create PDF files anywhere but in the WD, so we'll have to cd there and back, afterwards
+      current_wd <- getwd()
+      # change to destined directory
+      setwd(tmp_path)
+      texi2dvi(tmp_file, pdf=TRUE, clean=TRUE)
+      # in case save and merge were FALSE, move the PDFs to the actual destination
+      if(dir.exists(target_path)){
+        file.copy(gsub(".tex", ".pdf", tmp_file), target_path, overwrite=TRUE)
+        if(isTRUE(save)){
+          file.copy(tmp_file, target_path, overwrite=TRUE)
+        } else {}
+      } else {}
+      # get back to where we came from
+      setwd(current_wd)
     } else {}
 
     return(invisible(NULL))

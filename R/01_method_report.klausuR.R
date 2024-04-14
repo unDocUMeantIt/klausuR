@@ -323,6 +323,23 @@ setMethod(
         use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
       } else {}
     }
+    if("target_path" %in% names(dot_vars)){
+      if(!identical(path, dot_vars[["target_path"]])){
+        # if path and target_path differ, path is probably source_path for merging
+        if(!is.null(use_files[["hist_marks"]])){
+          file.copy(
+              from = use_files[["hist_marks"]]
+            , to = path
+          )
+        } else {}
+        if(!is.null(use_files[["hist_points"]])){
+          file.copy(
+              from = use_files[["hist_points"]]
+            , to = path
+          )
+        } else {}
+      } else {}
+    } else {}
 
     if(identical(matn, "glob")){
       if (!isTRUE(quiet)){
@@ -469,18 +486,21 @@ setMethod(
 
       if(identical(matn, "all")) {
         if(all(isTRUE(merge), isTRUE(pdf))){
-          tmp_path <- tempfile("klausuR")
-          if(!dir.create(tmp_path, recursive=TRUE)){
+          target_path <- path
+          source_path <- tempfile("klausuR_report_source_path")
+          if(!dir.create(source_path, recursive=TRUE)){
             stop(simpleError("Couldn't create temporary directory!"))
           } else {}
 
           # if the function is done, remove the tempdir
           on.exit(
-            if(!identical(path, tmp_path)){
-              unlink(tmp_path, recursive=TRUE)
+            if(!identical(path, source_path)){
+              unlink(source_path, recursive=TRUE)
             } else {}
           )
-        } else {}
+        } else {
+          source_path <- target_path <- path
+        }
 
         if(cores > 1){
           cl <- parallel::makeCluster(cores)
@@ -494,7 +514,7 @@ setMethod(
                 report(
                     klsr = klsr
                   , matn = this_matn
-                  , path = path
+                  , path = source_path
                   , file_name = file_name
                   , also_valid = also_valid
                   , save = save
@@ -514,6 +534,7 @@ setMethod(
                   , cores = 1
                   , meta = meta
                   , rendered_plots = dot_vars[["rendered_plots"]]
+                  , target_path = target_path
                   , ...
                 )
               }
@@ -526,7 +547,7 @@ setMethod(
                 report(
                     klsr = klsr
                   , matn = this_matn
-                  , path = path
+                  , path = source_path
                   , file_name = file_name
                   , also_valid = also_valid
                   , save = save
@@ -546,6 +567,7 @@ setMethod(
                   , cores = 1
                   , meta = meta
                   , rendered_plots = dot_vars[["rendered_plots"]]
+                  , target_path = target_path
                   , ...
                 )
               }
@@ -559,7 +581,8 @@ setMethod(
             , file_name = file_name
             , also_valid = also_valid
             , pdf = pdf
-            , path = path
+            , source_path = source_path
+            , target_path = target_path
             , save = save
             , quiet = quiet
             , fancyhdr = fancyhdr
