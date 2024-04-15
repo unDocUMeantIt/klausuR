@@ -1,10 +1,10 @@
 \histhisttblBegin
 
 ```{r, echo=FALSE}
-if(any(isTRUE(statistics[["marks_points"]]), isTRUE(statistics[["marks_percent"]]))){
+if(any(isTRUE(statistics["marks_points"]), isTRUE(statistics["marks_percent"]))){
   marks_table <- kableExtra::kbl(
       marks
-    , align = c("r", rep("l", sum(c(statistics[["marks_points"]], statistics[["marks_percent"]]))))
+    , align = c("r", rep("l", sum(c(statistics["marks_points"], statistics["marks_percent"]))))
     , booktabs = TRUE
     , valign = ""
     , linesep = ""

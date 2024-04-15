@@ -211,8 +211,8 @@ setMethod(
     header[["labels"]] <- labels
 
     use_marks_cols <- c(
-        "Points" = isTRUE(statistics[["marks_points"]])
-      , "Percent" = isTRUE(statistics[["marks_percent"]])
+        "Points" = isTRUE(statistics["marks_points"])
+      , "Percent" = isTRUE(statistics["marks_percent"])
     )
     if(any(use_marks_cols)){
       klsr_marks <- slot(klsr, "marks.sum")[, names(use_marks_cols)[use_marks_cols], drop = FALSE]
@@ -225,6 +225,8 @@ setMethod(
       klsr_marks <- NULL
     }
 
+    # use_files can contain full paths to plot files that have already
+    # been rendered and should be embedded in reports
     use_files <- c()
 
     if(any(statistics)){
@@ -258,16 +260,16 @@ setMethod(
       header[["stat_cols"]][[stat_cols_varname]] <- TRUE
     } else {}
 
-    if(any(isTRUE(statistics[["hist_points"]]), isTRUE(statistics[["hist_marks"]]))) {
+    if(any(isTRUE(statistics["hist_points"]), isTRUE(statistics["hist_marks"]))) {
       header[["plot_names"]] <- list()
 
-      if(isTRUE(statistics[["hist_points"]])) {
+      if(isTRUE(statistics["hist_points"])) {
         if(is.null(plot_names[["hist_points"]])){
           plot_names[["hist_points"]] <- "hist_points.pdf"
         } else {}
         header[["plot_names"]][["hist_points"]] <- plot_names[["hist_points"]]
       } else {}
-      if(isTRUE(statistics[["hist_marks"]])) {
+      if(isTRUE(statistics["hist_marks"])) {
         if(is.null(plot_names[["hist_marks"]])){
           plot_names[["hist_marks"]] <- "hist_marks.pdf"
         } else {}
@@ -276,8 +278,10 @@ setMethod(
     } else {}
 
     if(!"rendered_plots" %in% names(dot_vars)){
+      # other than use_files, dot_vars[["rendered_plots"]] only contains the file names
+      # of plots without full paths
       dot_vars[["rendered_plots"]] <- c()
-      if(isTRUE(statistics[["hist_points"]])) {
+      if(isTRUE(statistics["hist_points"])) {
         use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
         dot_vars[["rendered_plots"]][["hist_points"]] <- plot_names[["hist_points"]]
         pdf(
@@ -296,7 +300,7 @@ setMethod(
         dev.off()
       } else {}
 
-      if(isTRUE(statistics[["hist_marks"]])) {
+      if(isTRUE(statistics["hist_marks"])) {
         use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
         dot_vars[["rendered_plots"]][["hist_marks"]] <- plot_names[["hist_marks"]]
         pdf(
@@ -317,29 +321,12 @@ setMethod(
       } else {}
     } else {
       if(!is.null(dot_vars[["rendered_plots"]][["hist_marks"]])){
-        use_files[["hist_marks"]] <- file.path(path, plot_names[["hist_marks"]])
+        use_files[["hist_marks"]] <- file.path(path, dot_vars[["rendered_plots"]][["hist_marks"]])
       } else {}
       if(!is.null(dot_vars[["rendered_plots"]][["hist_points"]])){
-        use_files[["hist_points"]] <- file.path(path, plot_names[["hist_points"]])
+        use_files[["hist_points"]] <- file.path(path, dot_vars[["rendered_plots"]][["hist_points"]])
       } else {}
     }
-    if("target_path" %in% names(dot_vars)){
-      if(!identical(path, dot_vars[["target_path"]])){
-        # if path and target_path differ, path is probably source_path for merging
-        if(!is.null(use_files[["hist_marks"]])){
-          file.copy(
-              from = use_files[["hist_marks"]]
-            , to = path
-          )
-        } else {}
-        if(!is.null(use_files[["hist_points"]])){
-          file.copy(
-              from = use_files[["hist_points"]]
-            , to = path
-          )
-        } else {}
-      } else {}
-    } else {}
 
     if(identical(matn, "glob")){
       if (!isTRUE(quiet)){
@@ -498,6 +485,20 @@ setMethod(
               unlink(source_path, recursive=TRUE)
             } else {}
           )
+
+          # copy histograms if necessary
+          if(!is.null(use_files[["hist_marks"]])){
+            file.copy(
+                from = use_files[["hist_marks"]]
+              , to = source_path
+            )
+          } else {}
+          if(!is.null(use_files[["hist_points"]])){
+            file.copy(
+                from = use_files[["hist_points"]]
+              , to = source_path
+            )
+          } else {}
         } else {
           source_path <- target_path <- path
         }
