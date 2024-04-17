@@ -1,4 +1,4 @@
-# Copyright 2009-2022 Meik Michalke <meik.michalke@hhu.de>
+# Copyright 2009-2024 Meik Michalke <meik.michalke@hhu.de>
 #
 # This file is part of the R package klausuR.
 #
@@ -95,14 +95,24 @@ data.check.klausur <- function(answ, corr, items, na.rm, prefixes=c(), keep.case
           return(case.summary)
         }))
       if(isTRUE(na.rm)){
-        warning(paste("NAs were present in '",deparse(substitute(answ)),"' and cases have been removed:\n",
-          paste(invalid.cases, collapse="\n"), sep=""), call.=FALSE)
+        warning(
+          paste(
+              "NAs were present in '", deparse(substitute(answ)), "' and cases have been removed:\n"
+            , paste(invalid.cases, collapse="\n")
+            , sep=""
+          )
+          , call.=FALSE
+        )
         answ <- answ[-invalid.cases.row,]
-#         for (na.var in relevant.items){
-#           answ <- answ[!is.na(answ[, na.var]),]
-#         }
       } else {
-        warning(paste("NAs were present in '",deparse(substitute(answ)),"':\n", paste(invalid.cases, collapse=", "), sep=""), call.=FALSE)
+        warning(
+          paste(
+              "NAs were present in '", deparse(substitute(answ)), "':\n"
+            , paste(invalid.cases, collapse="\n")
+            , sep=""
+          )
+          , call.=FALSE
+        )
       }
     } else{}
     if(sum(is.na(corr) > 0)){

@@ -22,7 +22,7 @@
 #' @param title Character string, title of the test.
 #' @param name Character string, name of the lecturer applying the test.
 #' @param data_dir Character string, root directory for test data.
-#' @param data_file File name of the test raw data. Use a path releative to \code{data_dir}. If this argument
+#' @param data_file File name of the test raw data. Use a path relative to \code{data_dir}. If this argument
 #'    is defined,  \code{\link[klausuR:klausur.data]{klausur.data}} will try to import this file using
 #'    \code{\link[rio:import]{rio::import}}.
 #' @param corr Named vector, see \code{corr} argument of \code{\link[klausuR:klausur.data]{klausur.data}}.
@@ -50,6 +50,7 @@
 #' @param create_out_dir Logical, if \code{TRUE} and \code{out_dir} is missing, it will automatically be created.
 #' @param data_dir_unprefixed Logical, if \code{TRUE} \code{subdir_prefix} will not be added to \code{data_dir}.
 #' @param body_vars Optional R object to be added to the available objects in generated RMarkdown bodies. If you provide this, you can use it in the RMarkdown body of custom templates.
+#' @param check_data Logical, if \code{TRUE}, the data given as \code{data_file} will be loaded and examined. In particular, invalid matriculation numbers and missing values are reported.
 #' @param ... Optional additional arguments will be kept as-is in the resulting list.
 #' @return A named list with entries \code{title}, \code{name}, \code{date}, \code{data_dir}, \code{out_dir}, \code{subdir}, \code{corr}, 
 #'    \code{date}, \code{date_ISO}, \code{date_print}, \code{rename}, \code{dummies}, \code{marks}, and \code{gt_file}.
@@ -78,6 +79,7 @@ klausur_meta <- function(
   , create_out_dir = FALSE
   , data_dir_unprefixed = FALSE
   , body_vars = list()
+  , check_data = FALSE
   , ...
 ){
   date_ISO <- format(date, "%F")
@@ -105,7 +107,6 @@ klausur_meta <- function(
   result <- list(
       title = title
     , name = name
-    , date = date
     , data_dir = data_dir
     , data_file = data_file
     , out_dir = out_dir
@@ -140,6 +141,26 @@ klausur_meta <- function(
   if(isTRUE(create_out_dir) & !file_test("-d", file.path(result[["out_dir"]]))){
     message(paste0("Creating missing output directory:\n  ", result[["out_dir"]]))
     dir.create(file.path(result[["out_dir"]]), recursive=TRUE)
+  } else {}
+
+  if(isTRUE(check_data)){
+    # klausur.data() only applies some initial modification if "answ" is given
+    data_debug <- klausur.data(
+        answ = klausur.data(
+            meta = result
+          , debug = TRUE
+        )
+      , meta = result
+      , debug = TRUE
+    )
+    items <- which(tolower(colnames(data_debug)) %in% tolower(names(result[["corr"]])))
+    data.check.klausur(
+        answ=data_debug
+      , corr=result[["corr"]]
+      , items=items
+      , na.rm=FALSE
+      , prefixes=result[["item.prefix"]]
+    )
   } else {}
 
   return(result)

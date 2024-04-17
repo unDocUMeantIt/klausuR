@@ -181,6 +181,7 @@ klausur.data <- function(
     if(all(!is.null(meta[["data_dir"]]), !is.null(meta[["data_file"]]))){
       answ <- rio::import(file=file.path(meta[["data_dir"]], meta[["data_file"]]))
       if(isTRUE(debug)){
+        # first stage, no modifications
         return(answ)
       } else {}
     } else {
@@ -237,6 +238,7 @@ klausur.data <- function(
   }
 
   if(isTRUE(debug)){
+    # second stage, with modifications
     return(answ)
   } else {}
 
